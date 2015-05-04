@@ -38,11 +38,9 @@ if ($courseid) {
 }
 
 // instantiate edit_course form
-$mform = new moodec_edit_course_form(NULL, array('course' => $course));
+$mform = new moodec_edit_course_form();
 
 if ($mform->is_cancelled()) {
-	//Handle form cancel operation, if cancel button is present on form
-
 	// redirect back to the course page
 	redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
 } else if ($data = $mform->get_data()) {
@@ -71,18 +69,24 @@ if ($mform->is_cancelled()) {
 
 	if (!!$result) {
 		// redirect back to the course page
-		redirect(new moodle_url('/course/view.php', array('id' => $data->id)));
+		redirect(new moodle_url('/course/view.php', array('id' => $data->courseid)));
 	} else {
 		// TODO: throw exception
 		echo 'something went wrong...';
 	}
 } else {
-	// this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
-	// or on the first display of the form.
+	// get existing data, if any
+	$existingData = $DB->get_record('local_moodec_course', array('courseid' => $courseid), '*', IGNORE_MISSING);
 
-	//Set default data (if any)
+	// set it to be the form defaults
+	if (!!$existingData) {
+		$toform = new stdClass();
+		$toform->id = $existingData->courseid;
+		$toform->show_in_store = $existingData->show_in_store;
+		$toform->price = $existingData->price;
+		$toform->enrolment_duration = $existingData->enrolment_duration;
+	}
 	$mform->set_data($toform);
-	//displays the form
 }
 
 echo $OUTPUT->header();

@@ -21,8 +21,6 @@ class moodec_edit_course_form extends moodleform {
 
 		$mform = $this->_form; // Don't forget the underscore!
 
-		$course = $this->_customdata['course'];
-
 		$mform->addElement('advcheckbox', 'show_in_store', get_string('show_in_store', 'local_moodec'), get_string('show_in_store_label', 'local_moodec'), array('group' => 1), array(0, 1));
 
 		$mform->addElement('text', 'price', get_string('form_price', 'local_moodec')); // Add elements to your form
@@ -38,11 +36,10 @@ class moodec_edit_course_form extends moodleform {
 		$mform->addElement('hidden', 'id', null);
 		$mform->setType('id', PARAM_INT);
 
-		// Finally set the current form data
-		$this->set_data($course);
 	}
 	//Custom validation should be added here
 	function validation($data, $files) {
+		// TODO: add validation
 		return array();
 	}
 }
