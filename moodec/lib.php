@@ -21,7 +21,7 @@ defined('MOODLE_INTERNAL') || die;
 function local_moodec_extends_settings_navigation(settings_navigation $nav, $context) {
 	if ($context->contextlevel >= CONTEXT_COURSE and ($branch = $nav->get('courseadmin'))
 		and has_capability('moodle/course:update', $context)) {
-		$ltiurl = new moodle_url('/local/moodec/settings/course.php', array('courseid' => $context->instanceid));
+		$ltiurl = new moodle_url('/local/moodec/settings/course.php', array('id' => $context->instanceid));
 		$branch->add(get_string('pluginname', 'local_moodec'), $ltiurl, $nav::TYPE_CONTAINER, null, 'moodec' . $context->instanceid);
 	}
 }

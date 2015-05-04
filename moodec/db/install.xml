@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/moodec/db" VERSION="20130909" COMMENT="XMLDB file for Moodle local/moodec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+<XMLDB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PATH="local/moodec/db" VERSION="20150505" COMMENT="XMLDB file for Moodle local/moodec" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
     <TABLES>
         <TABLE NAME="local_moodec_course" COMMENT="Moodec specific course settings">
             <FIELDS>
-                <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" NEXT="show_in_store" />
-                <FIELD NAME="show_in_store" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" NEXT="price" />
-                <FIELD NAME="price" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" NEXT="enrolment_duration" />
-                <FIELD NAME="enrolment_duration" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+                <FIELD NAME="show_in_store" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="price" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="enrolment_duration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
             </FIELDS>
             <KEYS>
-                <KEY NAME="primary" TYPE="primary" FIELDS="course_id" />
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" />
             </KEYS>
         </TABLE>
     </TABLES>
