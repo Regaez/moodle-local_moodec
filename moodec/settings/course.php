@@ -13,12 +13,12 @@ require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 require_once $CFG->dirroot . '/local/moodec/forms/editcourse.php';
 
-$courseid = optional_param('courseid', 0, PARAM_INT);
+$courseid = optional_param('id', 0, PARAM_INT);
 
 $PAGE->set_pagelayout('admin');
 
 if ($courseid) {
-	$PAGE->set_url('/local/moodec/settings/course.php', array('courseid' => $courseid));
+	$PAGE->set_url('/local/moodec/settings/course.php', array('id' => $courseid));
 	$course = get_course($courseid);
 	require_login($course);
 	$course = course_get_format($course)->get_course();
