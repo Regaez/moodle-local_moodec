@@ -19,6 +19,20 @@ echo $OUTPUT->header();
 
 echo $OUTPUT->heading(get_string('pluginname', 'local_moodec'));
 
-echo "<p>Catalogue page</p>";
+$products = $DB->get_records('local_moodec_course');
+
+foreach ($products as $product) {
+	if (!!$product->show_in_store) {
+		$thisCourse = get_course($product->courseid);
+		echo "<div>";
+		printf(
+			"<a href='%s'>%s</a>",
+			new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->courseid)),
+			$thisCourse->fullname
+		);
+
+		echo "</div>";
+	}
+}
 
 echo $OUTPUT->footer();
