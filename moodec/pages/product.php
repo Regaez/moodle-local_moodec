@@ -12,13 +12,13 @@
 require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
-$courseid = required_param('courseid', PARAM_INT);
+$courseid = required_param('id', PARAM_INT);
 
 if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
 	print_error('invalidcourseid', 'error');
 }
 
-$PAGE->set_url('/local/moodec/pages/product.php', array('courseid' => $courseid));
+$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
 $PAGE->set_pagelayout('standard');
 
 echo $OUTPUT->header();
