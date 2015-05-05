@@ -13,6 +13,9 @@ defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Moodec';
 
+// Pages
+$string['catalogue_title'] = 'Store';
+
 // Edit course form
 $string['edit_course_form_title'] = 'Settings for {$a->name}';
 $string['show_in_store'] = 'Enable';
