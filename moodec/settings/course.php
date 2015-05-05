@@ -85,6 +85,9 @@ if ($mform->is_cancelled()) {
 		$toform->show_in_store = $existingData->show_in_store;
 		$toform->price = $existingData->price;
 		$toform->enrolment_duration = $existingData->enrolment_duration;
+	} else {
+		// we need to send the courseid
+		$toform->id = $courseid;
 	}
 	$mform->set_data($toform);
 }
