@@ -52,6 +52,8 @@ foreach ($products as $product) {
 
 	$productURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->courseid));
 	$imageURL = local_moodec_get_course_image_url($product->courseid);
+	$category = $DB->get_record('course_categories', array('id' => $thisCourse->category));
+	$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $thisCourse->category));
 
 	if (strlen($thisCourse->summary) < 100) {
 		$summary = $thisCourse->summary;
@@ -65,14 +67,14 @@ foreach ($products as $product) {
 			<div class="product-details__wrapper">
 				<h3 class="product-title"><a href="<?php echo $productURL;?>"><?php echo $thisCourse->fullname;?></a></h3>
 				<p class="product-summary"><?php echo $summary;?></p>
-				<p>Category: <a href="#">Miscellaneous</a></p>
+				<p>Category: <a href="<?php echo $categoryURL;?>"><?php echo $category->name;?></a></p>
 			</div>
 		</div>
 		<div class="product-actions">
 			<h4 class="product-price"><?php echo '$' . $product->price;?></h4>
-			<form action="" class="product-form">
+			<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
 				<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
-				<button class="view">Read more</button>
+				<input type="hidden" name="action" value="addToCart">
 				<button class="product-form__add">Add to cart</button>
 			</form>
 		</div>
