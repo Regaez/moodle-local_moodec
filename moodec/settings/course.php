@@ -78,9 +78,10 @@ if ($mform->is_cancelled()) {
 	// get existing data, if any
 	$existingData = $DB->get_record('local_moodec_course', array('courseid' => $courseid), '*', IGNORE_MISSING);
 
+	$toform = new stdClass();
+
 	// set it to be the form defaults
 	if (!!$existingData) {
-		$toform = new stdClass();
 		$toform->id = $existingData->courseid;
 		$toform->show_in_store = $existingData->show_in_store;
 		$toform->price = $existingData->price;
