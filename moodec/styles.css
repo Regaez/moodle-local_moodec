@@ -51,3 +51,77 @@
 .filter__sort {
     float: right;
 }
+
+.product-single {
+    overflow: hidden;
+}
+
+.product-single .product-image {
+    float: right;
+    width: 25%;
+    margin: 0 2em;
+}
+
+.product-single .product-details {
+    margin-right: calc(25% + 4em);
+}
+
+.product-single .product-description {
+    margin-bottom: 2em;
+}
+
+.cart-overview .products {
+    margin: 0;
+}
+
+.cart-overview .product__form {
+    float: right;
+    height: 40px;
+}
+
+.cart-overview .product-item {
+    margin: 0;
+    overflow: hidden;
+    padding: 0.5em;
+    border-bottom: 1px solid #ccc;
+    list-style: none;
+}
+
+.cart-overview .product-item .product-price {
+    float: left;
+    line-height: 40px;
+}
+
+.cart-overview .product-item .product-title {
+    float: left;
+    width: 80%;
+    line-height: 40px;
+    margin: 0;
+}
+
+.cart-overview .product__form .form__submit {
+    height: 32px;
+    display: block;
+    margin: 4px 0;
+}
+
+.cart-overview .cart-summary {
+    overflow: hidden;
+}
+
+.cart-overview .cart-total__label {
+    float: left;
+    text-align: right;
+    width: 80%;
+    padding-right: 0.5em;
+    box-sizing: border-box;
+}
+
+.cart-overview .cart-total {
+    float: left;
+    width: 20%;
+}
+
+.cart-overview .cart-actions {
+    float: right;
+}
