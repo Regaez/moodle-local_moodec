@@ -24,7 +24,7 @@ class moodec_edit_course_form extends moodleform {
 		$mform->addElement('advcheckbox', 'show_in_store', get_string('show_in_store', 'local_moodec'), get_string('show_in_store_label', 'local_moodec'), array('group' => 1), array(0, 1));
 
 		$mform->addElement('text', 'price', get_string('form_price', 'local_moodec')); // Add elements to your form
-		$mform->setType('price', PARAM_INT); //Set type of element
+		$mform->setType('price', PARAM_FLOAT); //Set type of element
 		$mform->setDefault('price', get_string('form_price_default', 'local_moodec')); //Default value
 
 		$mform->addElement('text', 'enrolment_duration', get_string('enrolment_duration', 'local_moodec'), get_string('enrolment_duration_desc', 'local_moodec')); // Add elements to your form
