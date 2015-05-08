@@ -11,6 +11,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once $CFG->dirroot . '/local/moodec/lib.php';
+
 if ($hassiteconfig) {
 	// needs this condition or there is error on login page
 
@@ -22,7 +24,9 @@ if ($hassiteconfig) {
 	$settings = new admin_settingpage('local_moodec', 'Moodec');
 	$ADMIN->add('localplugins', $settings);
 
-	$settings->add(new admin_setting_configtext('local_moodec/text',
-		'Test', '', '', PARAM_RAW_TRIMMED));
+	$settings->add(new admin_setting_configtext('local_moodec/paypalbusiness', get_string('businessemail', 'local_moodec'), get_string('businessemail_desc', 'local_moodec'), '', PARAM_EMAIL));
+
+	$paypalcurrencies = local_moodec_get_currencies();
+	$settings->add(new admin_setting_configselect('local_moodec/currency', get_string('currency', 'local_moodec'), '', 'USD', $paypalcurrencies));
 
 }
