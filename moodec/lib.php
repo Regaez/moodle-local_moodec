@@ -261,11 +261,12 @@ function local_moodec_get_currencies() {
 
 /**
  * Returns an array of the products
+ * @param  int $category  the category id to filter
  * @param  string $sortfield the field to sort the data by
  * @param  string $sortorder sort by ASC or DESC
  * @return array            the products
  */
-function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC') {
+function local_moodec_get_products($category = null, $sortfield = 'sortorder', $sortorder = 'ASC') {
 	global $DB;
 
 	// VALIDATE PARAMETERS
@@ -283,7 +284,9 @@ function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC')
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
+		%s
 		ORDER BY %s %s',
+		$category !== null ? 'AND c.category = ' . $category : '',
 		$sortfield,
 		$sortorder
 	);

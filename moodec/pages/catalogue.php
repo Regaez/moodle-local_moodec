@@ -12,6 +12,8 @@
 require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
+$categoryID = optional_param('category', null, PARAM_INT);
+
 $PAGE->set_url('/local/moodec/pages/catalogue.php');
 $PAGE->set_pagelayout('standard');
 
@@ -44,7 +46,7 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 <div class="product-list">
 
 <?php
-$products = local_moodec_get_products();
+$products = local_moodec_get_products($categoryID);
 
 foreach ($products as $product) {
 
