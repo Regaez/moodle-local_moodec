@@ -27,7 +27,7 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 	<div class="filter__category">
 		Category:
 		<select name="category" id="category">
-			<option value="all">All</option>
+			<?php echo local_moodec_get_category_list($categoryID);?>
 		</select>
 	</div>
 	<div class="filter__sort">

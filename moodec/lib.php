@@ -318,3 +318,32 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 	// return an empty array if nothing matches the query
 	return array();
 }
+
+/**
+ * Returns a list of <option> tags of each category
+ * @param  int $id the active category
+ * @return string     the HTML <option> list
+ */
+function local_moodec_get_category_list($id) {
+	global $DB;
+
+	$list = sprintf(
+		'<option value="null" %s>All</option>',
+		$id == null ? 'selected="selected"' : ''
+	);
+
+	$categories = $DB->get_records('course_categories');
+
+	if (!!$categories) {
+		foreach ($categories as $category) {
+			$list .= sprintf(
+				'<option value="%d" %s>%s</option>',
+				$category->id,
+				(int) $category->id === $id ? 'selected="selected"' : '',
+				$category->name
+			);
+		}
+	}
+
+	return $list;
+}
