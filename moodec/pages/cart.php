@@ -75,8 +75,12 @@ echo $OUTPUT->heading('Cart');
 	</div>
 
 	<div class="cart-actions">
-		<button>Return to store</button>
-		<button>Proceed to checkout</button>
+		<form action="/local/moodec/pages/catalogue.php" method="POST">
+			<input type="submit" value="Return to store">
+		</form>
+		<form action="/local/moodec/pages/checkout.php" method="POST">
+			<input type="submit" value="Proceed to checkout">
+		</form>
 	</div>
 </div>
 
