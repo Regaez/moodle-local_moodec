@@ -16,12 +16,11 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 
 	// Add store container to menu
 	$storenode = $PAGE->navigation->add('Store', new moodle_url('/local/moodec/pages/catalogue.php'), navigation_node::TYPE_CONTAINER);
-	$products = $DB->get_records('local_moodec_course', array('show_in_store' => 1));
+	$products = local_moodec_get_products();
 
 	// Add products to the store menu
 	foreach ($products as $product) {
-		$theCourse = get_course($product->courseid);
-		$storenode->add($theCourse->fullname, new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid)));
+		$storenode->add($product->fullname, new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid)));
 	}
 
 	// Add cart page to menu
@@ -270,7 +269,7 @@ function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC')
 	global $DB;
 
 	// VALIDATE PARAMETERS
-	if (!in_array($sortfield, array('sortorder', 'price', 'fullname', 'shortname', 'enrolment_duration'))) {
+	if (!in_array($sortfield, array('sortorder', 'price', 'fullname', 'shortname', 'enrolment_duration', 'timecreated'))) {
 		$sortfield = 'sortorder';
 	}
 
@@ -280,7 +279,7 @@ function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC')
 
 	// build the query
 	$query = sprintf(
-		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration
+		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
@@ -294,20 +293,18 @@ function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC')
 
 	// return the products
 	if (!!$products) {
-		// Convert returned DB data to an array
-		$products = local_moodec_object_to_array($products);
 		$castProducts = array();
 
 		// Cast the fields to be correct type
 		foreach ($products as $product) {
 			$newProduct = $product;
 
-			$newProduct['id'] = (int) $product['id'];
-			$newProduct['courseid'] = (int) $product['courseid'];
-			$newProduct['category'] = (int) $product['category'];
-			$newProduct['sortorder'] = (int) $product['sortorder'];
-			$newProduct['price'] = (float) $product['price'];
-			$newProduct['enrolment_duration'] = (int) $product['enrolment_duration'];
+			$newProduct->id = (int) $product->id;
+			$newProduct->courseid = (int) $product->courseid;
+			$newProduct->category = (int) $product->category;
+			$newProduct->sortorder = (int) $product->sortorder;
+			$newProduct->price = (float) $product->price;
+			$newProduct->enrolment_duration = (int) $product->enrolment_duration;
 
 			array_push($castProducts, $newProduct);
 		}
