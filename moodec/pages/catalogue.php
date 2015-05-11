@@ -44,28 +44,26 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 <div class="product-list">
 
 <?php
-$products = $DB->get_records('local_moodec_course', array('show_in_store' => 1));
+$products = local_moodec_get_products();
 
 foreach ($products as $product) {
 
-	$thisCourse = get_course($product->courseid);
-
 	$productURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->courseid));
 	$imageURL = local_moodec_get_course_image_url($product->courseid);
-	$category = $DB->get_record('course_categories', array('id' => $thisCourse->category));
-	$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $thisCourse->category));
+	$category = $DB->get_record('course_categories', array('id' => $product->category));
+	$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $product->category));
 
-	if (strlen($thisCourse->summary) < 100) {
-		$summary = $thisCourse->summary;
+	if (strlen($product->summary) < 100) {
+		$summary = $product->summary;
 	} else {
-		$summary = substr($thisCourse->summary, 0, 100) . '...';
+		$summary = substr($product->summary, 0, 100) . '...';
 	}?>
 
 	<div class="product-item">
 		<div class="product-details">
 			<?php if (!!$imageURL) {printf('<img src="%s" alt="image" class="product-image">', $imageURL);}?>
 			<div class="product-details__wrapper">
-				<h3 class="product-title"><a href="<?php echo $productURL;?>"><?php echo $thisCourse->fullname;?></a></h3>
+				<h3 class="product-title"><a href="<?php echo $productURL;?>"><?php echo $product->fullname;?></a></h3>
 				<p class="product-summary"><?php echo $summary;?></p>
 				<p>Category: <a href="<?php echo $categoryURL;?>"><?php echo $category->name;?></a></p>
 			</div>
@@ -81,26 +79,6 @@ foreach ($products as $product) {
 	</div>
 
 <?php }?>
-
-
-<?php
-// $products = $DB->get_records('local_moodec_course');
-
-// foreach ($products as $product) {
-// 	if (!!$product->show_in_store) {
-// 		$thisCourse = get_course($product->courseid);
-// 		// var_dump($thisCourse);
-// 		echo "<div>";
-// 		printf(
-// 			"<a href='%s'>%s</a>",
-// 			new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->courseid)),
-// 			$thisCourse->fullname
-// 		);
-
-// 		echo "</div>";
-// 	}
-// }
-?>
 
 </div>
 
