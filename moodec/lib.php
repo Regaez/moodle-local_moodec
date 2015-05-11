@@ -138,8 +138,33 @@ function local_moodec_get_course_image_url($id) {
  * @return array cart
  */
 function local_moodec_get_cart() {
+	global $DB;
+
 	if (isset($_COOKIE['moodec_cart'])) {
-		return local_moodec_object_to_array(json_decode($_COOKIE['moodec_cart']));
+
+		$storedCart = local_moodec_object_to_array(json_decode($_COOKIE['moodec_cart']));
+		$validCart = $storedCart;
+
+		// Check all the products which exist
+		foreach ($storedCart['courses'] as $product => $quantity) {
+
+			$productExists = $DB->get_record('local_moodec_course', array('courseid' => $product));
+
+			if (!!$productExists) {
+				if (!$productExists->show_in_store) {
+					$updateCart = true;
+					// If it shouldn't be shown in store, remove
+					unset($validCart['courses'][$product]);
+				}
+			} else {
+				$updateCart = true;
+				// If there is no longer an entry in the DB, remove
+				unset($validCart['courses'][$product]);
+			}
+		}
+
+		// Returns only valid products
+		return $validCart;
 	}
 
 	return false;
