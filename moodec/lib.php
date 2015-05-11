@@ -259,3 +259,63 @@ function local_moodec_get_currencies() {
 
 	return $currencies;
 }
+
+/**
+ * Returns an array of the products
+ * @param  string $sortfield the field to sort the data by
+ * @param  string $sortorder sort by ASC or DESC
+ * @return array            the products
+ */
+function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC') {
+	global $DB;
+
+	// VALIDATE PARAMETERS
+	if (!in_array($sortfield, array('sortorder', 'price', 'fullname', 'shortname', 'enrolment_duration'))) {
+		$sortfield = 'sortorder';
+	}
+
+	if (!in_array($sortorder, array('ASC', 'DESC'))) {
+		$sortorder = 'ASC';
+	}
+
+	// build the query
+	$query = sprintf(
+		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, summaryformat, sortorder, price, enrolment_duration
+		FROM {local_moodec_course} lmc, {course} c
+		WHERE show_in_store = 1
+		AND lmc.courseid = c.id
+		ORDER BY %s %s',
+		$sortfield,
+		$sortorder
+	);
+
+	// run the query
+	$products = $DB->get_records_sql($query);
+
+	// return the products
+	if (!!$products) {
+		// Convert returned DB data to an array
+		$products = local_moodec_object_to_array($products);
+		$castProducts = array();
+
+		// Cast the fields to be correct type
+		foreach ($products as $product) {
+			$newProduct = $product;
+
+			$newProduct['id'] = (int) $product['id'];
+			$newProduct['courseid'] = (int) $product['courseid'];
+			$newProduct['category'] = (int) $product['category'];
+			$newProduct['summaryformat'] = (int) $product['summaryformat'];
+			$newProduct['sortorder'] = (int) $product['sortorder'];
+			$newProduct['price'] = (float) $product['price'];
+			$newProduct['enrolment_duration'] = (int) $product['enrolment_duration'];
+
+			array_push($castProducts, $newProduct);
+		}
+
+		return $castProducts;
+	}
+
+	// return an empty array if nothing matches the query
+	return array();
+}
