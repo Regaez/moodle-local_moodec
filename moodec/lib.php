@@ -280,7 +280,7 @@ function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC')
 
 	// build the query
 	$query = sprintf(
-		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, summaryformat, sortorder, price, enrolment_duration
+		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
@@ -305,7 +305,6 @@ function local_moodec_get_products($sortfield = 'sortorder', $sortorder = 'ASC')
 			$newProduct['id'] = (int) $product['id'];
 			$newProduct['courseid'] = (int) $product['courseid'];
 			$newProduct['category'] = (int) $product['category'];
-			$newProduct['summaryformat'] = (int) $product['summaryformat'];
 			$newProduct['sortorder'] = (int) $product['sortorder'];
 			$newProduct['price'] = (float) $product['price'];
 			$newProduct['enrolment_duration'] = (int) $product['enrolment_duration'];
