@@ -79,6 +79,10 @@ function local_moodec_format_course_summary($id) {
 function local_moodec_format_enrolment_duration($duration) {
 	$output = '';
 
+	if ($duration < 1) {
+		return 'Unlimited';
+	}
+
 	if (364 < $duration) {
 		$years = floor($duration / 365);
 		$duration = $duration % 365;
