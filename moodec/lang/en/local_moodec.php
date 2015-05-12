@@ -39,6 +39,10 @@ $string['checkout_message'] = 'Please review your cart once more before purchasi
 $string['checkout_removed_courses_label'] = 'The following courses have been removed from your cart as you are already enrolled in them:';
 $string['checkout_total'] = 'Total:';
 
+// CART
+$string['cart_title'] = 'Cart';
+$string['cart_total'] = 'Total:';
+
 // Buttons
 $string['button_add_label'] = 'Add to cart';
 $string['button_remove_label'] = 'Remove';
