@@ -3,7 +3,7 @@
  *
  * @package     local
  * @subpackage  local_moodec
- * @author   	Thomas Threadgold
+ * @author      Thomas Threadgold
  * @copyright   2015 LearningWords Ltd
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -13,26 +13,8 @@
     margin: 1em 0;
 }
 
-.product-item .product-image {
-    float: left;
-    width: 150px;
-    margin-top: 0.75em;
-    margin-right: 1em;
-}
-
-.product-item .product-details {
-    float: left;
-    width: 70%;
-}
-
-.product-item .product-details__wrapper {
-    float: left;
-    width: calc(100% - 175px);
-}
-
-.product-item .product-actions {
-    float: right;
-    width: 29%;
+.product-image {
+    max-width: 100%;
 }
 
 .product-item .product-title {
@@ -54,16 +36,6 @@
 
 .product-single {
     overflow: hidden;
-}
-
-.product-single .product-image {
-    float: right;
-    width: 25%;
-    margin: 0 2em;
-}
-
-.product-single .product-details {
-    margin-right: calc(25% + 4em);
 }
 
 .product-single .product-description {
@@ -92,13 +64,6 @@
     line-height: 40px;
 }
 
-.cart-overview .product-item .product-title {
-    float: left;
-    width: 80%;
-    line-height: 40px;
-    margin: 0;
-}
-
 .cart-overview .product__form .form__submit {
     height: 32px;
     display: block;
@@ -109,19 +74,54 @@
     overflow: hidden;
 }
 
-.cart-overview .cart-total__label {
-    float: left;
-    text-align: right;
-    width: 80%;
-    padding-right: 0.5em;
-    box-sizing: border-box;
-}
-
-.cart-overview .cart-total {
-    float: left;
-    width: 20%;
-}
-
-.cart-overview .cart-actions {
-    float: right;
+@media all and (min-width: 767px) {
+    .product-item .product-details {
+        float: left;
+        width: 80%;
+    }
+    .product-item .product-details__wrapper {
+        float: left;
+        width: calc(100% - 175px);
+    }
+    .product-item .product-actions {
+        float: right;
+        width: 19%;
+    }
+    .product-item .product-image {
+        float: left;
+        width: 150px;
+        margin-top: 0.75em;
+        margin-right: 1em;
+    }
+    .product-single .product-image {
+        float: right;
+        width: 25%;
+        margin: 0 2em;
+    }
+    .product-single .product-details {
+        margin-right: calc(25% + 4em);
+    }
+    .cart-overview .product-item .product-title {
+        float: left;
+        width: 80%;
+        line-height: 40px;
+        margin: 0;
+    }
+    .cart-overview .cart-total__label {
+        float: left;
+        text-align: right;
+        width: 80%;
+        padding-right: 0.5em;
+        box-sizing: border-box;
+    }
+    .cart-overview .cart-total {
+        float: left;
+        width: 20%;
+    }
+    .cart-overview .cart-actions {
+        float: right;
+    }
+    .cart-overview .cart-actions form {
+        float: left;
+    }
 }
