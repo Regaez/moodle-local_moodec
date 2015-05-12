@@ -105,5 +105,8 @@ echo $OUTPUT->heading('Checkout');
 		<input type="submit" name="submit"  value="Pay with PayPal">
 	</div>
 </form>
+<form action="/local/moodec/pages/catalogue.php" method="POST" class="back-to-shop">
+	<input type="submit" value="Back to store">
+</form>
 
 <?php echo $OUTPUT->footer();
