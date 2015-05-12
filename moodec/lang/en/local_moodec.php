@@ -34,14 +34,16 @@ $string['enrolment_duration_label'] = 'Course Duration';
 $string['price_label'] = 'Price:';
 
 // CHECKOUT
+$string['checkout_title'] = 'Checkout';
 $string['checkout_message'] = 'Please review your cart once more before purchasing.';
 $string['checkout_removed_courses_label'] = 'The following courses have been removed from your cart as you are already enrolled in them:';
+$string['checkout_total'] = 'Total:';
 
 // Buttons
 $string['button_add_label'] = 'Add to cart';
-$string['button_remove_label'] = 'Remove from cart';
+$string['button_remove_label'] = 'Remove';
 $string['button_checkout_label'] = 'Proceed to checkout';
-$string['button_paypal_label'] = 'Proceed to PayPal';
+$string['button_paypal_label'] = 'Pay with PayPal';
 $string['button_return_store_label'] = 'Return to store';
 
 // Edit course form

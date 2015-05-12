@@ -47,7 +47,7 @@ $ipnData = sprintf('U:%d', $USER->id);
 
 echo $OUTPUT->header();
 
-echo $OUTPUT->heading('Checkout');
+echo $OUTPUT->heading(get_string('checkout_title', 'local_moodec'));
 
 ?>
 <p><?php echo get_string('checkout_message', 'local_moodec');?></p>
