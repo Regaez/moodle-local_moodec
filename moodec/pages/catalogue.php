@@ -102,11 +102,23 @@ foreach ($products as $product) {
 		</div>
 		<div class="product-actions">
 			<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
+
+			<?php
+if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
+		?>
+				<div class="product-form">
+					<button class="product-form__add" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
+				</div>
+
+			<?php } else {?>
+
 			<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
 				<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
 				<input type="hidden" name="action" value="addToCart">
 				<button class="product-form__add"><?php echo get_string('button_add_label', 'local_moodec');?></button>
 			</form>
+
+			<?php }?>
 		</div>
 	</div>
 

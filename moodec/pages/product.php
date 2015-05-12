@@ -48,11 +48,22 @@ echo $OUTPUT->heading(get_string('product_title', 'local_moodec', array('coursen
 
 		<h4><?php echo get_string('price_label', 'local_moodec');?> <span class="price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $moodecCourse->price;?></span></h4>
 
+		<?php
+if (isloggedin() && is_enrolled(context_course::instance($moodecCourse->courseid, MUST_EXIST))) {
+	?>
+			<div class="product-form">
+				<button class="product-form__add" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
+			</div>
+
+		<?php } else {?>
+
 		<form action="/local/moodec/pages/cart.php" method="POST" class="product-single__form">
 			<input type="hidden" name="action" value="addToCart">
 			<input type="hidden" name="id" value="<?php echo $moodecCourse->courseid;?>">
 			<input type="submit" value="<?php echo get_string('button_add_label', 'local_moodec');?>">
 		</form>
+
+		<?php }?>
 	</div>
 </div>
 
