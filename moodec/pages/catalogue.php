@@ -26,10 +26,10 @@ $sortfield = 'sortorder';
 $sortorder = 'ASC';
 
 if ($sort !== null && 0 < strlen($sort) && strpos('-', $sort) !== -1) {
-	$sort = explode('-', optional_param('sort', null, PARAM_TEXT));
+	$sortArray = explode('-', $sort);
 
-	$sortfield = $sort[0];
-	$sortorder = strtoupper($sort[1]);
+	$sortfield = $sortArray[0];
+	$sortorder = strtoupper($sortArray[1]);
 }
 
 echo $OUTPUT->header();
@@ -48,25 +48,25 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 	<div class="filter__sort">
 		<?php echo get_string('filter_sort_label', 'local_moodec');?>
 		<select name="sort" id="sort">
-			<option value="default-asc">
+			<option value="default-asc" <?php echo $sort === 'default-asc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_default', 'local_moodec');?>
 			</option>
-			<option value="fullname-asc">
+			<option value="fullname-asc" <?php echo $sort === 'fullname-asc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_fullname_asc', 'local_moodec');?>
 			</option>
-			<option value="fullname-desc">
+			<option value="fullname-desc" <?php echo $sort === 'fullname-desc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_fullname_desc', 'local_moodec');?>
 			</option>
-			<option value="price-desc">
+			<option value="price-desc" <?php echo $sort === 'price-desc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_price_desc', 'local_moodec');?>
 			</option>
-			<option value="price-asc">
+			<option value="price-asc" <?php echo $sort === 'price-asc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_price_asc', 'local_moodec');?>
 			</option>
-			<option value="enrolment_duration-desc">
+			<option value="enrolment_duration-desc" <?php echo $sort === 'enrolment_duration-desc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_duration_asc', 'local_moodec');?>
 			</option>
-			<option value="enrolment_duration-asc">
+			<option value="enrolment_duration-asc" <?php echo $sort === 'enrolment_duration-asc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_duration_desc', 'local_moodec');?>
 			</option>
 		</select>
