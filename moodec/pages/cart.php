@@ -49,12 +49,15 @@ echo $OUTPUT->heading(get_string('cart_title', 'local_moodec'));
 
 <div class="cart-overview">
 
+	<?php if (is_array($cart['courses']) && 0 < count($cart['courses'])) {
+	?>
+
 	<ul class="products">
 
 	<?php foreach ($cart['courses'] as $product => $value) {
 
-	$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
-	$thisCourse = get_course($product);?>
+		$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
+		$thisCourse = get_course($product);?>
 
 		<li class="product-item">
 			<h4 class="product-title"><?php echo $thisCourse->fullname;?></h4>
@@ -82,6 +85,16 @@ echo $OUTPUT->heading(get_string('cart_title', 'local_moodec'));
 			<input type="submit" value="<?php echo get_string('button_checkout_label', 'local_moodec');?>">
 		</form>
 	</div>
+
+	<?php } else {?>
+
+	<p><?php echo get_string('cart_empty_message', 'local_moodec');?></p>
+
+	<form action="/local/moodec/pages/catalogue.php" method="POST">
+		<input type="submit" value="<?php echo get_string('button_return_store_label', 'local_moodec');?>">
+	</form>
+
+	<?php }?>
 </div>
 
 

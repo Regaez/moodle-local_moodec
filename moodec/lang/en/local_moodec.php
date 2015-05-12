@@ -48,6 +48,7 @@ $string['checkout_guest_message'] = 'You cannot be logged in as guest to purchas
 // CART
 $string['cart_title'] = 'Cart';
 $string['cart_total'] = 'Total:';
+$string['cart_empty_message'] = 'Your cart is empty!';
 
 // Buttons
 $string['button_add_label'] = 'Add to cart';
