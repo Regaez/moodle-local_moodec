@@ -50,10 +50,10 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading('Checkout');
 
 ?>
-<p>Please review your cart once more before purchasing.</p>
+<p><?php echo get_string('checkout_message', 'local_moodec');?></p>
 
 <?php if (!!$removedProducts && is_array($removedProducts)) {
-	echo "<p style='color: red;'>The following products have been removed from your cart as you are already enrolled in them:</p>";
+	printf("<p style='color: red;'>%s</p>", get_string('checkout_removed_courses_label', 'local_moodec'));
 	echo "<ul>";
 	foreach ($removedProducts as $product) {
 		$thisCourse = get_course($product);
@@ -97,16 +97,16 @@ echo $OUTPUT->heading('Checkout');
 	</ul>
 
 	<div class="cart-summary">
-		<h3 class="cart-total__label">Total:</h3><h3 class="cart-total"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . local_moodec_cart_get_total();?></h3>
+		<h3 class="cart-total__label"><?php echo get_string('checkout_total', 'local_moodec');?></h3><h3 class="cart-total"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . local_moodec_cart_get_total();?></h3>
 	</div>
 
 	<div class="cart-actions">
 		<input type="hidden" name="custom" value="<?php echo $ipnData;?>" />
-		<input type="submit" name="submit"  value="Pay with PayPal">
+		<input type="submit" name="submit"  value="<?php echo get_string('button_paypal_label', 'local_moodec');?>">
 	</div>
 </form>
 <form action="/local/moodec/pages/catalogue.php" method="POST" class="back-to-shop">
-	<input type="submit" value="Back to store">
+	<input type="submit" value="<?php echo get_string('button_return_store_label', 'local_moodec');?>">
 </form>
 
 <?php echo $OUTPUT->footer();
