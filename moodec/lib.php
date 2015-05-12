@@ -15,16 +15,26 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 	global $PAGE, $DB;
 
 	// Add store container to menu
-	$storenode = $PAGE->navigation->add('Store', new moodle_url('/local/moodec/pages/catalogue.php'), navigation_node::TYPE_CONTAINER);
+	$storenode = $PAGE->navigation->add(
+		get_string('catalogue_title', 'local_moodec'),
+		new moodle_url('/local/moodec/pages/catalogue.php'),
+		navigation_node::TYPE_CONTAINER
+	);
 	$products = local_moodec_get_products();
 
 	// Add products to the store menu
 	foreach ($products as $product) {
-		$storenode->add($product->fullname, new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid)));
+		$storenode->add(
+			$product->fullname,
+			new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid))
+		);
 	}
 
 	// Add cart page to menu
-	$PAGE->navigation->add('Cart', new moodle_url('/local/moodec/pages/cart.php'));
+	$PAGE->navigation->add(
+		get_string('cart_title', 'local_moodec'),
+		new moodle_url('/local/moodec/pages/cart.php')
+	);
 }
 
 /**
@@ -80,29 +90,29 @@ function local_moodec_format_enrolment_duration($duration) {
 	$output = '';
 
 	if ($duration < 1) {
-		return 'Unlimited';
+		return get_string('enrolment_duration_unlimited', 'local_moodec');
 	}
 
 	if (364 < $duration) {
 		$years = floor($duration / 365);
 		$duration = $duration % 365;
-		$output .= $years == 1 ? $years . ' year ' : $years . ' years ';
+		$output .= $years == 1 ? sprintf(' %d %s ', $years, get_string('enrolment_duration_year', 'local_moodec')) : sprintf(' %d %s ', $years, get_string('enrolment_duration_year_plural', 'local_moodec'));
 	}
 
 	if (30 < $duration) {
 		$months = floor($duration / 30);
 		$duration = $duration % 30;
-		$output .= $months == 1 ? $months . ' month ' : $months . ' months ';
+		$output .= $months == 1 ? sprintf(' %d %s ', $months, get_string('enrolment_duration_month', 'local_moodec')) : sprintf(' %d %s ', $months, get_string('enrolment_duration_month_plural', 'local_moodec'));
 	}
 
 	if (7 < $duration) {
 		$weeks = floor($duration / 7);
 		$duration = $duration % 7;
-		$output .= $weeks == 1 ? $weeks . ' week ' : $weeks . ' weeks ';
+		$output .= $weeks == 1 ? sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week', 'local_moodec')) : sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week_plural', 'local_moodec'));
 	}
 
 	if (0 < $duration) {
-		$output .= $duration == 1 ? $duration . ' day ' : $duration . ' days';
+		$output .= $duration == 1 ? sprintf(' %d %s ', $days, get_string('enrolment_duration_day', 'local_moodec')) : sprintf(' %d %s ', $days, get_string('enrolment_duration_day_plural', 'local_moodec'));
 	}
 
 	return $output;

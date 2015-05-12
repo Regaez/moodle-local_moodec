@@ -50,6 +50,17 @@ $string['button_checkout_label'] = 'Proceed to checkout';
 $string['button_paypal_label'] = 'Pay with PayPal';
 $string['button_return_store_label'] = 'Return to store';
 
+// Lib
+$string['enrolment_duration_unlimited'] = 'Unlimited';
+$string['enrolment_duration_year'] = 'year';
+$string['enrolment_duration_year_plural'] = 'years';
+$string['enrolment_duration_month'] = 'month';
+$string['enrolment_duration_month_plural'] = 'months';
+$string['enrolment_duration_week'] = 'week';
+$string['enrolment_duration_week_plural'] = 'weeks';
+$string['enrolment_duration_day'] = 'day';
+$string['enrolment_duration_day_plural'] = 'days';
+
 // Edit course form
 $string['edit_course_form_title'] = 'Settings for {$a->name}';
 $string['show_in_store'] = 'Enable';
