@@ -27,7 +27,14 @@ $string['filter_sort_price_desc'] = 'Price: High to Low';
 $string['filter_sort_duration_asc'] = 'Duration: Low to High';
 $string['filter_sort_duration_desc'] = 'Duration: High to Low';
 $string['course_list_category_label'] = 'Category:';
-$string['course_list_add_button_label'] = 'Add to cart';
+
+// PRODUCT
+$string['product_title'] = '{$a->coursename}';
+$string['enrolment_duration_label'] = 'Course Duration';
+$string['price_label'] = 'Price:';
+
+// Buttons
+$string['button_add_label'] = 'Add to cart';
 
 // Edit course form
 $string['edit_course_form_title'] = 'Settings for {$a->name}';

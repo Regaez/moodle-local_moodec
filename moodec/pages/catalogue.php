@@ -105,7 +105,7 @@ foreach ($products as $product) {
 			<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
 				<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
 				<input type="hidden" name="action" value="addToCart">
-				<button class="product-form__add"><?php echo get_string('course_list_add_button_label', 'local_moodec');?></button>
+				<button class="product-form__add"><?php echo get_string('button_add_label', 'local_moodec');?></button>
 			</form>
 		</div>
 	</div>
