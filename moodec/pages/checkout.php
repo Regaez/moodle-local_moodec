@@ -29,6 +29,11 @@ $itemCount = 1;
 
 $removed = array();
 
+// If your cart is empty, redirect to cart page.
+if (!is_array($cart['courses']) || 0 === count($cart['courses'])) {
+	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+}
+
 foreach ($cart['courses'] as $product => $value) {
 	$context = context_course::instance($product);
 	$isEnrolled = is_enrolled($context, $USER, '', true);
