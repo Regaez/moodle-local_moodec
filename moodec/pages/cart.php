@@ -58,7 +58,7 @@ echo $OUTPUT->heading('Cart');
 
 		<li class="product-item">
 			<h4 class="product-title"><?php echo $thisCourse->fullname;?></h4>
-			<div class="product-price">$<?php echo $moodecCourse->price;?></div>
+			<div class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $moodecCourse->price;?></div>
 			<form class="product__form" action="" method="POST">
 				<input type="hidden" name="id" value="<?php echo $product;?>">
 				<input type="hidden" name="action" value="removeFromCart">
