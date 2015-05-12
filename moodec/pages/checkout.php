@@ -49,18 +49,36 @@ echo $OUTPUT->header();
 
 echo $OUTPUT->heading(get_string('checkout_title', 'local_moodec'));
 
-?>
+if (isguestuser()) {
+
+	$SESSION->wantsurl = new moodle_url('/local/moodec/pages/checkout.php');
+
+	printf(
+		'<p>%s</p>',
+		get_string('checkout_guest_message', 'local_moodec')
+	);
+
+	printf(
+		'<form method="GET" action="%s"><input type="hidden" name="sesskey" value="%s"><input type="submit" value="%s"></form>',
+		new moodle_url('/login'),
+		$USER->sesskey,
+		get_string('button_logout_label', 'local_moodec')
+	);
+
+} else {
+
+	?>
 <p><?php echo get_string('checkout_message', 'local_moodec');?></p>
 
 <?php if (!!$removedProducts && is_array($removedProducts)) {
-	printf("<p style='color: red;'>%s</p>", get_string('checkout_removed_courses_label', 'local_moodec'));
-	echo "<ul>";
-	foreach ($removedProducts as $product) {
-		$thisCourse = get_course($product);
-		printf('<li style="color: red;">%s</li>', $thisCourse->fullname);
-	}
-	echo "</ul>";
-}?>
+		printf("<p style='color: red;'>%s</p>", get_string('checkout_removed_courses_label', 'local_moodec'));
+		echo "<ul>";
+		foreach ($removedProducts as $product) {
+			$thisCourse = get_course($product);
+			printf('<li style="color: red;">%s</li>', $thisCourse->fullname);
+		}
+		echo "</ul>";
+	}?>
 
 <form class="cart-overview" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 	<input type="hidden" name="cmd" value="_cart">
@@ -79,8 +97,8 @@ echo $OUTPUT->heading(get_string('checkout_title', 'local_moodec'));
 
 	<?php foreach ($cart['courses'] as $product => $value) {
 
-	$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
-	$thisCourse = get_course($product);?>
+		$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
+		$thisCourse = get_course($product);?>
 
 		<li class="product-item">
 			<h4 class="product-title"><?php echo $thisCourse->fullname;?></h4>
@@ -92,7 +110,7 @@ echo $OUTPUT->heading(get_string('checkout_title', 'local_moodec'));
 		</li>
 
 	<?php $ipnData .= sprintf('|C:%d', $product);
-	$itemCount++;}?>
+		$itemCount++;}?>
 
 	</ul>
 
@@ -109,4 +127,6 @@ echo $OUTPUT->heading(get_string('checkout_title', 'local_moodec'));
 	<input type="submit" value="<?php echo get_string('button_return_store_label', 'local_moodec');?>">
 </form>
 
-<?php echo $OUTPUT->footer();
+<?php }
+
+echo $OUTPUT->footer();

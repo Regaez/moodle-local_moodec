@@ -43,6 +43,7 @@ $string['checkout_title'] = 'Checkout';
 $string['checkout_message'] = 'Please review your cart once more before purchasing.';
 $string['checkout_removed_courses_label'] = 'The following courses have been removed from your cart as you are already enrolled in them:';
 $string['checkout_total'] = 'Total:';
+$string['checkout_guest_message'] = 'You cannot be logged in as guest to purchase courses! Please log out and create your own account to continue.';
 
 // CART
 $string['cart_title'] = 'Cart';
@@ -54,6 +55,7 @@ $string['button_remove_label'] = 'Remove';
 $string['button_checkout_label'] = 'Proceed to checkout';
 $string['button_paypal_label'] = 'Pay with PayPal';
 $string['button_return_store_label'] = 'Return to store';
+$string['button_logout_label'] = 'Logout';
 
 // Lib
 $string['enrolment_duration_unlimited'] = 'Unlimited';
