@@ -40,21 +40,35 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 
 <form action="" method="GET" class="filter-bar">
 	<div class="filter__category">
-		Category:
+		<span><?php echo get_string('filter_category_label', 'local_moodec');?></span>
 		<select name="category" id="category">
 			<?php echo local_moodec_get_category_list($categoryID);?>
 		</select>
 	</div>
 	<div class="filter__sort">
-		Sort by:
+		<?php echo get_string('filter_sort_label', 'local_moodec');?>
 		<select name="sort" id="sort">
-			<option value="default-asc">Default</option>
-			<option value="fullname-asc">Title: A - Z</option>
-			<option value="fullname-desc">Title: Z - A</option>
-			<option value="price-desc">Price: High to Low</option>
-			<option value="price-asc">Price: Low to High</option>
-			<option value="enrolment_duration-desc">Duration: High to Low</option>
-			<option value="enrolment_duration-asc">Duration: Low to High</option>
+			<option value="default-asc">
+				<?php echo get_string('filter_sort_default', 'local_moodec');?>
+			</option>
+			<option value="fullname-asc">
+				<?php echo get_string('filter_sort_fullname_asc', 'local_moodec');?>
+			</option>
+			<option value="fullname-desc">
+				<?php echo get_string('filter_sort_fullname_desc', 'local_moodec');?>
+			</option>
+			<option value="price-desc">
+				<?php echo get_string('filter_sort_price_desc', 'local_moodec');?>
+			</option>
+			<option value="price-asc">
+				<?php echo get_string('filter_sort_price_asc', 'local_moodec');?>
+			</option>
+			<option value="enrolment_duration-desc">
+				<?php echo get_string('filter_sort_duration_asc', 'local_moodec');?>
+			</option>
+			<option value="enrolment_duration-asc">
+				<?php echo get_string('filter_sort_duration_desc', 'local_moodec');?>
+			</option>
 		</select>
 	</div>
 </form>
@@ -83,7 +97,7 @@ foreach ($products as $product) {
 			<div class="product-details__wrapper">
 				<h3 class="product-title"><a href="<?php echo $productURL;?>"><?php echo $product->fullname;?></a></h3>
 				<p class="product-summary"><?php echo $summary;?></p>
-				<p>Category: <a href="<?php echo $categoryURL;?>"><?php echo $category->name;?></a></p>
+				<p><?php echo get_string('course_list_category_label', 'local_moodec');?> <a href="<?php echo $categoryURL;?>"><?php echo $category->name;?></a></p>
 			</div>
 		</div>
 		<div class="product-actions">
@@ -91,7 +105,7 @@ foreach ($products as $product) {
 			<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
 				<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
 				<input type="hidden" name="action" value="addToCart">
-				<button class="product-form__add">Add to cart</button>
+				<button class="product-form__add"><?php echo get_string('course_list_add_button_label', 'local_moodec');?></button>
 			</form>
 		</div>
 	</div>

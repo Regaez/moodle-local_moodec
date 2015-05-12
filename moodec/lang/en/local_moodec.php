@@ -14,7 +14,20 @@ defined('MOODLE_INTERNAL') || die;
 $string['pluginname'] = 'Moodec';
 
 // Pages
+
+// CATALOGUE
 $string['catalogue_title'] = 'Store';
+$string['filter_category_label'] = 'Category:';
+$string['filter_sort_label'] = 'Sort by:';
+$string['filter_sort_default'] = 'Default';
+$string['filter_sort_fullname_asc'] = 'Course Title: A - Z';
+$string['filter_sort_fullname_desc'] = 'Course Title: Z - A';
+$string['filter_sort_price_asc'] = 'Price: Low to High';
+$string['filter_sort_price_desc'] = 'Price: High to Low';
+$string['filter_sort_duration_asc'] = 'Duration: Low to High';
+$string['filter_sort_duration_desc'] = 'Duration: High to Low';
+$string['course_list_category_label'] = 'Category:';
+$string['course_list_add_button_label'] = 'Add to cart';
 
 // Edit course form
 $string['edit_course_form_title'] = 'Settings for {$a->name}';
