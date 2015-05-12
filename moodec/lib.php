@@ -329,6 +329,10 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 		$sortorder = 'ASC';
 	}
 
+	if ($category == 'default') {
+		$category = null;
+	}
+
 	// build the query
 	$query = sprintf(
 		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, timecreated
@@ -379,7 +383,7 @@ function local_moodec_get_category_list($id) {
 	global $DB;
 
 	$list = sprintf(
-		'<option value="null" %s>All</option>',
+		'<option value="default" %s>All</option>',
 		$id == null ? 'selected="selected"' : ''
 	);
 

@@ -13,9 +13,21 @@ require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
 $categoryID = optional_param('category', null, PARAM_INT);
+$sort = optional_param('sort', null, PARAM_TEXT);
+
+$sortfield = 'sortorder';
+$sortorder = 'ASC';
+
+if ($sort !== null && 0 < strlen($sort) && strpos('-', $sort) !== -1) {
+	$sort = explode('-', optional_param('sort', null, PARAM_TEXT));
+
+	$sortfield = $sort[0];
+	$sortorder = strtoupper($sort[1]);
+}
 
 $PAGE->set_url('/local/moodec/pages/catalogue.php');
 $PAGE->set_pagelayout('standard');
+$PAGE->requires->jquery();
 
 echo $OUTPUT->header();
 
@@ -23,7 +35,7 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 
 ?>
 
-<div class="filter-bar">
+<form action="" method="GET" class="filter-bar">
 	<div class="filter__category">
 		Category:
 		<select name="category" id="category">
@@ -33,20 +45,21 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 	<div class="filter__sort">
 		Sort by:
 		<select name="sort" id="sort">
-			<option value="alpha">Title: A - Z</option>
-			<option value="alpha2">Title: Z - A</option>
-			<option value="price">Price: High to Low</option>
-			<option value="price2">Price: Low to High</option>
-			<option value="enrolment">Duration: High to Low</option>
-			<option value="enrolment2">Duration: Low to High</option>
+			<option value="default-asc">Default</option>
+			<option value="fullname-asc">Title: A - Z</option>
+			<option value="fullname-desc">Title: Z - A</option>
+			<option value="price-desc">Price: High to Low</option>
+			<option value="price-asc">Price: Low to High</option>
+			<option value="enrolment_duration-desc">Duration: High to Low</option>
+			<option value="enrolment_duration-asc">Duration: Low to High</option>
 		</select>
 	</div>
-</div>
+</form>
 
 <div class="product-list">
 
 <?php
-$products = local_moodec_get_products($categoryID);
+$products = local_moodec_get_products($categoryID, $sortfield, $sortorder);
 
 foreach ($products as $product) {
 
@@ -83,5 +96,11 @@ foreach ($products as $product) {
 <?php }?>
 
 </div>
+
+<script>
+	$('.filter-bar select').on('change', function(){
+		$('.filter-bar').submit();
+	});
+</script>
 
 <?php echo $OUTPUT->footer();?>
