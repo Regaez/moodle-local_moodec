@@ -71,7 +71,7 @@ foreach ($products as $product) {
 			</div>
 		</div>
 		<div class="product-actions">
-			<h4 class="product-price"><?php echo '$' . $product->price;?></h4>
+			<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
 			<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
 				<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
 				<input type="hidden" name="action" value="addToCart">

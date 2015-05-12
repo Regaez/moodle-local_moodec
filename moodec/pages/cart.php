@@ -71,7 +71,7 @@ echo $OUTPUT->heading('Cart');
 	</ul>
 
 	<div class="cart-summary">
-		<h3 class="cart-total__label">Total:</h3><h3 class="cart-total">$<?php echo local_moodec_cart_get_total();?></h3>
+		<h3 class="cart-total__label">Total:</h3><h3 class="cart-total"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . local_moodec_cart_get_total();?></h3>
 	</div>
 
 	<div class="cart-actions">

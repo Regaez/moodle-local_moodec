@@ -43,7 +43,7 @@ echo $OUTPUT->heading($course->fullname);
 		<h4>Enrolment Duration</h4>
 		<p><?php echo local_moodec_format_enrolment_duration($moodecCourse->enrolment_duration);?></p>
 
-		<h4>Price: <span class="price">$<?php echo $moodecCourse->price;?></span></h4>
+		<h4>Price: <span class="price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $moodecCourse->price;?></span></h4>
 
 		<form action="/local/moodec/pages/cart.php" method="POST" class="product-single__form">
 			<input type="hidden" name="action" value="addToCart">

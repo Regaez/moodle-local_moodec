@@ -191,6 +191,11 @@ function local_moodec_cart_add($id) {
 	return $newCart;
 }
 
+/**
+ * Removes the product of specified id from the cart and returns the new cart
+ * @param  int $id product id
+ * @return array     the updated cart
+ */
 function local_moodec_cart_remove($id) {
 	$newCart = array();
 	$id = (int) $id;
@@ -230,6 +235,10 @@ function local_moodec_object_to_array($obj) {
 	return $new;
 }
 
+/**
+ * Returns the total of the cart
+ * @return float total
+ */
 function local_moodec_cart_get_total() {
 	global $DB;
 	$sum = 0;
@@ -257,6 +266,48 @@ function local_moodec_get_currencies() {
 	}
 
 	return $currencies;
+}
+
+/**
+ * Returns the symbol for the supplied currency
+ * @param  string $currency the currency code
+ * @return string           the symbol
+ */
+function local_moodec_get_currency_symbol($currency) {
+
+	$codes = array(
+		'AUD' => '$',
+		'BRL' => 'R$',
+		'CAD' => '$',
+		'CHF' => 'CHF',
+		'CZK' => 'Kč',
+		'DKK' => 'kr',
+		'EUR' => '€',
+		'GBP' => '£',
+		'HKD' => '$',
+		'HUF' => 'Ft',
+		'ILS' => '₪',
+		'JPY' => '¥',
+		'MXN' => '$',
+		'MYR' => 'RM',
+		'NOK' => 'kr',
+		'NZD' => '$',
+		'PHP' => '₱',
+		'PLN' => 'zł',
+		'RUB' => 'руб',
+		'SEK' => 'kr',
+		'SGD' => '$',
+		'THB' => '฿',
+		'TRY' => '₺',
+		'TWD' => 'NT$',
+		'USD' => '$',
+	);
+
+	if (array_key_exists($currency, $codes)) {
+		return $codes[$currency];
+	}
+
+	return '$';
 }
 
 /**

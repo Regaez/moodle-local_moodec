@@ -83,7 +83,7 @@ echo $OUTPUT->heading('Checkout');
 
 		<li class="product-item">
 			<h4 class="product-title"><?php echo $thisCourse->fullname;?></h4>
-			<div class="product-price">$<?php echo $moodecCourse->price;?></div>
+			<div class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $moodecCourse->price;?></div>
 
 			<input type="hidden" name="item_name_<?php echo $itemCount;?>" value="<?php echo $thisCourse->fullname;?>">
 			<input type="hidden" name="amount_<?php echo $itemCount;?>" value="<?php echo $moodecCourse->price;?>">
@@ -96,7 +96,7 @@ echo $OUTPUT->heading('Checkout');
 	</ul>
 
 	<div class="cart-summary">
-		<h3 class="cart-total__label">Total:</h3><h3 class="cart-total">$<?php echo local_moodec_cart_get_total();?></h3>
+		<h3 class="cart-total__label">Total:</h3><h3 class="cart-total"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . local_moodec_cart_get_total();?></h3>
 	</div>
 
 	<div class="cart-actions">
