@@ -12,6 +12,9 @@
 require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
+$systemcontext = context_system::instance();
+
+$PAGE->set_context($systemcontext);
 $PAGE->set_url('/local/moodec/pages/cart.php');
 $PAGE->set_pagelayout('standard');
 

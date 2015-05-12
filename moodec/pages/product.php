@@ -14,6 +14,12 @@ require_once $CFG->dirroot . '/local/moodec/lib.php';
 
 $courseid = required_param('id', PARAM_INT);
 
+$systemcontext = context_system::instance();
+
+$PAGE->set_context($systemcontext);
+$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
+$PAGE->set_pagelayout('standard');
+
 if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
 	print_error('invalidcourseid', 'error');
 }
@@ -23,9 +29,6 @@ $moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $cour
 if (!$moodecCourse->show_in_store) {
 	print_error('courseunavailable', 'error');
 }
-
-$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
-$PAGE->set_pagelayout('standard');
 
 echo $OUTPUT->header();
 

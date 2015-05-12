@@ -15,6 +15,13 @@ require_once $CFG->dirroot . '/local/moodec/lib.php';
 $categoryID = optional_param('category', null, PARAM_INT);
 $sort = optional_param('sort', null, PARAM_TEXT);
 
+$systemcontext = context_system::instance();
+
+$PAGE->set_context($systemcontext);
+$PAGE->set_url('/local/moodec/pages/catalogue.php');
+$PAGE->set_pagelayout('standard');
+$PAGE->requires->jquery();
+
 $sortfield = 'sortorder';
 $sortorder = 'ASC';
 
@@ -24,10 +31,6 @@ if ($sort !== null && 0 < strlen($sort) && strpos('-', $sort) !== -1) {
 	$sortfield = $sort[0];
 	$sortorder = strtoupper($sort[1]);
 }
-
-$PAGE->set_url('/local/moodec/pages/catalogue.php');
-$PAGE->set_pagelayout('standard');
-$PAGE->requires->jquery();
 
 echo $OUTPUT->header();
 

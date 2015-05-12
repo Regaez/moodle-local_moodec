@@ -12,15 +12,16 @@
 require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
-// $systemcontext = context_system::instance();
+$systemcontext = context_system::instance();
 
-$removedProducts = (array) json_decode(optional_param('enrolled', '', PARAM_TEXT));
-
+$PAGE->set_context($systemcontext);
 $PAGE->set_url('/local/moodec/pages/checkout.php');
 $PAGE->set_pagelayout('standard');
 
 require_login();
 // require_capability('local/moodec:checkout', $systemcontext);
+
+$removedProducts = (array) json_decode(optional_param('enrolled', '', PARAM_TEXT));
 
 // Get the cart in it's current state
 $cart = local_moodec_get_cart();
