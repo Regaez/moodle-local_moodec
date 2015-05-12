@@ -12,6 +12,11 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Moodec';
+$string['businessemail'] = 'PayPal business email';
+$string['businessemail_desc'] = 'The email address of your business PayPal account';
+$string['currency'] = 'Currency';
+$string['moodec_settings'] = 'Moodec settings';
+$string['moodec_course_settings'] = 'Edit product settings';
 
 // Pages
 
@@ -62,7 +67,7 @@ $string['enrolment_duration_day'] = 'day';
 $string['enrolment_duration_day_plural'] = 'days';
 
 // Edit course form
-$string['edit_course_form_title'] = 'Settings for {$a->name}';
+$string['edit_course_form_title'] = 'Product settings for {$a->name}';
 $string['show_in_store'] = 'Enable';
 $string['show_in_store_label'] = 'Show this course on the catalogue page';
 $string['form_price'] = 'Course price';

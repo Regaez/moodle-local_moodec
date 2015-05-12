@@ -27,7 +27,7 @@ class moodec_edit_course_form extends moodleform {
 		$mform->setType('price', PARAM_FLOAT); //Set type of element
 		$mform->setDefault('price', get_string('form_price_default', 'local_moodec')); //Default value
 
-		$mform->addElement('text', 'enrolment_duration', get_string('enrolment_duration', 'local_moodec'), get_string('enrolment_duration_desc', 'local_moodec')); // Add elements to your form
+		$mform->addElement('text', 'enrolment_duration', get_string('enrolment_duration', 'local_moodec'), get_string('enrolment_duration_help', 'local_moodec')); // Add elements to your form
 		$mform->setType('enrolment_duration', PARAM_INT); //Set type of element
 		$mform->setDefault('enrolment_duration', get_string('enrolment_duration_default', 'local_moodec')); //Default value
 

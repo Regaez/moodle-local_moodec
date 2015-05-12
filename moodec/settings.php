@@ -18,10 +18,10 @@ if ($hassiteconfig) {
 
 	$ADMIN->add('root', new admin_category('moodec', get_string('pluginname', 'local_moodec')));
 
-	$ADMIN->add('moodec', new admin_externalpage('moodecsettings', 'Moodec Settings',
+	$ADMIN->add('moodec', new admin_externalpage('moodecsettings', get_string('moodec_settings', 'local_moodec'),
 		$CFG->wwwroot . '/admin/settings.php?section=local_moodec', 'moodle/course:update'));
 
-	$settings = new admin_settingpage('local_moodec', 'Moodec');
+	$settings = new admin_settingpage('local_moodec', get_string('pluginname', 'local_moodec'));
 	$ADMIN->add('localplugins', $settings);
 
 	$settings->add(new admin_setting_configtext('local_moodec/paypalbusiness', get_string('businessemail', 'local_moodec'), get_string('businessemail_desc', 'local_moodec'), '', PARAM_EMAIL));
