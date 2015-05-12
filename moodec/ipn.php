@@ -5,7 +5,7 @@
  * @package     local
  * @subpackage  local_moodec
  * @author      Thomas Threadgold - based on code by others (Paypal Enrolment plugin)
- * @copyright   2015 LearningWords Ltd
+ * @copyright   2015 LearningWorks Ltd
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
