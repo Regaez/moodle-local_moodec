@@ -103,9 +103,6 @@ echo $OUTPUT->heading('Checkout');
 		<input type="hidden" name="custom" value="<?php echo $ipnData;?>" />
 		<input type="submit" name="submit"  value="Pay with PayPal">
 	</div>
-</div>
-
-
 </form>
 
 <?php echo $OUTPUT->footer();
