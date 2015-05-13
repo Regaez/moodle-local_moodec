@@ -471,7 +471,8 @@ function local_moodec_get_category_list($id) {
  */
 function local_moodec_output_pagination($products, $currentPage = 0, $category = null, $sort = null) {
 
-	$pageCount = ceil(count($products) / get_config('local_moodec', 'pagination'));
+	// Calculate total page count
+	$pageCount = ($currentPage - 1) + ceil(count($products) / get_config('local_moodec', 'pagination'));
 
 	// Only output pagination when there is more than one page
 	if (1 < $pageCount) {
