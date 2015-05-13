@@ -112,7 +112,7 @@ function local_moodec_format_enrolment_duration($duration) {
 	}
 
 	if (0 < $duration) {
-		$output .= $duration == 1 ? sprintf(' %d %s ', $days, get_string('enrolment_duration_day', 'local_moodec')) : sprintf(' %d %s ', $days, get_string('enrolment_duration_day_plural', 'local_moodec'));
+		$output .= $duration == 1 ? sprintf(' %d %s ', $duration, get_string('enrolment_duration_day', 'local_moodec')) : sprintf(' %d %s ', $duration, get_string('enrolment_duration_day_plural', 'local_moodec'));
 	}
 
 	return $output;
@@ -385,6 +385,48 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 	}
 
 	// return an empty array if nothing matches the query
+	return array();
+}
+
+function local_moodec_get_related_products($id, $category = null) {
+	global $DB;
+
+	// build the query
+	$query = sprintf(
+		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, timecreated
+		FROM {local_moodec_course} lmc, {course} c
+		WHERE show_in_store = 1
+		AND lmc.courseid = c.id
+		AND lmc.courseid != %d
+		%s
+		ORDER BY uuid()',
+		$id,
+		$category !== null ? 'AND c.category = ' . $category : ''
+	);
+
+	$products = $DB->get_records_sql($query);
+
+	// return the products
+	if (!!$products) {
+		$castProducts = array();
+
+		// Cast the fields to be correct type
+		foreach ($products as $product) {
+			$newProduct = $product;
+
+			$newProduct->id = (int) $product->id;
+			$newProduct->courseid = (int) $product->courseid;
+			$newProduct->category = (int) $product->category;
+			$newProduct->sortorder = (int) $product->sortorder;
+			$newProduct->price = (float) $product->price;
+			$newProduct->enrolment_duration = (int) $product->enrolment_duration;
+
+			array_push($castProducts, $newProduct);
+		}
+
+		return $castProducts;
+	}
+
 	return array();
 }
 

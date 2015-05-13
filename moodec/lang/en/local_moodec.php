@@ -37,6 +37,7 @@ $string['course_list_category_label'] = 'Category:';
 $string['product_title'] = '{$a->coursename}';
 $string['enrolment_duration_label'] = 'Course Duration';
 $string['price_label'] = 'Price:';
+$string['product_related_label'] = 'Related Products';
 
 // CHECKOUT
 $string['checkout_title'] = 'Checkout';

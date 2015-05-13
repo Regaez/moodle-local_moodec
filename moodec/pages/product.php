@@ -25,6 +25,7 @@ if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
 }
 
 $moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $courseid));
+$course = get_course($courseid);
 
 if (!$moodecCourse->show_in_store) {
 	print_error('courseunavailable', 'error');
@@ -66,5 +67,32 @@ if (isloggedin() && is_enrolled(context_course::instance($moodecCourse->courseid
 		<?php }?>
 	</div>
 </div>
+
+<?php $products = local_moodec_get_related_products($courseid, $course->category);
+$iterator = 0;
+if (is_array($products) && 0 < count($products)) {?>
+
+
+<div class="related-products">
+
+	<h4><?php echo get_string('product_related_label', 'local_moodec');?></h4>
+
+	<ul class="grid-container">
+
+		<?php foreach ($products as $product) {?>
+
+		<li class="grid-item">
+			<a href="<?php echo new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid));?>">
+				<img src="<?php echo local_moodec_get_course_image_url($product->courseid);?>" alt="" class="product-image">
+				<h5><?php echo $product->fullname;?></h5>
+			</a>
+		</li>
+
+		<?php $iterator++;if ($iterator > 2) {break;}}?>
+	</ul>
+
+</div>
+
+<?php }?>
 
 <?php echo $OUTPUT->footer();
