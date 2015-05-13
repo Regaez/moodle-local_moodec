@@ -14,6 +14,7 @@ require_once $CFG->dirroot . '/local/moodec/lib.php';
 
 $categoryID = optional_param('category', null, PARAM_INT);
 $sort = optional_param('sort', null, PARAM_TEXT);
+$page = optional_param('page', 1, PARAM_INT);
 
 $systemcontext = context_system::instance();
 
@@ -42,6 +43,7 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 ?>
 
 <form action="" method="GET" class="filter-bar">
+	<input type="hidden" name="page" value="<?php echo $page;?>">
 	<div class="filter__category">
 		<span><?php echo get_string('filter_category_label', 'local_moodec');?></span>
 		<select name="category" id="category">
@@ -76,23 +78,29 @@ echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 	</div>
 </form>
 
+<?php
+$products = local_moodec_get_products($categoryID, $sortfield, $sortorder, $page);
+
+if (is_array($products) && 0 < count($products)) {
+	?>
+
 <div class="product-list">
 
 <?php
-$products = local_moodec_get_products($categoryID, $sortfield, $sortorder);
+$iterator = 0;
+	$itemLimit = (int) get_config('local_moodec', 'pagination');
+	foreach ($products as $product) {
 
-foreach ($products as $product) {
+		$productURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->courseid));
+		$imageURL = local_moodec_get_course_image_url($product->courseid);
+		$category = $DB->get_record('course_categories', array('id' => $product->category));
+		$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $product->category));
 
-	$productURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->courseid));
-	$imageURL = local_moodec_get_course_image_url($product->courseid);
-	$category = $DB->get_record('course_categories', array('id' => $product->category));
-	$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $product->category));
-
-	if (strlen($product->summary) < 100) {
-		$summary = $product->summary;
-	} else {
-		$summary = substr($product->summary, 0, 100) . '...';
-	}?>
+		if (strlen($product->summary) < 100) {
+			$summary = $product->summary;
+		} else {
+			$summary = substr($product->summary, 0, 100) . '...';
+		}?>
 
 	<div class="product-item">
 		<div class="product-details">
@@ -108,7 +116,7 @@ foreach ($products as $product) {
 
 			<?php
 if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
-		?>
+			?>
 				<div class="product-form">
 					<button class="product-form__add" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
 				</div>
@@ -131,9 +139,13 @@ if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUS
 		</div>
 	</div>
 
-<?php }?>
+<?php $iterator++;if ($iterator === $itemLimit) {break;}}?>
 
 </div>
+
+<?php local_moodec_output_pagination($products, $page, $categoryID, $sort);?>
+
+<?php }?>
 
 <script>
 	$('.filter-bar select').on('change', function(){

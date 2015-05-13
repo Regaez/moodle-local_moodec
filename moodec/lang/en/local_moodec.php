@@ -17,6 +17,8 @@ $string['businessemail_desc'] = 'The email address of your business PayPal accou
 $string['currency'] = 'Currency';
 $string['moodec_settings'] = 'Moodec settings';
 $string['moodec_course_settings'] = 'Edit product settings';
+$string['pagination'] = 'Courses per page';
+$string['pagination_desc'] = 'The number of courses to be displayed per page in the catalogue';
 
 // Pages
 

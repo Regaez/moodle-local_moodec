@@ -29,4 +29,5 @@ if ($hassiteconfig) {
 	$paypalcurrencies = local_moodec_get_currencies();
 	$settings->add(new admin_setting_configselect('local_moodec/currency', get_string('currency', 'local_moodec'), '', 'USD', $paypalcurrencies));
 
+	$settings->add(new admin_setting_configtext('local_moodec/pagination', get_string('pagination', 'local_moodec'), get_string('pagination_desc', 'local_moodec'), 10, PARAM_INT));
 }

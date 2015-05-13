@@ -331,7 +331,7 @@ function local_moodec_get_currency_symbol($currency) {
  * @param  string $sortorder sort by ASC or DESC
  * @return array            the products
  */
-function local_moodec_get_products($category = null, $sortfield = 'sortorder', $sortorder = 'ASC') {
+function local_moodec_get_products($category = null, $sortfield = 'sortorder', $sortorder = 'ASC', $page = 1) {
 	global $DB;
 
 	// VALIDATE PARAMETERS
@@ -346,6 +346,8 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 	if ($category == 'default') {
 		$category = null;
 	}
+
+	$page = $page < 1 ? 0 : $page - 1;
 
 	// build the query
 	$query = sprintf(
@@ -381,7 +383,7 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 			array_push($castProducts, $newProduct);
 		}
 
-		return $castProducts;
+		return array_slice($castProducts, $page * get_config('local_moodec', 'pagination'));
 	}
 
 	// return an empty array if nothing matches the query
@@ -457,4 +459,46 @@ function local_moodec_get_category_list($id) {
 	}
 
 	return $list;
+}
+
+/**
+ * Outputs the HTML for the pagination
+ * @param  array  $products    An array of the products to be paginated
+ * @param  integer $currentPage The index of the current page
+ * @param  int  $category    the category ID
+ * @param  string  $sort        the string sorting parameter
+ * @return string               the HTML output
+ */
+function local_moodec_output_pagination($products, $currentPage = 0, $category = null, $sort = null) {
+
+	$pageCount = $currentPage + floor(count($products) / get_config('local_moodec', 'pagination'));
+
+	// Only output pagination when there is more than one page
+	if (1 < $pageCount) {
+
+		printf('<div class="pagination-bar"><ul class="pagination">');
+
+		$params = array();
+
+		if ($sort !== null) {
+			$params['sort'] = $sort;
+		}
+
+		if ($category !== null) {
+			$params['category'] = $category;
+		}
+
+		for ($paginator = 1; $paginator <= $pageCount; $paginator++) {
+			$params['page'] = $paginator;
+
+			printf('<li class="page-item"><a href="%s" %s>%d</a></li>',
+				new moodle_url('/local/moodec/pages/catalogue.php', $params),
+				$paginator === $currentPage ? 'class="active"' : '',
+				$paginator
+			);
+
+		}
+
+		printf('</ul></div>');
+	}
 }
