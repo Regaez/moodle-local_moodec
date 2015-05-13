@@ -32,6 +32,9 @@ if ($sort !== null && 0 < strlen($sort) && strpos('-', $sort) !== -1) {
 	$sortorder = strtoupper($sortArray[1]);
 }
 
+// Get the cart in it's current state
+$cart = local_moodec_get_cart();
+
 echo $OUTPUT->header();
 
 echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
@@ -108,6 +111,12 @@ if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUS
 		?>
 				<div class="product-form">
 					<button class="product-form__add" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
+				</div>
+
+			<?php } else if (is_array($cart['courses']) && array_key_exists($product->courseid, $cart['courses'])) {?>
+
+				<div class="product-form">
+					<button class="product-form__add" disabled="disabled"><?php echo get_string('button_in_cart_label', 'local_moodec');?></button>
 				</div>
 
 			<?php } else {?>

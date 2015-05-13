@@ -58,6 +58,7 @@ $string['button_paypal_label'] = 'Pay with PayPal';
 $string['button_return_store_label'] = 'Return to store';
 $string['button_logout_label'] = 'Logout';
 $string['button_enrolled_label'] = 'Already enrolled';
+$string['button_in_cart_label'] = 'In cart';
 
 // Lib
 $string['enrolment_duration_unlimited'] = 'Unlimited';
