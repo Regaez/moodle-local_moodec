@@ -78,10 +78,10 @@ echo $OUTPUT->heading(get_string('cart_title', 'local_moodec'));
 	</div>
 
 	<div class="cart-actions">
-		<form action="/local/moodec/pages/catalogue.php" method="POST">
+		<form action="/local/moodec/pages/catalogue.php" method="GET">
 			<input type="submit" value="<?php echo get_string('button_return_store_label', 'local_moodec');?>">
 		</form>
-		<form action="/local/moodec/pages/checkout.php" method="POST">
+		<form action="/local/moodec/pages/checkout.php" method="GET">
 			<input type="submit" value="<?php echo get_string('button_checkout_label', 'local_moodec');?>">
 		</form>
 	</div>
@@ -90,7 +90,7 @@ echo $OUTPUT->heading(get_string('cart_title', 'local_moodec'));
 
 	<p><?php echo get_string('cart_empty_message', 'local_moodec');?></p>
 
-	<form action="/local/moodec/pages/catalogue.php" method="POST">
+	<form action="/local/moodec/pages/catalogue.php" method="GET">
 		<input type="submit" value="<?php echo get_string('button_return_store_label', 'local_moodec');?>">
 	</form>
 
