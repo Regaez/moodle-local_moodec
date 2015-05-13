@@ -128,7 +128,7 @@ if (isguestuser()) {
 		<input type="submit" name="submit"  value="<?php echo get_string('button_paypal_label', 'local_moodec');?>">
 	</div>
 </form>
-<form action="/local/moodec/pages/catalogue.php" method="POST" class="back-to-shop">
+<form action="/local/moodec/pages/catalogue.php" method="GET" class="back-to-shop">
 	<input type="submit" value="<?php echo get_string('button_return_store_label', 'local_moodec');?>">
 </form>
 
