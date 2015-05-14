@@ -116,7 +116,7 @@ if (strlen($result) > 0) {
 
 			foreach ($courseList as $courseid) {
 
-				$instance = $DB->get_record('enrol', array('courseid' => $courseid, 'enrol' => 'manual'));
+				$instance = $DB->get_record('enrol', array('courseid' => $courseid, 'enrol' => 'moodec'));
 
 				$data->courseid = $courseid;
 				$data->instanceid = $instance->id;
@@ -217,7 +217,7 @@ if (strlen($result) > 0) {
 
 		foreach ($courseList as $courseid) {
 			$data->courseid = $courseid;
-			$instance = $DB->get_record('enrol', array('courseid' => $courseid, 'enrol' => 'manual'));
+			$instance = $DB->get_record('enrol', array('courseid' => $courseid, 'enrol' => 'moodec'));
 
 			$DB->insert_record("local_moodec_paypal", $data);
 
