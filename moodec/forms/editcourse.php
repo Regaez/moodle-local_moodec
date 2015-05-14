@@ -31,6 +31,9 @@ class moodec_edit_course_form extends moodleform {
 		$mform->setType('enrolment_duration', PARAM_INT); //Set type of element
 		$mform->setDefault('enrolment_duration', get_string('enrolment_duration_default', 'local_moodec')); //Default value
 
+		$mform->addElement('editor', 'additional_info', get_string('additional_info', 'local_moodec'));
+		$mform->setType('additional_info', PARAM_RAW);
+
 		$this->add_action_buttons();
 
 		$mform->addElement('hidden', 'id', null);

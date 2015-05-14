@@ -80,6 +80,7 @@ $string['show_in_store'] = 'Enable';
 $string['show_in_store_label'] = 'Show this course on the catalogue page';
 $string['form_price'] = 'Course price';
 $string['form_price_default'] = '0';
+$string['additional_info'] = 'Additional product information';
 $string['enrolment_duration'] = 'Enrolment duration';
 $string['enrolment_duration_help'] = 'Set the enrolment duration for this course (in days). A value of 0 will make the enrolment never expire.';
 $string['enrolment_duration_default'] = '0';

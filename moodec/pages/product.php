@@ -44,6 +44,10 @@ echo $OUTPUT->heading(get_string('product_title', 'local_moodec', array('coursen
 			<?php echo local_moodec_format_course_summary($moodecCourse->courseid);?>
 		</div>
 
+		<div class="additional-info">
+			<?php echo $moodecCourse->additional_info;?>
+		</div>
+
 		<h4><?php echo get_string('enrolment_duration_label', 'local_moodec');?></h4>
 		<p><?php echo local_moodec_format_enrolment_duration($moodecCourse->enrolment_duration);?></p>
 

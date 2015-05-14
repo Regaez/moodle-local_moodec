@@ -57,6 +57,8 @@ if ($mform->is_cancelled()) {
 	// set the courseid field to our form's course id field
 	$data->courseid = $data->id;
 
+	$data->additional_info = $data->additional_info['text'];
+
 	if (!!$recordExists) {
 		// set the id to the record returned by our earlier query
 		$data->id = $recordExists->id;
@@ -86,6 +88,8 @@ if ($mform->is_cancelled()) {
 		$toform->show_in_store = $existingData->show_in_store;
 		$toform->price = $existingData->price;
 		$toform->enrolment_duration = $existingData->enrolment_duration;
+		$toform->additional_info['text'] = $existingData->additional_info;
+		$toform->additional_info['format'] = 1;
 	} else {
 		// we need to send the courseid
 		$toform->id = $courseid;

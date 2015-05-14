@@ -351,7 +351,7 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 
 	// build the query
 	$query = sprintf(
-		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, timecreated
+		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, additional_info, timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
@@ -395,7 +395,7 @@ function local_moodec_get_related_products($id, $category = null) {
 
 	// build the query
 	$query = sprintf(
-		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, timecreated
+		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, additional_info, timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
