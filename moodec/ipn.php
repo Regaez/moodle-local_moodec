@@ -76,7 +76,7 @@ foreach ($courseList as $c) {
 
 $courseList = $newList;
 
-$plugin = enrol_get_plugin('manual');
+$plugin = enrol_get_plugin('moodec');
 
 $c = new curl();
 $options = array(

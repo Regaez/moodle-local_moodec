@@ -12,8 +12,11 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_moodec';
-$plugin->version = 2015051200;
+$plugin->version = 2015051500;
 $plugin->release = '2.8 (Build: 2015012900)';
 $plugin->requires = 2014051200;
 //$plugin->requires = 2014111000;
 $plugin->maturity = MATURITY_STABLE;
+$plugin->dependencies = array(
+	'enrol_moodec' => 2014111000,
+);
