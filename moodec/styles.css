@@ -120,6 +120,11 @@
     border: 1px solid #ccc;
 }
 
+.cart-overview .cart-actions form {
+    text-align: center;
+    margin: 0 0.5em;
+}
+
 @media all and (min-width: 767px) {
     .product-item .product-details {
         float: left;
@@ -169,5 +174,6 @@
     }
     .cart-overview .cart-actions form {
         float: left;
+        text-align: left;
     }
 }
