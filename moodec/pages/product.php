@@ -35,18 +35,36 @@ echo $OUTPUT->header();
 
 echo $OUTPUT->heading(get_string('product_title', 'local_moodec', array('coursename' => $course->fullname)));
 
+$imageURL = local_moodec_get_course_image_url($moodecCourse->courseid);
 ?>
 
 <div class="product-single">
-	<img src="<?php echo local_moodec_get_course_image_url($moodecCourse->courseid);?>" alt="" class="product-image">
+
+	<?php if (!!$imageURL && !!get_config('local_moodec', 'page_product_show_image')) {?>
+		<img src="<?php echo $imageURL;?>" alt="" class="product-image">
+	<?php }?>
+
 	<div class="product-details">
+
+		<?php if (!!get_config('local_moodec', 'page_product_show_description')) {?>
 		<div class="product-description">
 			<?php echo local_moodec_format_course_summary($moodecCourse->courseid);?>
 		</div>
+		<?php }?>
 
+		<?php if (!!get_config('local_moodec', 'page_product_show_additional_description')) {?>
 		<div class="additional-info">
 			<?php echo $moodecCourse->additional_info;?>
 		</div>
+		<?php }?>
+
+		<?php if (!!get_config('local_moodec', 'page_catalogue_show_category')) {
+
+		$category = $DB->get_record('course_categories', array('id' => $course->category));
+		$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $course->category));
+		?>
+		<p><?php echo get_string('course_list_category_label', 'local_moodec');?> <a href="<?php echo $categoryURL;?>"><?php echo $category->name;?></a></p>
+		<?php }?>
 
 		<h4><?php echo get_string('enrolment_duration_label', 'local_moodec');?></h4>
 		<p><?php echo local_moodec_format_enrolment_duration($moodecCourse->enrolment_duration);?></p>
@@ -72,9 +90,12 @@ if (isloggedin() && is_enrolled(context_course::instance($moodecCourse->courseid
 	</div>
 </div>
 
-<?php $products = local_moodec_get_related_products($courseid, $course->category);
-$iterator = 0;
-if (is_array($products) && 0 < count($products)) {?>
+<?php
+if (!!get_config('local_moodec', 'page_product_show_related_products')) {
+
+	$products = local_moodec_get_related_products($courseid, $course->category);
+	$iterator = 0;
+	if (is_array($products) && 0 < count($products)) {?>
 
 
 <div class="related-products">
@@ -97,6 +118,6 @@ if (is_array($products) && 0 < count($products)) {?>
 
 </div>
 
-<?php }?>
+<?php }}?>
 
 <?php echo $OUTPUT->footer();

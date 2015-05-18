@@ -22,12 +22,14 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 	);
 	$products = local_moodec_get_products();
 
-	// Add products to the store menu
-	foreach ($products as $product) {
-		$storenode->add(
-			$product->fullname,
-			new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid))
-		);
+	if (!!get_config('local_moodec', 'page_product_enable')) {
+		// Add products to the store menu
+		foreach ($products as $product) {
+			$storenode->add(
+				$product->fullname,
+				new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid))
+			);
+		}
 	}
 
 	// Add cart page to menu

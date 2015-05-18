@@ -12,11 +12,45 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Moodec';
+
+// SETTINGS
+$string['moodec_pages'] = 'Page settings';
+$string['moodec_settings'] = 'General settings';
+$string['moodec_course_settings'] = 'Edit product settings';
+$string['page_setting_heading_catalogue'] = 'Catalogue page';
+$string['page_setting_heading_product'] = 'Product page';
+
+$string['page_catalogue_show_description'] = 'Show course description';
+$string['page_catalogue_show_description_desc'] = 'This will show the course description excerpt on the catalogue list page';
+$string['page_catalogue_show_additional_description'] = 'Show additional description';
+$string['page_catalogue_show_additional_description_desc'] = 'This will show the additional description excerpt on the catalogue list page';
+$string['page_catalogue_show_duration'] = 'Show product enrolment duration';
+$string['page_catalogue_show_duration_desc'] = 'This will show the product enrolment duration excerpt on the catalogue list page';
+$string['page_catalogue_show_image'] = 'Show product image';
+$string['page_catalogue_show_image_desc'] = 'This will show the product image on the catalogue list page';
+$string['page_catalogue_show_category'] = 'Show product category';
+$string['page_catalogue_show_category_desc'] = 'This will show the product category on the catalogue list page';
+$string['page_catalogue_show_price'] = 'Show product price';
+$string['page_catalogue_show_price_desc'] = 'This will show the product price on the catalogue list page';
+$string['page_catalogue_show_button'] = 'Show add to cart button';
+$string['page_catalogue_show_button_desc'] = 'This will show the add to cart button on the catalogue list page';
+
+$string['page_product_enable'] = 'Enable this page';
+$string['page_product_enable_desc'] = 'This will allow users to view individual products and add links to the navigation block';
+$string['page_product_show_image'] = 'Show product image';
+$string['page_product_show_image_desc'] = 'This will show the product image on the product page';
+$string['page_product_show_description'] = 'Show course description';
+$string['page_product_show_description_desc'] = 'This will show the course description excerpt on the product page';
+$string['page_product_show_additional_description'] = 'Show product\'s additional description';
+$string['page_product_show_additional_description_desc'] = 'This will show the product\'s additional description excerpt on the product page';
+$string['page_product_show_category'] = 'Show course category';
+$string['page_product_show_category_desc'] = 'This will show the course category on the product page';
+$string['page_product_show_related_products'] = 'Show related products';
+$string['page_product_show_related_products_desc'] = 'This will show the related products on the product page';
+
 $string['businessemail'] = 'PayPal business email';
 $string['businessemail_desc'] = 'The email address of your business PayPal account';
 $string['currency'] = 'Currency';
-$string['moodec_settings'] = 'Moodec settings';
-$string['moodec_course_settings'] = 'Edit product settings';
 $string['pagination'] = 'Courses per page';
 $string['pagination_desc'] = 'The number of courses to be displayed per page in the catalogue';
 
@@ -24,6 +58,8 @@ $string['pagination_desc'] = 'The number of courses to be displayed per page in 
 
 // CATALOGUE
 $string['catalogue_title'] = 'Store';
+$string['catalogue_empty'] = 'No products available.';
+$string['catalogue_enrolment_duration_label'] = 'Course duration:';
 $string['filter_category_label'] = 'Category:';
 $string['filter_sort_label'] = 'Sort by:';
 $string['filter_sort_default'] = 'Default';

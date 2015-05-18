@@ -42,6 +42,10 @@
     margin-bottom: 2em;
 }
 
+.catalogue-empty {
+    text-align: center;
+}
+
 .cart-overview .products {
     margin: 0;
 }

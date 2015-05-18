@@ -103,19 +103,43 @@ $iterator = 0;
 
 	<div class="product-item">
 		<div class="product-details">
-			<?php if (!!$imageURL) {printf('<img src="%s" alt="image" class="product-image">', $imageURL);}?>
+			<?php if (!!$imageURL && !!get_config('local_moodec', 'page_catalogue_show_image')) {printf('<img src="%s" alt="image" class="product-image">', $imageURL);}?>
 			<div class="product-details__wrapper">
-				<h3 class="product-title"><a href="<?php echo $productURL;?>"><?php echo $product->fullname;?></a></h3>
-				<p class="product-summary"><?php echo $summary;?></p>
+				<h3 class="product-title">
+					<?php if (!!get_config('local_moodec', 'page_product_enable')) {?>
+					<a href="<?php echo $productURL;?>"><?php echo $product->fullname;?></a>
+					<?php } else {
+						echo $product->fullname;
+					}?>
+				</h3>
+				
+				<?php if (!!get_config('local_moodec', 'page_catalogue_show_description')) {?>
+				<div class="product-summary"><?php echo $summary;?></div>
+				<?php }?>
+
+				<?php if (!!get_config('local_moodec', 'page_catalogue_show_additional_description')) {?>
+				<div class="product-summary additional"><?php echo $product->additional_info;?></div>
+				<?php }?>
+
+				<?php if(!!get_config('local_moodec', 'page_catalogue_show_duration')) { ?>
+				<p><?php echo get_string('catalogue_enrolment_duration_label', 'local_moodec');?> <?php echo local_moodec_format_enrolment_duration($product->enrolment_duration);?></p>
+				<?php } ?>
+
+				<?php if (!!get_config('local_moodec', 'page_catalogue_show_category')) {?>
 				<p><?php echo get_string('course_list_category_label', 'local_moodec');?> <a href="<?php echo $categoryURL;?>"><?php echo $category->name;?></a></p>
+				<?php }?>
 			</div>
 		</div>
 		<div class="product-actions">
+
+			<?php if (!!get_config('local_moodec', 'page_catalogue_show_price')) {?>
 			<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
+			<?php }?>
 
 			<?php
-if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
-			?>
+			if (!!get_config('local_moodec', 'page_catalogue_show_button')) {
+				if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
+				?>
 				<div class="product-form">
 					<button class="product-form__add" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
 				</div>
@@ -134,7 +158,8 @@ if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUS
 				<button class="product-form__add"><?php echo get_string('button_add_label', 'local_moodec');?></button>
 			</form>
 
-			<?php }?>
+			<?php }
+			}?>
 		</div>
 	</div>
 
@@ -144,7 +169,15 @@ if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUS
 
 <?php local_moodec_output_pagination($products, $page, $categoryID, $sort);?>
 
-<?php }?>
+<?php } else {
+	printf(
+		'<div class="catalogue-empty">%s</div>',
+		get_string(
+			'catalogue_empty',
+			'local_moodec'
+		)
+	);
+} ?>
 
 <script>
 	$('.filter-bar select').on('change', function(){
