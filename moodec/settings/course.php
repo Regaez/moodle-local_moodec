@@ -105,14 +105,14 @@ echo $OUTPUT->heading(get_string('edit_course_form_title', 'local_moodec', array
 $mform->display(); ?>
 
 <script>
-	$('#id_price_model').on('change', function(){
-		if($('#id_price_model').val() !== 'simple') {
+	$('#id_pricing_model').on('change', function(){
+		if($('#id_pricing_model').val() !== 'simple') {
 			$('#id_simple_header').hide();
 		} else {
 			$('#id_simple_header').show().removeClass('collapsed');
 		}
 
-		if($('#id_price_model').val() !== 'variable') {
+		if($('#id_pricing_model').val() !== 'variable') {
 			$('#id_variable_header').hide();
 		} else {
 			$('#id_variable_header').show().removeClass('collapsed');
@@ -157,11 +157,11 @@ $mform->display(); ?>
 	});
 
 	var initSettings = function() {
-		if($('#id_price_model').val() !== 'simple') {
+		if($('#id_pricing_model').val() !== 'simple') {
 			$('#id_simple_header').hide();
 		}
 
-		if($('#id_price_model').val() !== 'variable') {
+		if($('#id_pricing_model').val() !== 'variable') {
 			$('#id_variable_header').hide();
 		}
 
