@@ -87,8 +87,40 @@ if ($mform->is_cancelled()) {
 	if (!!$existingData) {
 		$toform->id = $existingData->courseid;
 		$toform->show_in_store = $existingData->show_in_store;
-		$toform->price = $existingData->price;
-		$toform->enrolment_duration = $existingData->enrolment_duration;
+
+		$toform->pricing_model = $existingData->pricing_model;
+
+		$toform->simple_price = $existingData->simple_price;
+		$toform->simple_enrolment_duration = $existingData->simple_enrolment_duration;
+		$toform->simple_group = $existingData->simple_group;
+
+		$toform->variable_tiers = $existingData->variable_tiers;
+
+		$toform->variable_name_1 = $existingData->variable_name_1;
+		$toform->variable_price_1 = $existingData->variable_price_1;
+		$toform->variable_enrolment_duration_1 = $existingData->variable_enrolment_duration_1;
+		$toform->variable_group_1 = $existingData->variable_group_1;
+
+		$toform->variable_name_2 = $existingData->variable_name_2;
+		$toform->variable_price_2 = $existingData->variable_price_2;
+		$toform->variable_enrolment_duration_2 = $existingData->variable_enrolment_duration_2;
+		$toform->variable_group_2 = $existingData->variable_group_2;
+
+		$toform->variable_name_3 = $existingData->variable_name_3;
+		$toform->variable_price_3 = $existingData->variable_price_3;
+		$toform->variable_enrolment_duration_3 = $existingData->variable_enrolment_duration_3;
+		$toform->variable_group_3 = $existingData->variable_group_3;
+
+		$toform->variable_name_4 = $existingData->variable_name_4;
+		$toform->variable_price_4 = $existingData->variable_price_4;
+		$toform->variable_enrolment_duration_4 = $existingData->variable_enrolment_duration_4;
+		$toform->variable_group_4 = $existingData->variable_group_4;
+
+		$toform->variable_name_5 = $existingData->variable_name_5;
+		$toform->variable_price_5 = $existingData->variable_price_5;
+		$toform->variable_enrolment_duration_5 = $existingData->variable_enrolment_duration_5;
+		$toform->variable_group_5 = $existingData->variable_group_5;
+
 		$toform->additional_info['text'] = $existingData->additional_info;
 		$toform->additional_info['format'] = 1;
 	} else {
