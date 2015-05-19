@@ -16,6 +16,7 @@ require_once $CFG->dirroot . '/local/moodec/forms/editcourse.php';
 $courseid = optional_param('id', 0, PARAM_INT);
 
 $PAGE->set_pagelayout('admin');
+$PAGE->requires->jquery();
 
 if ($courseid) {
 	$PAGE->set_url('/local/moodec/settings/course.php', array('id' => $courseid));
@@ -101,6 +102,102 @@ echo $OUTPUT->header();
 
 echo $OUTPUT->heading(get_string('edit_course_form_title', 'local_moodec', array('name' => $course->fullname)));
 
-$mform->display();
+$mform->display(); ?>
+
+<script>
+	$('#id_price_model').on('change', function(){
+		if($('#id_price_model').val() !== 'simple') {
+			$('#id_simple_header').hide();
+		} else {
+			$('#id_simple_header').show().removeClass('collapsed');
+		}
+
+		if($('#id_price_model').val() !== 'variable') {
+			$('#id_variable_header').hide();
+		} else {
+			$('#id_variable_header').show().removeClass('collapsed');
+		}
+	});
+	$('#id_variable_tiers').on('change', function(){
+		if($('#id_variable_tiers').val() < 3) {
+			$('#fitem_id_variable_name_3').hide();
+			$('#fitem_id_variable_group_3').hide();
+			$('#fitem_id_variable_price_3').hide();
+			$('#fitem_id_variable_enrolment_duration_3').hide();
+		} else {
+			$('#fitem_id_variable_name_3').show();
+			$('#fitem_id_variable_group_3').show();
+			$('#fitem_id_variable_price_3').show();
+			$('#fitem_id_variable_enrolment_duration_3').show();
+		}
+
+		if($('#id_variable_tiers').val() < 4) {
+			$('#fitem_id_variable_name_4').hide();
+			$('#fitem_id_variable_group_4').hide();
+			$('#fitem_id_variable_price_4').hide();
+			$('#fitem_id_variable_enrolment_duration_4').hide();
+		} else {
+			$('#fitem_id_variable_name_4').show();
+			$('#fitem_id_variable_group_4').show();
+			$('#fitem_id_variable_price_4').show();
+			$('#fitem_id_variable_enrolment_duration_4').show();
+		}
+
+		if($('#id_variable_tiers').val() < 5) {
+			$('#fitem_id_variable_name_5').hide();
+			$('#fitem_id_variable_group_5').hide();
+			$('#fitem_id_variable_price_5').hide();
+			$('#fitem_id_variable_enrolment_duration_5').hide();
+		} else {
+			$('#fitem_id_variable_name_5').show();
+			$('#fitem_id_variable_group_5').show();
+			$('#fitem_id_variable_price_5').show();
+			$('#fitem_id_variable_enrolment_duration_5').show();
+		}
+	});
+
+	var initSettings = function() {
+		if($('#id_price_model').val() !== 'simple') {
+			$('#id_simple_header').hide();
+		}
+
+		if($('#id_price_model').val() !== 'variable') {
+			$('#id_variable_header').hide();
+		}
+
+		if($('#id_variable_tiers').val() < 3) {
+			$('#fitem_id_variable_name_3').hide();
+			$('#fitem_id_variable_group_3').hide();
+			$('#fitem_id_variable_price_3').hide();
+			$('#fitem_id_variable_enrolment_duration_3').hide();
+		}
+
+		if($('#id_variable_tiers').val() < 4) {
+			$('#fitem_id_variable_name_4').hide();
+			$('#fitem_id_variable_group_4').hide();
+			$('#fitem_id_variable_price_4').hide();
+			$('#fitem_id_variable_enrolment_duration_4').hide();
+		}
+
+		if($('#id_variable_tiers').val() < 5) {
+			$('#fitem_id_variable_name_5').hide();
+			$('#fitem_id_variable_group_5').hide();
+			$('#fitem_id_variable_price_5').hide();
+			$('#fitem_id_variable_enrolment_duration_5').hide();
+		}
+
+		$('#fitem_id_variable_tiers').addClass('course-settings-tier');
+		$('#fitem_id_variable_group_1').addClass('course-settings-tier');
+		$('#fitem_id_variable_group_2').addClass('course-settings-tier');
+		$('#fitem_id_variable_group_3').addClass('course-settings-tier');
+		$('#fitem_id_variable_group_4').addClass('course-settings-tier');
+		$('#fitem_id_variable_group_5').addClass('course-settings-tier');
+	};
+
+	initSettings();
+
+</script>
+
+<?php
 
 echo $OUTPUT->footer();
