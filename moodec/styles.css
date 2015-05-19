@@ -125,6 +125,48 @@
     margin: 0 0.5em;
 }
 
+.mform .fitem.course-settings-tier {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1em;
+    margin-bottom: 2em;
+}
+
+#fitem_id_variable_name_1:before {
+    content: 'Tier 1';
+    display: block;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+#fitem_id_variable_name_2:before {
+    content: 'Tier 2';
+    display: block;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+#fitem_id_variable_name_3:before {
+    content: 'Tier 3';
+    display: block;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+#fitem_id_variable_name_4:before {
+    content: 'Tier 4';
+    display: block;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+#fitem_id_variable_name_5:before {
+    content: 'Tier 5';
+    display: block;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+
 @media all and (min-width: 767px) {
     .product-item .product-details {
         float: left;
