@@ -505,3 +505,18 @@ function local_moodec_output_pagination($products, $currentPage = 0, $category =
 		printf('</ul></div>');
 	}
 }
+
+function local_moodec_get_groups($id) {
+	global $CFG;
+	require_once $CFG->libdir . '/grouplib.php';
+	$arr = array(
+		0 => get_string('variable_group_none', 'local_moodec')
+	);
+	$groups = groups_get_all_groups($id);
+
+	foreach ($groups as $g) {
+		$arr[$g->id] = $g->name;
+	}
+
+	return $arr;
+}
