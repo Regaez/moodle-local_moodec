@@ -115,7 +115,7 @@ $string['edit_course_form_title'] = 'Product settings for {$a->name}';
 $string['show_in_store'] = 'Enable';
 $string['show_in_store_label'] = 'Show this course on the catalogue page';
 $string['additional_info'] = 'Additional product information';
-$string['price_model'] = 'Pricing model';
+$string['pricing_model'] = 'Pricing model';
 
 $string['simple_price'] = 'Course price';
 $string['simple_price_default'] = '0';
