@@ -5,8 +5,31 @@
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
                 <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
                 <FIELD NAME="show_in_store" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="price" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="enrolment_duration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="pricing_model" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="simple_price" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
+                <FIELD NAME="simple_enrolment_duration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="simple_group" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="null" SEQUENCE="false" />
+                <FIELD NAME="variable_tiers" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="2" SEQUENCE="false" />
+                <FIELD NAME="variable_name_1" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="variable_price_1" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
+                <FIELD NAME="variable_enrolment_duration_1" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="variable_group_1" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="null" SEQUENCE="false" />
+                <FIELD NAME="variable_name_2" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="variable_price_2" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
+                <FIELD NAME="variable_enrolment_duration_2" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="variable_group_2" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="null" SEQUENCE="false" />
+                <FIELD NAME="variable_name_3" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="variable_price_3" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
+                <FIELD NAME="variable_enrolment_duration_3" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="variable_group_3" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="null" SEQUENCE="false" />
+                <FIELD NAME="variable_name_4" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="variable_price_4" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
+                <FIELD NAME="variable_enrolment_duration_4" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="variable_group_4" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="null" SEQUENCE="false" />
+                <FIELD NAME="variable_name_5" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="variable_price_5" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
+                <FIELD NAME="variable_enrolment_duration_5" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="variable_group_5" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="null" SEQUENCE="false" />
                 <FIELD NAME="additional_info" TYPE="text" NOTNULL="false" SEQUENCE="false" />
             </FIELDS>
             <KEYS>
