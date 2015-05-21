@@ -59,7 +59,7 @@ class moodec_edit_course_form extends moodleform {
 			// TIER 1
 
 			$mform->addElement('text', 'variable_name_1', get_string('variable_name', 'local_moodec', array('tier' => 1))); // Add elements to your form
-			$mform->setType('variable_name_1', PARAM_FLOAT); //Set type of element
+			$mform->setType('variable_name_1', PARAM_TEXT); //Set type of element
 			$mform->setDefault('variable_name_1', get_string('variable_name_default', 'local_moodec', array('tier' => 1))); //Default value
 			$mform->disabledif('variable_name_1', 'pricing_model', 'neq', 'variable');
 
@@ -80,7 +80,7 @@ class moodec_edit_course_form extends moodleform {
 			// TIER 2
 			
 			$mform->addElement('text', 'variable_name_2', get_string('variable_name', 'local_moodec', array('tier' => 2))); // Add elements to your form
-			$mform->setType('variable_name_2', PARAM_FLOAT); //Set type of element
+			$mform->setType('variable_name_2', PARAM_TEXT); //Set type of element
 			$mform->setDefault('variable_name_2', get_string('variable_name_default', 'local_moodec', array('tier' => 2))); //Default value
 			$mform->disabledif('variable_name_2', 'pricing_model', 'neq', 'variable');
 
@@ -101,7 +101,7 @@ class moodec_edit_course_form extends moodleform {
 			// TIER 3
 			
 			$mform->addElement('text', 'variable_name_3', get_string('variable_name', 'local_moodec', array('tier' => 3))); // Add elements to your form
-			$mform->setType('variable_name_3', PARAM_FLOAT); //Set type of element
+			$mform->setType('variable_name_3', PARAM_TEXT); //Set type of element
 			$mform->setDefault('variable_name_3', get_string('variable_name_default', 'local_moodec', array('tier' => 3))); //Default value
 			$mform->disabledif('variable_name_3', 'pricing_model', 'neq', 'variable');
 			$mform->disabledif('variable_name_3', 'variable_tiers', 'eq', 2);
@@ -126,7 +126,7 @@ class moodec_edit_course_form extends moodleform {
 			// TIER 4
 
 			$mform->addElement('text', 'variable_name_4', get_string('variable_name', 'local_moodec', array('tier' => 4))); // Add elements to your form
-			$mform->setType('variable_name_4', PARAM_FLOAT); //Set type of element
+			$mform->setType('variable_name_4', PARAM_TEXT); //Set type of element
 			$mform->setDefault('variable_name_4', get_string('variable_name_default', 'local_moodec', array('tier' => 4))); //Default value
 			$mform->disabledif('variable_name_4', 'pricing_model', 'neq', 'variable');
 			$mform->disabledif('variable_name_4', 'variable_tiers', 'eq', 2);
@@ -155,7 +155,7 @@ class moodec_edit_course_form extends moodleform {
 			// TIER 5
 
 			$mform->addElement('text', 'variable_name_5', get_string('variable_name', 'local_moodec', array('tier' => 5))); // Add elements to your form
-			$mform->setType('variable_name_5', PARAM_FLOAT); //Set type of element
+			$mform->setType('variable_name_5', PARAM_TEXT); //Set type of element
 			$mform->setDefault('variable_name_5', get_string('variable_name_default', 'local_moodec', array('tier' => 5))); //Default value
 			$mform->disabledif('variable_name_5', 'pricing_model', 'neq', 'variable');
 			$mform->disabledif('variable_name_5', 'variable_tiers', 'eq', 2);
