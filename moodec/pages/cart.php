@@ -33,6 +33,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'addToCart') {
 	redirect(new moodle_url('/local/moodec/pages/cart.php'));
 }
 
+
+// If we are adding to the cart, process this first
+if (isset($_POST['action']) && $_POST['action'] === 'addVariationToCart') {
+	// Updates the cart var with the new addition
+	$cart = local_moodec_cart_add($_POST['id'], $_POST['variation']);
+	// redirect back to the course page
+	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+}
+
 if (isset($_POST['action']) && $_POST['action'] === 'removeFromCart') {
 	// Updates the cart var with the new addition
 	$cart = local_moodec_cart_remove($_POST['id']);
@@ -54,16 +63,31 @@ echo $OUTPUT->heading(get_string('cart_title', 'local_moodec'));
 
 	<ul class="products">
 
-	<?php foreach ($cart['courses'] as $product => $value) {
+	<?php foreach ($cart['courses'] as $courseid => $variation) {
 
-		$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
-		$thisCourse = get_course($product);?>
+		$product = local_moodec_get_product($courseid);?>
 
 		<li class="product-item">
-			<h4 class="product-title"><?php echo $thisCourse->fullname;?></h4>
-			<div class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $moodecCourse->price;?></div>
+			<h4 class="product-title"><?php 
+				if($variation === 0) {
+					echo $product->fullname;
+				} else {
+					printf(
+						'%s - %s',
+					 	$product->fullname,
+					 	$product->variations[$variation]->name
+					); 
+				}
+			?></h4>
+			<div class="product-price"><?php 
+				if($variation === 0) {
+					echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;
+				} else {
+					echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) .$product->variations[$variation]->price;
+				}
+			?></div>
 			<form class="product__form" action="" method="POST">
-				<input type="hidden" name="id" value="<?php echo $product;?>">
+				<input type="hidden" name="id" value="<?php echo $courseid;?>">
 				<input type="hidden" name="action" value="removeFromCart">
 				<input class="form__submit" type="submit" value="<?php echo get_string('button_remove_label', 'local_moodec');?>">
 			</form>

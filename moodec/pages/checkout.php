@@ -100,21 +100,45 @@ if (isguestuser()) {
 
 	<ul class="products">
 
-	<?php foreach ($cart['courses'] as $product => $value) {
+	<?php foreach ($cart['courses'] as $courseid => $variation) {
 
-		$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
-		$thisCourse = get_course($product);?>
+		$product = local_moodec_get_product($courseid);?>
 
 		<li class="product-item">
-			<h4 class="product-title"><?php echo $thisCourse->fullname;?></h4>
-			<div class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $moodecCourse->price;?></div>
+			<h4 class="product-title"><?php 
+				if($variation === 0) {
+					echo $product->fullname;
+				} else {
+					printf(
+						'%s - %s',
+					 	$product->fullname,
+					 	$product->variations[$variation]->name
+					); 
+				}
+			?></h4>
+			<div class="product-price"><?php 
+				if($variation === 0) {
+					echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;
+				} else {
+					echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) .$product->variations[$variation]->price;
+				}
+			?></div>
 
-			<input type="hidden" name="item_name_<?php echo $itemCount;?>" value="<?php echo $thisCourse->fullname;?>">
-			<input type="hidden" name="amount_<?php echo $itemCount;?>" value="<?php echo $moodecCourse->price;?>">
+			<input type="hidden" name="item_name_<?php echo $itemCount;?>" value="<?php
+				if($variation === 0) { 
+					echo $product->fullname;
+				} else { 
+					printf(
+						'%s - %s',
+					 	$product->fullname,
+					 	$product->variations[$variation]->name
+					);
+				}?>">
+			<input type="hidden" name="amount_<?php echo $itemCount;?>" value="<?php if($variation === 0) { echo $product->price; } else { echo $product->variations[$variation]->price;}?>">
 
 		</li>
 
-	<?php $ipnData .= sprintf('|C:%d', $product);
+	<?php $ipnData .= sprintf('|C:%d,V:%d', $courseid, $variation);
 		$itemCount++;}?>
 
 	</ul>
