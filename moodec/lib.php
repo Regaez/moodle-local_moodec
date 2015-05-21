@@ -190,7 +190,7 @@ function local_moodec_get_cart() {
  * @param  int 	$id		course id
  * @return array    	the cart
  */
-function local_moodec_cart_add($id) {
+function local_moodec_cart_add($id, $variation = 0) {
 	$newCart = array();
 	$id = (int) $id;
 
@@ -200,7 +200,9 @@ function local_moodec_cart_add($id) {
 		$newCart = $cart;
 	}
 
-	$newCart['courses'][$id] = 1;
+	// Stores the item in the cart, the key being the course ID, the value the variation
+	// 0 = simple, 1-5 is variation tier
+	$newCart['courses'][$id] = (int) $variation;
 
 	setcookie('moodec_cart', json_encode($newCart), time() + 31536000);
 
@@ -261,9 +263,25 @@ function local_moodec_cart_get_total() {
 	$cart = local_moodec_get_cart();
 
 	if (!!$cart) {
-		foreach ($cart['courses'] as $product => $value) {
+		foreach ($cart['courses'] as $product => $variation) {
 			$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
-			$sum += (float) $moodecCourse->price;
+			
+			// checks if product is variable, or simple
+			if($moodecCourse->pricing_model == 'simple') {
+				$sum += (float) $moodecCourse->simple_price;
+			} else {
+				// if variable, we should have a variation ID
+				// double check that this is actually set
+				// if 0, then something has gone funny along the way, so return simple price
+				// (when we create the cart, we default set it to 0 for simple products)
+				if( (int) $variation === 0) {
+					$sum += (float) $moodecCourse->simple_price;
+				} else {
+					// otherwise we *should* be gravy to add the variation's price
+					// TODO: forseeable issue being variation_id GREATER than 5?
+					$sum += (float) $moodecCourse->{"variable_price_$variation"};
+				}
+			}
 		}
 	}
 
@@ -327,6 +345,102 @@ function local_moodec_get_currency_symbol($currency) {
 }
 
 /**
+ * Returns an product object
+ * @param  int $id the course id
+ * @return object     Product, false if no product found
+ */
+function local_moodec_get_product($id) {
+	global $DB;
+
+	// build the query
+	$query = sprintf(
+		'SELECT 
+			lmc.id,
+			c.id as courseid,
+			fullname,
+			shortname,
+			category,
+			summary,
+			sortorder,
+			pricing_model,
+			simple_price,
+			simple_enrolment_duration,
+			simple_group,
+			variable_tiers,
+			variable_name_1,
+			variable_price_1,
+			variable_enrolment_duration_1,
+			variable_group_1,
+			variable_name_2,
+			variable_price_2,
+			variable_enrolment_duration_2,
+			variable_group_2,
+			variable_name_3,
+			variable_price_3,
+			variable_enrolment_duration_3,
+			variable_group_3,
+			variable_name_4,
+			variable_price_4,
+			variable_enrolment_duration_4,
+			variable_group_4,
+			variable_name_5,
+			variable_price_5,
+			variable_enrolment_duration_5,
+			variable_group_5,
+			additional_info,
+			timecreated
+		FROM {local_moodec_course} lmc, {course} c
+		WHERE show_in_store = 1
+		AND lmc.courseid = c.id
+		AND lmc.courseid = %d
+		LIMIT 1',
+		$id
+	);
+
+	// run the query
+	$products = $DB->get_records_sql($query);
+
+	// return the products
+	if (!!$products) {
+		foreach ($products as $product) {
+			$newProduct = new stdClass();
+
+			$newProduct->id = (int) $product->id;
+			$newProduct->courseid = (int) $product->courseid;
+			$newProduct->fullname = $product->fullname;
+			$newProduct->pricing_model = $product->pricing_model;
+			$newProduct->category = (int) $product->category;
+			$newProduct->summary = $product->summary;
+			$newProduct->sortorder = (int) $product->sortorder;
+			$newProduct->price = (float) $product->simple_price;
+			$newProduct->enrolment_duration = (int) $product->simple_enrolment_duration;
+			$newProduct->group = (int) $product->simple_group;
+			$newProduct->additional_info = $product->additional_info;
+			$newProduct->variable_tiers = (int) $product->variable_tiers;
+			$newProduct->variations = array();
+
+			// Store variations as an array of objects
+			for($i = 1; $i <= (int) $product->variable_tiers; $i++) {
+				$newVariation = new stdClass();
+				$newVariation->variation_id = $i;
+				$newVariation->name = $product->{"variable_name_$i"};
+				$newVariation->price = (float) $product->{"variable_price_$i"};
+				$newVariation->enrolment_duration = (int) $product->{"variable_enrolment_duration_$i"};
+				$newVariation->group = (int) $product->{"variable_group_$i"};
+
+				$newProduct->variations[$i] = $newVariation;
+			}
+
+			return $newProduct;
+		}
+	}
+
+	// return false if no product matches that ID;
+	return false;
+}
+
+
+/**
  * Returns an array of the products
  * @param  int $category  the category id to filter
  * @param  string $sortfield the field to sort the data by
@@ -353,7 +467,41 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 
 	// build the query
 	$query = sprintf(
-		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, additional_info, timecreated
+		'SELECT 
+			lmc.id,
+			c.id as courseid,
+			fullname,
+			shortname,
+			category,
+			summary,
+			sortorder,
+			pricing_model,
+			simple_price,
+			simple_enrolment_duration,
+			simple_group,
+			variable_tiers,
+			variable_name_1,
+			variable_price_1,
+			variable_enrolment_duration_1,
+			variable_group_1,
+			variable_name_2,
+			variable_price_2,
+			variable_enrolment_duration_2,
+			variable_group_2,
+			variable_name_3,
+			variable_price_3,
+			variable_enrolment_duration_3,
+			variable_group_3,
+			variable_name_4,
+			variable_price_4,
+			variable_enrolment_duration_4,
+			variable_group_4,
+			variable_name_5,
+			variable_price_5,
+			variable_enrolment_duration_5,
+			variable_group_5,
+			additional_info,
+			timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
@@ -373,14 +521,33 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 
 		// Cast the fields to be correct type
 		foreach ($products as $product) {
-			$newProduct = $product;
+			$newProduct = new stdClass();
 
 			$newProduct->id = (int) $product->id;
 			$newProduct->courseid = (int) $product->courseid;
+			$newProduct->fullname = $product->fullname;
+			$newProduct->pricing_model = $product->pricing_model;
 			$newProduct->category = (int) $product->category;
+			$newProduct->summary = $product->summary;
 			$newProduct->sortorder = (int) $product->sortorder;
-			$newProduct->price = (float) $product->price;
-			$newProduct->enrolment_duration = (int) $product->enrolment_duration;
+			$newProduct->price = (float) $product->simple_price;
+			$newProduct->enrolment_duration = (int) $product->simple_enrolment_duration;
+			$newProduct->group = (int) $product->simple_group;
+			$newProduct->additional_info = $product->additional_info;
+			$newProduct->variable_tiers = (int) $product->variable_tiers;
+			$newProduct->variations = array();
+
+			// Store variations as an array of objects
+			for($i = 1; $i <= (int) $product->variable_tiers; $i++) {
+				$newVariation = new stdClass();
+				$newVariation->variation_id = $i;
+				$newVariation->name = $product->{"variable_name_$i"};
+				$newVariation->price = (float) $product->{"variable_price_$i"};
+				$newVariation->enrolment_duration = (int) $product->{"variable_enrolment_duration_$i"};
+				$newVariation->group = (int) $product->{"variable_group_$i"};
+
+				$newProduct->variations[] = $newVariation;
+			}
 
 			array_push($castProducts, $newProduct);
 		}
@@ -397,7 +564,19 @@ function local_moodec_get_related_products($id, $category = null) {
 
 	// build the query
 	$query = sprintf(
-		'SELECT lmc.id,  c.id as courseid, fullname, shortname, category, summary, sortorder, price, enrolment_duration, additional_info, timecreated
+		'SELECT 
+			lmc.id,
+			c.id as courseid,
+			fullname,
+			shortname,
+			category,
+			summary,
+			sortorder,
+			pricing_model,
+			simple_price as price,
+			simple_enrolment_duration as enrolment_duration,
+			additional_info,
+			timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
