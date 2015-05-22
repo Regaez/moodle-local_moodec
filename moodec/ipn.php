@@ -18,6 +18,7 @@ require_once "lib.php";
 require_once $CFG->libdir . '/eventslib.php';
 require_once $CFG->libdir . '/enrollib.php';
 require_once $CFG->libdir . '/filelib.php';
+require_once $CFG->dirroot . '/group/lib.php';
 
 // PayPal does not like when we return error messages here,
 // the custom handler just logs exceptions and stops.
@@ -247,7 +248,17 @@ if (strlen($result) > 0) {
 
 			$plugin->enrol_user($instance, $user->id, $instance->roleid, $timestart, $timeend);
 
-			// TODO: also add them to group
+			// Now check if they should be added to a group
+			if( $c['variation'] === 0 ) {
+				$group = "simple_group";
+			} else {
+				$group = "variable_group_" . $c['variation'];
+			}
+
+			// if there is a group set (ie NOT 0), then add them to it
+			if (!!$thisCourse->$group) { 
+				$result = groups_add_member($thisCourse->$group, $user->id);
+			}	
 		}
 
 	} else if (strcmp($result, "INVALID") == 0) {
