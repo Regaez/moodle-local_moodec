@@ -152,12 +152,34 @@ $iterator = 0;
 
 			<?php } else {?>
 
-			<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
-				<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
-				<input type="hidden" name="action" value="addToCart">
-				<button class="product-form__add"><?php echo get_string('button_add_label', 'local_moodec');?></button>
-			</form>
+				<?php if( $product->pricing_model === 'simple') { ?>
 
+				<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
+					<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
+					<input type="hidden" name="action" value="addToCart">
+					<button class="product-form__add"><?php echo get_string('button_add_label', 'local_moodec');?></button>
+				</form>
+
+				<?php } else { ?>
+				
+				<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
+					<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
+					<input type="hidden" name="action" value="addVariationToCart">
+					<select name="variation">
+						
+						<?php foreach($product->variations as $variation) {?>
+						
+							<option value="<?php echo $variation->variation_id; ?>">
+								<?php echo $variation->name; ?>
+							</option>
+						
+						<?php } ?>
+
+					</select>
+					<button class="product-form__add"><?php echo get_string('button_add_label', 'local_moodec');?></button>
+				</form>
+
+				<?php } ?>
 			<?php }
 			}?>
 		</div>
