@@ -23,6 +23,7 @@ require_once $CFG->libdir . '/filelib.php';
 // the custom handler just logs exceptions and stops.
 set_exception_handler('local_moodec_ipn_exception_handler');
 
+
 /// Keep out casual intruders
 if (empty($_POST) or !empty($_GET)) {
 	print_error("Sorry, you can not use the script that way.");
@@ -59,7 +60,9 @@ if (!$user = $DB->get_record("user", array("id" => $data->userid))) {
 $newList = array();
 
 foreach ($courseList as $c) {
-	$courseid = (int) str_replace('C:', '', $c);
+	$c = explode(',', $c);
+	$courseid = (int) str_replace('C:', '', $c[0]);
+	$variationid = (int) str_replace('V:', '', $c[1]);
 
 	if (!$course = $DB->get_record("course", array("id" => $courseid))) {
 		message_paypal_error_to_admin("Not a valid course id", $data);
@@ -71,7 +74,7 @@ foreach ($courseList as $c) {
 		die;
 	}
 
-	array_push($newList, $courseid);
+	array_push($newList, array('id' => $courseid, 'variation'=>$variationid));
 }
 
 $courseList = $newList;
@@ -114,11 +117,11 @@ if (strlen($result) > 0) {
 
 		if ($data->payment_status != "Completed" and $data->payment_status != "Pending") {
 
-			foreach ($courseList as $courseid) {
+			foreach ($courseList as $c) {
 
-				$instance = $DB->get_record('enrol', array('courseid' => $courseid, 'enrol' => 'moodec'));
+				$instance = $DB->get_record('enrol', array('courseid' => $c['id'], 'enrol' => 'moodec'));
 
-				$data->courseid = $courseid;
+				$data->courseid = $c['id'];
 				$data->instanceid = $instance->id;
 
 				$plugin->unenrol_user($instance, $data->userid);
@@ -165,11 +168,11 @@ if (strlen($result) > 0) {
 
 		// At this point we only proceed with a status of completed or pending with a reason of echeck
 
-		foreach ($courseList as $courseid) {
+		foreach ($courseList as $c) {
 
-			if ($existing = $DB->get_record("local_moodec_paypal", array("txn_id" => $data->txn_id, 'courseid' => $courseid))) {
+			if ($existing = $DB->get_record("local_moodec_paypal", array("txn_id" => $data->txn_id, 'courseid' => $c['id']))) {
 				// Make sure this transaction doesn't exist already
-				message_paypal_error_to_admin("Transaction $data->txn_id for course $courseid is being repeated!", $data);
+				message_paypal_error_to_admin("Transaction $data->txn_id for course ".$c['id']." is being repeated!", $data);
 				die;
 
 			}
@@ -189,19 +192,24 @@ if (strlen($result) > 0) {
 			die;
 		}
 
-		foreach ($courseList as $courseid) {
-			if (!$course = $DB->get_record('course', array('id' => $courseid))) {
+		foreach ($courseList as $c) {
+			if (!$course = $DB->get_record('course', array('id' => $c['id']))) {
 				// Check that course exists
-				message_paypal_error_to_admin("Course $courseid doesn't exist", $data);
+				message_paypal_error_to_admin("Course ".$c['id']." doesn't exist", $data);
 				die;
 			}
 		}
 
 		// get the sum of all the products in the paypal transaction
 		$cost = 0;
-		foreach ($courseList as $courseid) {
-			$thisCourse = $DB->get_record('local_moodec_course', array('courseid' => $courseid));
-			$cost += (float) $thisCourse->price;
+		foreach ($courseList as $c) {
+			$thisCourse = $DB->get_record('local_moodec_course', array('courseid' => $c['id']));
+			if(	$c['variation'] === 0) {
+				$cost += (float) $thisCourse->simple_price;
+			} else {
+				$price = "variable_price_".$c['variation'];
+				$cost += (float) $thisCourse->$price;
+			}
 		}
 
 		// Use the same rounding of floats as on the enrol form.
@@ -215,23 +223,31 @@ if (strlen($result) > 0) {
 
 		// ALL CLEAR !
 
-		foreach ($courseList as $courseid) {
-			$data->courseid = $courseid;
-			$instance = $DB->get_record('enrol', array('courseid' => $courseid, 'enrol' => 'moodec'));
+		foreach ($courseList as $c) {
+			$data->courseid = $c['id'];
+			$data->variation = $c['variation'];
+			$instance = $DB->get_record('enrol', array('courseid' => $c['id'], 'enrol' => 'moodec'));
+			$timestart = time();
+			$timeend = 0;
 
 			$DB->insert_record("local_moodec_paypal", $data);
 
-			$thisCourse = $DB->get_record('local_moodec_course', array('courseid' => $courseid));
+			$thisCourse = $DB->get_record('local_moodec_course', array('courseid' => $c['id']));
 
-			if ($thisCourse->enrolment_duration) {
-				$timestart = time();
-				$timeend = $timestart + ($thisCourse->enrolment_duration * 86400);
+			if( $c['variation'] === 0 ) {
+				if (!!$thisCourse->simple_enrolment_duration) {
+					$timeend = $timestart + ((int)$thisCourse->simple_enrolment_duration * 86400);
+				}
 			} else {
-				$timestart = 0;
-				$timeend = 0;
+				$duration = "variable_enrolment_duration_".$c['variation'];
+				if (!!$thisCourse->$duration) {
+					$timeend = $timestart + ((int)$thisCourse->$duration * 86400);
+				}
 			}
 
 			$plugin->enrol_user($instance, $user->id, $instance->roleid, $timestart, $timeend);
+
+			// TODO: also add them to group
 		}
 
 	} else if (strcmp($result, "INVALID") == 0) {
