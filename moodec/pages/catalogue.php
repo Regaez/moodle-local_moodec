@@ -122,7 +122,29 @@ $iterator = 0;
 				<?php }?>
 
 				<?php if(!!get_config('local_moodec', 'page_catalogue_show_duration')) { ?>
-				<p><?php echo get_string('catalogue_enrolment_duration_label', 'local_moodec');?> <?php echo local_moodec_format_enrolment_duration($product->enrolment_duration);?></p>
+					<p><?php echo get_string('catalogue_enrolment_duration_label', 'local_moodec');?> <?php 
+
+						if( $product->pricing_model === 'simple') {
+							printf('<span class="product-duration">%s</span>',local_moodec_format_enrolment_duration($product->enrolment_duration)
+							);
+						} else {
+							$attr = '';
+
+							foreach ($product->variations as $v) {
+								$attr .= sprintf('data-tier-%d="%s" ', 
+									$v->variation_id, 
+									local_moodec_format_enrolment_duration($v->enrolment_duration)
+								);	
+							}
+
+							$firstVariation = reset($product->variations);
+
+							printf('<span class="product-duration" %s>%s</span>',
+								$attr,
+								local_moodec_format_enrolment_duration($firstVariation->enrolment_duration)
+							);
+						}
+					?></p>
 				<?php } ?>
 
 				<?php if (!!get_config('local_moodec', 'page_catalogue_show_category')) {?>
@@ -133,7 +155,25 @@ $iterator = 0;
 		<div class="product-actions">
 
 			<?php if (!!get_config('local_moodec', 'page_catalogue_show_price')) {?>
-			<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
+				
+				<?php if($product->pricing_model === 'simple') { ?>
+					<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
+				<?php } else { 
+					$attr = '';
+
+					foreach ($product->variations as $v) {
+						$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);	
+					}
+
+					$firstVariation = reset($product->variations);
+
+					printf('<h4 class="product-price" %s>%s<span class="amount">%.2f</span></h4>',
+						$attr,
+						local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+						$firstVariation->price
+					);
+
+				} ?>
 			<?php }?>
 
 			<?php
@@ -165,7 +205,7 @@ $iterator = 0;
 				<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
 					<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
 					<input type="hidden" name="action" value="addVariationToCart">
-					<select name="variation">
+					<select class="product-tier" name="variation">
 						
 						<?php foreach($product->variations as $variation) {?>
 						
@@ -204,6 +244,19 @@ $iterator = 0;
 <script>
 	$('.filter-bar select').on('change', function(){
 		$('.filter-bar').submit();
+	});
+
+	$('.product-form .product-tier').on('change', function(){
+		var id = $(this).val();
+		var parent = $(this).parents('.product-item');
+
+		// Update price
+		var newPrice = $('.product-price', parent).attr('data-tier-' + id);
+		$('.product-price .amount', parent).text(newPrice);
+
+		// Update course duration
+		var newDuration = $('.product-duration', parent).attr('data-tier-' + id);
+		$('.product-duration', parent).text(newDuration);
 	});
 </script>
 
