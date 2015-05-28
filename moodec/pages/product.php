@@ -19,6 +19,7 @@ $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
 $PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
 $PAGE->set_pagelayout('standard');
+$PAGE->requires->jquery();
 
 if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
 	print_error('invalidcourseid', 'error');
@@ -67,9 +68,49 @@ $imageURL = local_moodec_get_course_image_url($product->courseid);
 		<?php }?>
 
 		<h4><?php echo get_string('enrolment_duration_label', 'local_moodec');?></h4>
-		<p><?php echo local_moodec_format_enrolment_duration($product->enrolment_duration);?></p>
+		<?php 
 
-		<h4><?php echo get_string('price_label', 'local_moodec');?> <span class="price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></span></h4>
+			if( $product->pricing_model === 'simple') {
+				printf('<p class="product-duration">%s</p>',local_moodec_format_enrolment_duration($product->enrolment_duration)
+				);
+			} else {
+				$attr = '';
+
+				foreach ($product->variations as $v) {
+					$attr .= sprintf('data-tier-%d="%s" ', 
+						$v->variation_id, 
+						local_moodec_format_enrolment_duration($v->enrolment_duration)
+					);	
+				}
+
+				$firstVariation = reset($product->variations);
+
+				printf('<p class="product-duration" %s>%s</p>',
+					$attr,
+					local_moodec_format_enrolment_duration($firstVariation->enrolment_duration)
+				);
+			}
+		?>
+
+		<?php if($product->pricing_model === 'simple') { ?>
+			<h4 class="product-price"><span class="label"><?php echo get_string('price_label', 'local_moodec');?></span> <?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
+		<?php } else { 
+			$attr = '';
+
+			foreach ($product->variations as $v) {
+				$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);	
+			}
+
+			$firstVariation = reset($product->variations);
+
+			printf('<h4 class="product-price" %s>%s %s<span class="amount">%.2f</span></h4>',
+				$attr,
+				get_string('price_label', 'local_moodec'),
+				local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+				$firstVariation->price
+			);
+
+		} ?>
 
 		<?php
 if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
@@ -92,7 +133,7 @@ if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUS
 
 				<form action="/local/moodec/pages/cart.php" method="POST" class="product-single__form">
 					<input type="hidden" name="action" value="addVariationToCart">
-					<select name="variation">
+					<select class="product-tier" name="variation">
 						
 						<?php foreach($product->variations as $variation) {?>
 						
@@ -142,5 +183,19 @@ if (!!get_config('local_moodec', 'page_product_show_related_products')) {
 </div>
 
 <?php }}?>
+
+<script>
+	$('.product-tier').on('change', function(){
+		var id = $(this).val();
+
+		// Update price
+		var newPrice = $('.product-price').attr('data-tier-' + id);
+		$('.product-price .amount').text(newPrice);
+
+		// Update course duration
+		var newDuration = $('.product-duration').attr('data-tier-' + id);
+		$('.product-duration').text(newDuration);
+	});
+</script>
 
 <?php echo $OUTPUT->footer();
