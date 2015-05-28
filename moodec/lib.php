@@ -101,13 +101,13 @@ function local_moodec_format_enrolment_duration($duration) {
 		$output .= $years == 1 ? sprintf(' %d %s ', $years, get_string('enrolment_duration_year', 'local_moodec')) : sprintf(' %d %s ', $years, get_string('enrolment_duration_year_plural', 'local_moodec'));
 	}
 
-	if (30 < $duration) {
+	if (29 < $duration) {
 		$months = floor($duration / 30);
 		$duration = $duration % 30;
 		$output .= $months == 1 ? sprintf(' %d %s ', $months, get_string('enrolment_duration_month', 'local_moodec')) : sprintf(' %d %s ', $months, get_string('enrolment_duration_month_plural', 'local_moodec'));
 	}
 
-	if (7 < $duration) {
+	if (6 < $duration) {
 		$weeks = floor($duration / 7);
 		$duration = $duration % 7;
 		$output .= $weeks == 1 ? sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week', 'local_moodec')) : sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week_plural', 'local_moodec'));
