@@ -17,6 +17,8 @@ $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
 $PAGE->set_url('/local/moodec/pages/checkout.php');
 $PAGE->set_pagelayout('standard');
+$PAGE->set_title(get_string('checkout_title', 'local_moodec'));
+$PAGE->set_heading(get_string('checkout_title', 'local_moodec'));
 
 require_login();
 // require_capability('local/moodec:checkout', $systemcontext);
@@ -51,8 +53,6 @@ if (0 < count($removed)) {
 $ipnData = sprintf('U:%d', $USER->id);
 
 echo $OUTPUT->header();
-
-echo $OUTPUT->heading(get_string('checkout_title', 'local_moodec'));
 
 if (isguestuser()) {
 

@@ -32,9 +32,11 @@ if (!$product) {
 	print_error('courseunavailable', 'error');
 }
 
-echo $OUTPUT->header();
+//needs to have the product verified before setting page heading & title
+$PAGE->set_title(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
+$PAGE->set_heading(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
 
-echo $OUTPUT->heading(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
+echo $OUTPUT->header();
 
 $imageURL = local_moodec_get_course_image_url($product->courseid);
 ?>

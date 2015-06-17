@@ -21,6 +21,8 @@ $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
 $PAGE->set_url('/local/moodec/pages/catalogue.php');
 $PAGE->set_pagelayout('standard');
+$PAGE->set_title(get_string('catalogue_title', 'local_moodec'));
+$PAGE->set_heading(get_string('catalogue_title', 'local_moodec'));
 $PAGE->requires->jquery();
 
 $sortfield = 'sortorder';
@@ -37,8 +39,6 @@ if ($sort !== null && 0 < strlen($sort) && strpos('-', $sort) !== -1) {
 $cart = local_moodec_get_cart();
 
 echo $OUTPUT->header();
-
-echo $OUTPUT->heading(get_string('catalogue_title', 'local_moodec'));
 
 ?>
 

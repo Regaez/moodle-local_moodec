@@ -17,6 +17,9 @@ $systemcontext = context_system::instance();
 $PAGE->set_context($systemcontext);
 $PAGE->set_url('/local/moodec/pages/cart.php');
 $PAGE->set_pagelayout('standard');
+$PAGE->set_title(get_string('cart_title', 'local_moodec'));
+$PAGE->set_heading(get_string('cart_title', 'local_moodec'));
+
 
 //
 // TODO: Check for new items and add to cart
@@ -50,8 +53,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'removeFromCart') {
 }
 
 echo $OUTPUT->header();
-
-echo $OUTPUT->heading(get_string('cart_title', 'local_moodec'));
 
 ?>
 
