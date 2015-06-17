@@ -73,7 +73,7 @@ $string['course_list_category_label'] = 'Category:';
 
 // PRODUCT
 $string['product_title'] = '{$a->coursename}';
-$string['enrolment_duration_label'] = 'Course Duration';
+$string['enrolment_duration_label'] = 'Course duration:';
 $string['price_label'] = 'Price:';
 $string['product_related_label'] = 'Related Products';
 
