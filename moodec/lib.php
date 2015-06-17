@@ -630,12 +630,14 @@ function local_moodec_get_category_list($id) {
 
 	if (!!$categories) {
 		foreach ($categories as $category) {
-			$list .= sprintf(
-				'<option value="%d" %s>%s</option>',
-				$category->id,
-				(int) $category->id === $id ? 'selected="selected"' : '',
-				$category->name
-			);
+			if($category->visible) {
+				$list .= sprintf(
+					'<option value="%d" %s>%s</option>',
+					$category->id,
+					(int) $category->id === $id ? 'selected="selected"' : '',
+					$category->name
+				);
+			}
 		}
 	}
 
