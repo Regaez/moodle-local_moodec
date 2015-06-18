@@ -73,7 +73,9 @@ if (isguestuser()) {
 } else {
 
 	?>
-<p><?php echo get_string('checkout_message', 'local_moodec');?></p>
+<div class="cart-overview">
+
+<p class="cart-review__message"><?php echo get_string('checkout_message', 'local_moodec');?></p>
 
 <?php if (!!$removedProducts && is_array($removedProducts)) {
 		printf("<p style='color: red;'>%s</p>", get_string('checkout_removed_courses_label', 'local_moodec'));
@@ -85,7 +87,7 @@ if (isguestuser()) {
 		echo "</ul>";
 	}?>
 
-<form class="cart-overview" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<form class="cart-review" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 	<input type="hidden" name="cmd" value="_cart">
 	<input type="hidden" name="charset" value="utf-8" />
 	<input type="hidden" name="upload" value="1">
@@ -155,6 +157,8 @@ if (isguestuser()) {
 <form action="/local/moodec/pages/catalogue.php" method="GET" class="back-to-shop">
 	<input type="submit" value="<?php echo get_string('button_return_store_label', 'local_moodec');?>">
 </form>
+
+</div>
 
 <?php }
 
