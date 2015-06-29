@@ -56,6 +56,7 @@ echo $OUTPUT->header();
 
 ?>
 
+<h1 class="page__title"><?php echo get_string('cart_title', 'local_moodec'); ?></h1>
 
 <div class="cart-overview">
 

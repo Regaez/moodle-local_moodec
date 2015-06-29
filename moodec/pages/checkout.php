@@ -52,7 +52,11 @@ if (0 < count($removed)) {
 
 $ipnData = sprintf('U:%d', $USER->id);
 
-echo $OUTPUT->header();
+echo $OUTPUT->header(); ?>
+
+<h1 class="page__title"><?php echo get_string('checkout_title', 'local_moodec'); ?></h1>
+
+<?php
 
 if (isguestuser()) {
 

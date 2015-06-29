@@ -42,6 +42,8 @@ echo $OUTPUT->header();
 
 ?>
 
+<h1 class="page__title"><?php echo get_string('catalogue_title', 'local_moodec'); ?></h1>
+
 <form action="" method="GET" class="filter-bar">
 	<div class="filter__category">
 		<span><?php echo get_string('filter_category_label', 'local_moodec');?></span>
