@@ -150,7 +150,7 @@ $imageURL = local_moodec_get_course_image_url($product->courseid);
 					<form action="/local/moodec/pages/cart.php" method="POST" class="product-single__form">
 						<input type="hidden" name="action" value="addToCart">
 						<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
-						<input type="submit" value="<?php echo get_string('button_add_label', 'local_moodec');?>">
+						<input type="submit" class="product-form__add" value="<?php echo get_string('button_add_label', 'local_moodec');?>">
 					</form>
 
 				<?php } else { ?>
@@ -169,7 +169,7 @@ $imageURL = local_moodec_get_course_image_url($product->courseid);
 
 						</select>
 						<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
-						<input type="submit" value="<?php echo get_string('button_add_label', 'local_moodec');?>">
+						<input type="submit" class="product-form__add" value="<?php echo get_string('button_add_label', 'local_moodec');?>">
 					</form>
 				
 				<?php } ?>
