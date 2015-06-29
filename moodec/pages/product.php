@@ -36,6 +36,9 @@ if (!$product) {
 $PAGE->set_title(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
 $PAGE->set_heading(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
 
+// Get the cart in it's current state
+$cart = local_moodec_get_cart();
+
 echo $OUTPUT->header();
 
 $imageURL = local_moodec_get_course_image_url($product->courseid);
