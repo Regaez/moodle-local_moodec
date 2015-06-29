@@ -46,6 +46,8 @@ $imageURL = local_moodec_get_course_image_url($product->courseid);
 
 <div class="product-single">
 
+	<h1 class="product__title"><?php echo get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)); ?></h1>
+
 	<?php if (!!$imageURL && !!get_config('local_moodec', 'page_product_show_image')) {?>
 		<img src="<?php echo $imageURL;?>" alt="" class="product-image">
 	<?php }?>
@@ -186,16 +188,17 @@ if (!!get_config('local_moodec', 'page_product_show_related_products')) {
 
 <div class="related-products">
 
-	<h4><?php echo get_string('product_related_label', 'local_moodec');?></h4>
+	<h2 class="related-products__title"><?php echo get_string('product_related_label', 'local_moodec');?></h2>
 
 	<ul class="grid-container">
 
 		<?php foreach ($products as $product) {?>
 
 		<li class="grid-item">
-			<a href="<?php echo new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid));?>">
-				<img src="<?php echo local_moodec_get_course_image_url($product->courseid);?>" alt="" class="product-image">
-				<h5><?php echo $product->fullname;?></h5>
+			<img src="<?php echo local_moodec_get_course_image_url($product->courseid);?>" alt="" class="product-image">
+			<h5><?php echo $product->fullname;?></h5>
+			<a href="<?php echo new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid));?>" class="product-view btn">
+				<?php echo get_string('product_related_button_label', 'local_moodec'); ?>
 			</a>
 		</li>
 

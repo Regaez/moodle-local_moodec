@@ -76,6 +76,7 @@ $string['product_title'] = '{$a->coursename}';
 $string['enrolment_duration_label'] = 'Course duration:';
 $string['price_label'] = 'Price:';
 $string['product_related_label'] = 'Related Products';
+$string['product_related_button_label'] = 'View details';
 
 // CHECKOUT
 $string['checkout_title'] = 'Checkout';
