@@ -129,7 +129,13 @@ $imageURL = local_moodec_get_course_image_url($product->courseid);
 	if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
 		?>
 				<div class="product-single__form">
-					<button class="product-form__add" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
+					<button class="product-form__add button--enrolled" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
+				</div>
+
+			<?php } else if (is_array($cart['courses']) && array_key_exists($product->courseid, $cart['courses'])) {?>
+
+				<div class="product-single__form">
+					<button class="product-form__add button--cart" disabled="disabled"><?php echo get_string('button_in_cart_label', 'local_moodec');?></button>
 				</div>
 
 			<?php } else {?>
