@@ -204,7 +204,7 @@ function local_moodec_cart_add($id, $variation = 0) {
 	// 0 = simple, 1-5 is variation tier
 	$newCart['courses'][$id] = (int) $variation;
 
-	setcookie('moodec_cart', json_encode($newCart), time() + 31536000);
+	setcookie('moodec_cart', json_encode($newCart), time() + 31536000, '/');
 
 	return $newCart;
 }
@@ -226,7 +226,7 @@ function local_moodec_cart_remove($id) {
 
 	unset($newCart['courses'][$id]);
 
-	setcookie('moodec_cart', json_encode($newCart), time() + 31536000);
+	setcookie('moodec_cart', json_encode($newCart), time() + 31536000, '/');
 
 	return $newCart;
 }
