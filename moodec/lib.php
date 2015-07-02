@@ -442,10 +442,11 @@ function local_moodec_get_product($id) {
 
 /**
  * Returns an array of the products
- * @param  int $category  the category id to filter
- * @param  string $sortfield the field to sort the data by
- * @param  string $sortorder sort by ASC or DESC
- * @return array            the products
+ * @param  int 		$category  	The category id to filter
+ * @param  string 	$sortfield 	The field to sort the data by
+ * @param  string 	$sortorder 	Sort by ASC or DESC
+ * @param  int 		$page 		The pagination 'page' to return. -1 will return all products
+ * @return array            	The products
  */
 function local_moodec_get_products($category = null, $sortfield = 'sortorder', $sortorder = 'ASC', $page = 1) {
 	global $DB;
@@ -461,6 +462,12 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 
 	if ($category == 'default') {
 		$category = null;
+	}
+
+	// Check if we should be returning all products or just a page of products
+	$returnAll = false;
+	if( $page === -1 ) {
+		$returnAll = true;
 	}
 
 	$page = $page < 1 ? 0 : $page - 1;
@@ -552,7 +559,11 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 			array_push($castProducts, $newProduct);
 		}
 
-		return array_slice($castProducts, $page * get_config('local_moodec', 'pagination'));
+		if( $returnAll ) {
+			return $castProducts;
+		} else {
+			return array_slice($castProducts, $page * get_config('local_moodec', 'pagination'));
+		}
 	}
 
 	// return an empty array if nothing matches the query
