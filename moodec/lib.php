@@ -392,7 +392,7 @@ function local_moodec_get_product($id) {
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
-		AND lmc.id = %d
+		AND lmc.courseid = %d
 		LIMIT 1',
 		$id
 	);
@@ -699,7 +699,7 @@ function local_moodec_get_related_products($id, $category = null) {
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
 		AND lmc.courseid = c.id
-		AND lmc.id != %d
+		AND lmc.courseid != %d
 		%s
 		ORDER BY uuid()',
 		$id,
