@@ -12,24 +12,23 @@
 require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
-$courseid = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_INT);
 
 $systemcontext = context_system::instance();
 
 $PAGE->set_context($systemcontext);
-$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
+$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $id));
 $PAGE->set_pagelayout('standard');
 $PAGE->requires->jquery();
 
-if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
-	print_error('invalidcourseid', 'error');
-}
-
-// $product = $DB->get_record('local_moodec_course', array('courseid' => $courseid));
-$product = local_moodec_get_product($courseid);
+$product = local_moodec_get_product($id);
 
 if (!$product) {
 	print_error('courseunavailable', 'error');
+}
+
+if (!($course = $DB->get_record('course', array('id' => $product->courseid)))) {
+	print_error('invalidcourseid', 'error');
 }
 
 //needs to have the product verified before setting page heading & title
@@ -181,7 +180,7 @@ $imageURL = local_moodec_get_course_image_url($product->courseid);
 <?php
 if (!!get_config('local_moodec', 'page_product_show_related_products')) {
 
-	$products = local_moodec_get_related_products($courseid, $product->category);
+	$products = local_moodec_get_related_products($id, $product->category);
 	$iterator = 0;
 	if (is_array($products) && 0 < count($products)) {?>
 
