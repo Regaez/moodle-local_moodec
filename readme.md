@@ -5,7 +5,7 @@ Moodec is a **work-in-progress** eCommerce storefront plugin for Moodle. Users a
 
 ## Requirements
 
-1. Moodec Enrolment plugin (enrol_moodec) version 2014111000
+1. [Moodec Enrolment plugin](https://github.com/Regaez/moodle-enrol_moodec) (enrol_moodec) version 2014111000
 2. Users must have an account to purchase courses, so self-registration is recommended to be enabled
 
 
@@ -25,6 +25,10 @@ In the Site Administration block, under *Moodec > General settings*.
 
 In the Site Administration block, under *Moodec > Page settings*. You can configure the pages created by the plugin by enabling and disabling elements, such as product description, course image etc.
 
+### Course Enrolment Method settings
+
+You will also need to ensure that the **Moodec enrolment method** is enabled for the course, with the settings configured appropriately.
+
 ### Product settings
 
 In order to enable a course for sale, you must navigate to the course page and in the Administration block, select *Course administration > Edit product settings*. You must tick the **Enable** checkbox to allow the product to show up in the store and be able to be bought.
@@ -33,10 +37,6 @@ Next select a *pricing model*, either **simple** or **variable**.
 
 1. **Simple products** have a single price, course enrolment duration and group.
 2. **Variable products** can be configured to have up to 5 tiers. You can specify a name, price, enrolment duration and group for each tier.
-
-### Course Enrolment Method settings
-
-You will also need to ensure that the **Moodec enrolment method** is enabled for the course, with the settings configured appropriately.
 
 #### Course description and image
 
