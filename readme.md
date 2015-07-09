@@ -1,6 +1,6 @@
 # Moodec
 
-Moodec is an eCommerce storefront plugin for Moodle. Users are able to browse through a catalogue of courses and add them to a cart, which they can purchase and enrol into via Paypal.
+Moodec is a **work-in-progress** eCommerce storefront plugin for Moodle. Users are able to browse through a catalogue of courses and add them to a cart, which they can purchase and enrol into via Paypal.
 
 
 ## Requirements
@@ -34,8 +34,19 @@ Next select a *pricing model*, either **simple** or **variable**.
 1. **Simple products** have a single price, course enrolment duration and group.
 2. **Variable products** can be configured to have up to 5 tiers. You can specify a name, price, enrolment duration and group for each tier.
 
+### Course Enrolment Method settings
+
+You will also need to ensure that the **Moodec enrolment method** is enabled for the course, with the settings configured appropriately.
+
 #### Course description and image
 
 The course description is inherited from Moodle's default course summary field, which can be found in *Course administration > Edit settings*. The product image is also pulled from the default course summary files section in the same settings page.
 
 You can also add additional product information, under the *More settings* section when editing the course's product settings.
+
+
+## Issues
+
+As this is still work in progress, there are some known issues. However, feel free to report any you bugs you find. 
+
+**NOTE:** it is recommended to only use this plugin in a test environment.
