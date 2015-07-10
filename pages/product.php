@@ -25,7 +25,6 @@ if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
 	print_error('invalidcourseid', 'error');
 }
 
-// $product = $DB->get_record('local_moodec_course', array('courseid' => $courseid));
 $product = local_moodec_get_product($courseid);
 
 if (!$product) {
@@ -36,149 +35,15 @@ if (!$product) {
 $PAGE->set_title(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
 $PAGE->set_heading(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
 
+$renderer = $PAGE->get_renderer('local_moodec');
+
 // Get the cart in it's current state
 $cart = local_moodec_get_cart();
 
 echo $OUTPUT->header();
 
-$imageURL = local_moodec_get_course_image_url($product->courseid);
-?>
+echo $renderer->single_product($product);
 
-<div class="product-single">
-
-	<h1 class="product__title"><?php echo get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)); ?></h1>
-
-	<?php if (!!$imageURL && !!get_config('local_moodec', 'page_product_show_image')) {?>
-		<img src="<?php echo $imageURL;?>" alt="" class="product-image">
-	<?php }?>
-
-	<div class="product-details">
-
-		<?php if (!!get_config('local_moodec', 'page_product_show_description')) {?>
-		<div class="product-description">
-			<?php echo local_moodec_format_course_summary($product->courseid);?>
-		</div>
-		<?php }?>
-
-		<?php if (!!get_config('local_moodec', 'page_product_show_additional_description')) {?>
-		<div class="additional-info">
-			<?php echo $product->additional_info;?>
-		</div>
-		<?php }?>
-
-		<div class="product-details__additional">
-
-			<div class="product-duration__wrapper">
-				<span class="product-duration__label"><?php echo get_string('enrolment_duration_label', 'local_moodec');?></span>
-				<?php 
-
-					if( $product->pricing_model === 'simple') {
-						printf('<span class="product-duration">%s</span>',local_moodec_format_enrolment_duration($product->enrolment_duration)
-						);
-					} else {
-						$attr = '';
-
-						foreach ($product->variations as $v) {
-							$attr .= sprintf('data-tier-%d="%s" ', 
-								$v->variation_id, 
-								local_moodec_format_enrolment_duration($v->enrolment_duration)
-							);	
-						}
-
-						$firstVariation = reset($product->variations);
-
-						printf('<span class="product-duration" %s>%s</span>',
-							$attr,
-							local_moodec_format_enrolment_duration($firstVariation->enrolment_duration)
-						);
-					}
-				?>
-			</div>
-
-			<?php if (!!get_config('local_moodec', 'page_catalogue_show_category')) {
-
-			$category = $DB->get_record('course_categories', array('id' => $product->category));
-			$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $product->category));
-			?>
-			<div class="product-category__wrapper">
-				<span class="product-category__label"><?php echo get_string('course_list_category_label', 'local_moodec');?></span>
-				<a class="product-category__link" href="<?php echo $categoryURL;?>"><?php echo $category->name;?></a>
-			</div>
-			<?php }?>
-			
-
-			<?php if($product->pricing_model === 'simple') { ?>
-				<div class="product-price">
-					<span class="product-price__label"><?php echo get_string('price_label', 'local_moodec');?></span> 
-					<span class="product-price__value"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></span>
-				</div>
-			<?php } else { 
-				$attr = '';
-
-				foreach ($product->variations as $v) {
-					$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);	
-				}
-
-				$firstVariation = reset($product->variations);
-
-				printf('<div class="product-price" %s><span class="product-price__label">%s</span> <span class="product-price__value">%s<span class="amount">%.2f</span></span></div>',
-					$attr,
-					get_string('price_label', 'local_moodec'),
-					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-					$firstVariation->price
-				);
-
-			} ?>
-
-			<?php
-	if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
-		?>
-				<div class="product-single__form">
-					<button class="product-form__add button--enrolled" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
-				</div>
-
-			<?php } else if (is_array($cart['courses']) && array_key_exists($product->courseid, $cart['courses'])) {?>
-
-				<div class="product-single__form">
-					<button class="product-form__add button--cart" disabled="disabled"><?php echo get_string('button_in_cart_label', 'local_moodec');?></button>
-				</div>
-
-			<?php } else {?>
-
-				<?php if($product->pricing_model === 'simple') { ?>
-
-					<form action="/local/moodec/pages/cart.php" method="POST" class="product-single__form">
-						<input type="hidden" name="action" value="addToCart">
-						<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
-						<input type="submit" class="product-form__add" value="<?php echo get_string('button_add_label', 'local_moodec');?>">
-					</form>
-
-				<?php } else { ?>
-
-					<form action="/local/moodec/pages/cart.php" method="POST" class="product-single__form">
-						<input type="hidden" name="action" value="addVariationToCart">
-						<select class="product-tier" name="variation">
-							
-							<?php foreach($product->variations as $variation) {?>
-							
-								<option value="<?php echo $variation->variation_id; ?>">
-									<?php echo $variation->name; ?>
-								</option>
-							
-							<?php } ?>
-
-						</select>
-						<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
-						<input type="submit" class="product-form__add" value="<?php echo get_string('button_add_label', 'local_moodec');?>">
-					</form>
-				
-				<?php } ?>
-			<?php }?>
-		</div>
-	</div>
-</div>
-
-<?php
 if (!!get_config('local_moodec', 'page_product_show_related_products')) {
 
 	$products = local_moodec_get_related_products($courseid, $product->category);
