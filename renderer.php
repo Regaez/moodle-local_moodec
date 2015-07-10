@@ -138,7 +138,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 							// Category label
 							$html .= sprintf(
-								'<span class="product-category__label">%s</span>',
+								'<span class="product-category__label">%s</span> ',
 								get_string('course_list_category_label', 'local_moodec')
 							);
 
@@ -273,6 +273,82 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 		// close product single wrapper
 		$html .= '</div>';
+
+		return $html;
+	}
+
+
+	/**
+	 * Outputs the HTML to display related products given a product
+	 * @param  product 	$product  	the product for which to find the related ones
+	 * @return string           	the HTML output
+	 */
+	function related_products($product) {
+		global $CFG;
+
+		// Require Moodec lib
+		require_once $CFG->dirroot . '/local/moodec/lib.php';
+
+		$html = '';
+		$iterator = 0;
+
+		// Get products related to the product passed to us
+		$products = local_moodec_get_related_products($product->courseid, $product->category);
+
+		// We only output anything if there ARE related products
+		if (is_array($products) && 0 < count($products)) {
+
+			// Output section wrapper
+			$html .= '<div class="related-products">';
+
+				// Show the section title
+				$html .= sprintf(
+					'<h2 class="related-products__title">%s</h2>',
+					get_string('product_related_label', 'local_moodec')
+				);
+
+				// Output container to hold product items
+				$html .= '<ul class="grid-container">';
+
+				foreach ($products as $product) {
+
+					$html .= '<li class="grid-item">';
+
+						// Product image
+						$html .= sprintf(
+							'<img src="%s" alt="%s" class="product-image">',
+							local_moodec_get_course_image_url($product->courseid),
+							$product->fullname
+						);
+
+						// Product title
+						$html .= sprintf(
+							'<h5>%s</h5>',
+							$product->fullname
+						);
+
+						// Product link
+						$html .= sprintf(
+							'<a href="%s" class="product-view btn">%s</a>',
+							new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid)),
+							get_string('product_related_button_label', 'local_moodec')
+						);
+
+					$html .= '</li>';
+
+					// Iterator limits only 3 products to be shown
+					$iterator++;
+					if ($iterator > 2) {
+						break;
+					}
+				}
+
+				// Close item container
+				$html .= '</ul>';
+
+			// Close section wrapper
+			$html .= '</div>';
+		}
 
 		return $html;
 	}

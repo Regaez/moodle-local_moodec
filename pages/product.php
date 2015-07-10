@@ -12,21 +12,30 @@
 require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
+// Get the ID of the course to be displayed
 $courseid = required_param('id', PARAM_INT);
 
-$systemcontext = context_system::instance();
-
-$PAGE->set_context($systemcontext);
+// Set PAGE variables
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
 $PAGE->set_pagelayout('standard');
-$PAGE->requires->jquery();
 
+// Get the renderer for this page
+$renderer = $PAGE->get_renderer('local_moodec');
+
+// Include required javascript
+$PAGE->requires->jquery();
+$PAGE->requires->js(new moodle_url('/local/moodec/js/product.js'));
+
+// Course must exist for there to be a product shown
 if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
 	print_error('invalidcourseid', 'error');
 }
 
+// Get the product via the course id
 $product = local_moodec_get_product($courseid);
 
+// Check if the product actually exists/is available
 if (!$product) {
 	print_error('courseunavailable', 'error');
 }
@@ -35,57 +44,15 @@ if (!$product) {
 $PAGE->set_title(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
 $PAGE->set_heading(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
 
-$renderer = $PAGE->get_renderer('local_moodec');
-
-// Get the cart in it's current state
-$cart = local_moodec_get_cart();
 
 echo $OUTPUT->header();
 
+// Render the product page content
 echo $renderer->single_product($product);
 
+// Check if related products should be shown and output if so
 if (!!get_config('local_moodec', 'page_product_show_related_products')) {
+	echo $renderer->related_products($product);
+}
 
-	$products = local_moodec_get_related_products($courseid, $product->category);
-	$iterator = 0;
-	if (is_array($products) && 0 < count($products)) {?>
-
-
-<div class="related-products">
-
-	<h2 class="related-products__title"><?php echo get_string('product_related_label', 'local_moodec');?></h2>
-
-	<ul class="grid-container">
-
-		<?php foreach ($products as $product) {?>
-
-		<li class="grid-item">
-			<img src="<?php echo local_moodec_get_course_image_url($product->courseid);?>" alt="" class="product-image">
-			<h5><?php echo $product->fullname;?></h5>
-			<a href="<?php echo new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid));?>" class="product-view btn">
-				<?php echo get_string('product_related_button_label', 'local_moodec'); ?>
-			</a>
-		</li>
-
-		<?php $iterator++;if ($iterator > 2) {break;}}?>
-	</ul>
-
-</div>
-
-<?php }}?>
-
-<script>
-	$('.product-tier').on('change', function(){
-		var id = $(this).val();
-
-		// Update price
-		var newPrice = $('.product-price').attr('data-tier-' + id);
-		$('.product-price .amount').text(newPrice);
-
-		// Update course duration
-		var newDuration = $('.product-duration').attr('data-tier-' + id);
-		$('.product-duration').text(newDuration);
-	});
-</script>
-
-<?php echo $OUTPUT->footer();
+echo $OUTPUT->footer();
