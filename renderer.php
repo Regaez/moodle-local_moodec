@@ -40,16 +40,8 @@ class local_moodec_renderer extends plugin_renderer_base {
 			);
 
 			// Product/course image
-			$imageURL = local_moodec_get_course_image_url($product->courseid);
-
-			if (!!$imageURL && !!get_config('local_moodec', 'page_product_show_image')) {
-
-				$html .= sprintf(
-					'<img src="%s" alt="%s" class="product-image">',
-					$imageURL,
-					$product->fullname
-				);
-
+			if (!!get_config('local_moodec', 'page_product_show_image')) {
+				$html .= $this->product_image($product);
 			}
 
 			// Product details wrapper
@@ -315,11 +307,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					$html .= '<li class="grid-item">';
 
 						// Product image
-						$html .= sprintf(
-							'<img src="%s" alt="%s" class="product-image">',
-							local_moodec_get_course_image_url($product->courseid),
-							$product->fullname
-						);
+						$html .= $this->product_image($product);
 
 						// Product title
 						$html .= sprintf(
@@ -348,6 +336,32 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 			// Close section wrapper
 			$html .= '</div>';
+		}
+
+		return $html;
+	}
+
+
+	/**
+	 * Returns the HTML for the product image
+	 * @param  product 	$product 	the product for the image to be retrieved 
+	 * @return string          		the HTML output
+	 */
+	function product_image($product) {
+		global $CFG;
+
+		// Require Moodec lib
+		require_once $CFG->dirroot . '/local/moodec/lib.php';
+
+		$html = '';
+		$imageURL = local_moodec_get_course_image_url($product->courseid);
+
+		if ( !!$imageURL ) {
+			$html = sprintf(
+				'<img src="%s" alt="%s" class="product-image">',
+				$imageURL,
+				$product->fullname
+			);
 		}
 
 		return $html;
