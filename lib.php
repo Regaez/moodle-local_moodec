@@ -25,7 +25,7 @@ function local_moodec_extend_navigation(global_navigation $nav) {
 	$productsExist = $DB->get_records_sql('SELECT * FROM {local_moodec_course}');
 
 	if(!!$productsExist) {
-		
+
 		// Actually get the products
 		$products = local_moodec_get_products();
 
@@ -273,7 +273,7 @@ function local_moodec_cart_get_total() {
 	if (!!$cart) {
 		foreach ($cart['courses'] as $product => $variation) {
 			$moodecCourse = $DB->get_record('local_moodec_course', array('courseid' => $product));
-			
+
 			// checks if product is variable, or simple
 			if($moodecCourse->pricing_model == 'simple') {
 				$sum += (float) $moodecCourse->simple_price;
@@ -362,7 +362,7 @@ function local_moodec_get_product($id) {
 
 	// build the query
 	$query = sprintf(
-		'SELECT 
+		'SELECT
 			lmc.id,
 			c.id as courseid,
 			fullname,
@@ -460,7 +460,7 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 	global $DB;
 
 	// VALIDATE PARAMETERS
-	if (!in_array($sortfield, array('sortorder', 'price', 'fullname', 'shortname', 'enrolment_duration', 'timecreated'))) {
+	if (!in_array($sortfield, array('sortorder', 'simple_price', 'fullname', 'shortname', 'simple_enrolment_duration', 'timecreated'))) {
 		$sortfield = 'sortorder';
 	}
 
@@ -482,7 +482,7 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 
 	// build the query
 	$query = sprintf(
-		'SELECT 
+		'SELECT
 			lmc.id,
 			c.id as courseid,
 			fullname,
@@ -580,7 +580,7 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 
 /**
  * Returns an array of the products
- * @param  int 		$limit 		The number of random products to return  	
+ * @param  int 		$limit 		The number of random products to return
  * @param  int 		$category  	The category id to filter by
  * @return array            	The products
  */
@@ -594,7 +594,7 @@ function local_moodec_get_random_products($limit = 1, $category = null) {
 
 	// build the query
 	$query = sprintf(
-		'SELECT 
+		'SELECT
 			lmc.id,
 			c.id as courseid,
 			fullname,
@@ -691,7 +691,7 @@ function local_moodec_get_related_products($id, $category = null) {
 
 	// build the query
 	$query = sprintf(
-		'SELECT 
+		'SELECT
 			lmc.id,
 			c.id as courseid,
 			fullname,

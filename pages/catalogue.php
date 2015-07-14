@@ -63,16 +63,16 @@ echo $OUTPUT->header();
 			<option value="fullname-desc" <?php echo $sort === 'fullname-desc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_fullname_desc', 'local_moodec');?>
 			</option>
-			<option value="price-desc" <?php echo $sort === 'price-desc' ? 'selected="selected"' : '';?>>
+			<option value="simple_price-desc" <?php echo $sort === 'simple_price-desc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_price_desc', 'local_moodec');?>
 			</option>
-			<option value="price-asc" <?php echo $sort === 'price-asc' ? 'selected="selected"' : '';?>>
+			<option value="simple_price-asc" <?php echo $sort === 'simple_price-asc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_price_asc', 'local_moodec');?>
 			</option>
-			<option value="enrolment_duration-desc" <?php echo $sort === 'enrolment_duration-desc' ? 'selected="selected"' : '';?>>
+			<option value="simple_enrolment_duration-asc" <?php echo $sort === 'simple_enrolment_duration-asc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_duration_asc', 'local_moodec');?>
 			</option>
-			<option value="enrolment_duration-asc" <?php echo $sort === 'enrolment_duration-asc' ? 'selected="selected"' : '';?>>
+			<option value="simple_enrolment_duration-desc" <?php echo $sort === 'simple_enrolment_duration-desc' ? 'selected="selected"' : '';?>>
 				<?php echo get_string('filter_sort_duration_desc', 'local_moodec');?>
 			</option>
 		</select>
@@ -114,7 +114,7 @@ $iterator = 0;
 						echo $product->fullname;
 					}?>
 				</h3>
-				
+
 				<?php if (!!get_config('local_moodec', 'page_catalogue_show_description')) {?>
 				<div class="product-summary"><?php echo $summary;?></div>
 				<?php }?>
@@ -124,7 +124,7 @@ $iterator = 0;
 				<?php }?>
 
 				<?php if(!!get_config('local_moodec', 'page_catalogue_show_duration')) { ?>
-					<p><?php echo get_string('catalogue_enrolment_duration_label', 'local_moodec');?> <?php 
+					<p><?php echo get_string('catalogue_enrolment_duration_label', 'local_moodec');?> <?php
 
 						if( $product->pricing_model === 'simple') {
 							printf('<span class="product-duration">%s</span>',local_moodec_format_enrolment_duration($product->enrolment_duration)
@@ -133,10 +133,10 @@ $iterator = 0;
 							$attr = '';
 
 							foreach ($product->variations as $v) {
-								$attr .= sprintf('data-tier-%d="%s" ', 
-									$v->variation_id, 
+								$attr .= sprintf('data-tier-%d="%s" ',
+									$v->variation_id,
 									local_moodec_format_enrolment_duration($v->enrolment_duration)
-								);	
+								);
 							}
 
 							$firstVariation = reset($product->variations);
@@ -157,14 +157,14 @@ $iterator = 0;
 		<div class="product-actions">
 
 			<?php if (!!get_config('local_moodec', 'page_catalogue_show_price')) {?>
-				
+
 				<?php if($product->pricing_model === 'simple') { ?>
 					<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
-				<?php } else { 
+				<?php } else {
 					$attr = '';
 
 					foreach ($product->variations as $v) {
-						$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);	
+						$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);
 					}
 
 					$firstVariation = reset($product->variations);
@@ -203,18 +203,18 @@ $iterator = 0;
 				</form>
 
 				<?php } else { ?>
-				
+
 				<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
 					<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
 					<input type="hidden" name="action" value="addVariationToCart">
 					<select class="product-tier" name="variation">
-						
+
 						<?php foreach($product->variations as $variation) {?>
-						
+
 							<option value="<?php echo $variation->variation_id; ?>">
 								<?php echo $variation->name; ?>
 							</option>
-						
+
 						<?php } ?>
 
 					</select>
