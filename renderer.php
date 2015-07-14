@@ -49,7 +49,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 				// Product description
 				if (!!get_config('local_moodec', 'page_product_show_description')) {
-					
+
 					$html .= sprintf(
 						'<div class="product-description">%s</div>',
 						local_moodec_format_course_summary($product->courseid)
@@ -88,10 +88,10 @@ class local_moodec_renderer extends plugin_renderer_base {
 							$attr = '';
 
 							foreach ($product->variations as $v) {
-								$attr .= sprintf('data-tier-%d="%s" ', 
-									$v->variation_id, 
+								$attr .= sprintf('data-tier-%d="%s" ',
+									$v->variation_id,
 									local_moodec_format_enrolment_duration($v->enrolment_duration)
-								);	
+								);
 							}
 
 							$firstVariation = reset($product->variations);
@@ -116,7 +116,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 								'id' => $product->category
 							)
 						);
-						
+
 						// Get the url to link to the category page with the filter active
 						$categoryURL = new moodle_url(
 							$CFG->wwwroot . '/local/moodec/pages/catalogue.php',
@@ -170,7 +170,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 						$attr = '';
 
 						foreach ($product->variations as $v) {
-							$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);	
+							$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);
 						}
 
 						$firstVariation = reset($product->variations);
@@ -183,7 +183,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 							$firstVariation->price
 						);
 					}
-					
+
 					// Add to cart button states
 					if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
 
@@ -344,7 +344,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 	/**
 	 * Returns the HTML for the product image
-	 * @param  product 	$product 	the product for the image to be retrieved 
+	 * @param  product 	$product 	the product for the image to be retrieved
 	 * @return string          		the HTML output
 	 */
 	function product_image($product) {
@@ -366,4 +366,117 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 		return $html;
 	}
+
+		/**
+		* Returns the HTML for the Moodec cart
+		* @param 	array 		cart
+		* @return 	string 		the HTML output
+		*/
+		function moodec_cart($cart) {
+				global $CFG;
+
+				// Require Moodec lib
+				require_once $CFG->dirroot . '/local/moodec/lib.php';
+
+				$html = '';
+
+				$html .= '<div class="cart-overview">';
+
+				if (is_array($cart['courses']) && 0 < count($cart['courses'])) {
+
+						$html .= '<ul class="products">';
+
+						// Go through each product in the cart
+						foreach ($cart['courses'] as $courseid => $variation) {
+
+								$product = local_moodec_get_product($courseid);
+
+								$html .= '<li class="product-item">';
+
+										// Product title and variation
+										$html .= sprintf(
+												'<h4 class="product-title"><a href="%s">%s</a></h4>',
+												new moodle_url('/local/moodec/pages/product.php', array('id'=>$courseid)),
+												$variation === 0 ? $product->fullname : $product->fullname . ' - ' . $product->variations[$variation]->name
+										);
+
+										// Product price
+										$html .= sprintf(
+												'<div class="product-price">%s%.02f</div>',
+												local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+												$variation === 0 ? $product->price : $product->variations[$variation]->price
+										);
+
+										// 'Remove' from cart button
+										$html .= sprintf(
+												'<form class="product__form" action="" method="POST">
+													<input type="hidden" name="id" value="%d">
+													<input type="hidden" name="action" value="removeFromCart">
+													<input class="form__submit" type="submit" value="%s">
+												</form>',
+												$courseid,
+												get_string('button_remove_label', 'local_moodec')
+										);
+
+								$html .= '</li>';
+						}
+
+						$html .= '</ul>';
+
+						// Output cart summary section
+						$html .= '<div class="cart-summary">';
+
+								// Cart total price
+								$html .= sprintf(
+										'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%0.2f</h3>',
+										get_string('cart_total', 'local_moodec'),
+										local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+										local_moodec_cart_get_total()
+								);
+
+						$html .= '</div><div class="cart-actions">';
+
+								// Return to store button
+								$html .= sprintf(
+										'<form action="%s" method="GET">
+											<input type="submit" value="%s">
+										</form>',
+										new moodle_url('/local/moodec/pages/catalogue.php'),
+										get_string('button_return_store_label', 'local_moodec')
+								);
+
+								// Proceed to checkout button
+								$html .= sprintf(
+										'<form action="%s" method="GET">
+											<input type="submit" value="%s">
+										</form>',
+										new moodle_url('/local/moodec/pages/checkout.php'),
+										get_string('button_checkout_label', 'local_moodec')
+								);
+
+						$html .= '</div>';
+
+				} else {
+
+						// Empty cart message
+						$html .= sprintf(
+								'<p class="cart-mesage--empty">%s</p>',
+								get_string('cart_empty_message', 'local_moodec')
+						);
+
+						// Return to store button
+						$html .= sprintf(
+								'<form action="%s" method="GET">
+									<input type="submit" value="%s">
+								</form>',
+								new moodle_url('/local/moodec/pages/catalogue.php'),
+								get_string('button_return_store_label', 'local_moodec')
+						);
+
+				}
+
+				$html .= '</div>';
+
+				return $html;
+		}
 }
