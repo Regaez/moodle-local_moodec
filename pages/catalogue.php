@@ -25,6 +25,9 @@ $PAGE->set_title(get_string('catalogue_title', 'local_moodec'));
 $PAGE->set_heading(get_string('catalogue_title', 'local_moodec'));
 $PAGE->requires->jquery();
 
+// Get the renderer for this page
+$renderer = $PAGE->get_renderer('local_moodec');
+
 $sortfield = 'sortorder';
 $sortorder = 'ASC';
 
@@ -44,42 +47,12 @@ echo $OUTPUT->header();
 
 <h1 class="page__title"><?php echo get_string('catalogue_title', 'local_moodec'); ?></h1>
 
-<form action="" method="GET" class="filter-bar">
-	<div class="filter__category">
-		<span><?php echo get_string('filter_category_label', 'local_moodec');?></span>
-		<select name="category" id="category">
-			<?php echo local_moodec_get_category_list($categoryID);?>
-		</select>
-	</div>
-	<div class="filter__sort">
-		<?php echo get_string('filter_sort_label', 'local_moodec');?>
-		<select name="sort" id="sort">
-			<option value="default-asc" <?php echo $sort === 'default-asc' ? 'selected="selected"' : '';?>>
-				<?php echo get_string('filter_sort_default', 'local_moodec');?>
-			</option>
-			<option value="fullname-asc" <?php echo $sort === 'fullname-asc' ? 'selected="selected"' : '';?>>
-				<?php echo get_string('filter_sort_fullname_asc', 'local_moodec');?>
-			</option>
-			<option value="fullname-desc" <?php echo $sort === 'fullname-desc' ? 'selected="selected"' : '';?>>
-				<?php echo get_string('filter_sort_fullname_desc', 'local_moodec');?>
-			</option>
-			<option value="simple_price-desc" <?php echo $sort === 'simple_price-desc' ? 'selected="selected"' : '';?>>
-				<?php echo get_string('filter_sort_price_desc', 'local_moodec');?>
-			</option>
-			<option value="simple_price-asc" <?php echo $sort === 'simple_price-asc' ? 'selected="selected"' : '';?>>
-				<?php echo get_string('filter_sort_price_asc', 'local_moodec');?>
-			</option>
-			<option value="simple_enrolment_duration-asc" <?php echo $sort === 'simple_enrolment_duration-asc' ? 'selected="selected"' : '';?>>
-				<?php echo get_string('filter_sort_duration_asc', 'local_moodec');?>
-			</option>
-			<option value="simple_enrolment_duration-desc" <?php echo $sort === 'simple_enrolment_duration-desc' ? 'selected="selected"' : '';?>>
-				<?php echo get_string('filter_sort_duration_desc', 'local_moodec');?>
-			</option>
-		</select>
-	</div>
-</form>
+<?php 
 
-<?php
+// Render catalogue filter bar
+echo $renderer->filter_bar($categoryID, $sort); 
+
+
 $products = local_moodec_get_products($categoryID, $sortfield, $sortorder, $page);
 
 if (is_array($products) && 0 < count($products)) {
