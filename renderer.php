@@ -530,6 +530,71 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 
 	/**
+	 * Returns the HTML output for the catalogue page filter bar
+	 * @param  int 		$c 		The catalogue ID
+	 * @param  string 	$s  	The sorting string
+	 * @return string   		HTML
+	 */
+	function filter_bar($c = null, $s= null) {
+
+		$filters = array(
+			'default-asc',
+			'fullname-asc',
+			'fullname-desc',
+			'simple_price-asc',
+			'simple_price-desc',
+			'simple_enrolment_duration-asc',
+			'simple_enrolment_duration-desc',
+		);
+
+		// open form wrapper
+		$html = '<form action="" method="GET" class="filter-bar">';
+
+			// Render category filter
+			$html .= sprintf(
+				'<div class="filter__category">
+					<span>%s</span>
+					<select name="category" id="category">
+						%s
+					</select>
+				</div>',
+				get_string('filter_category_label', 'local_moodec'),
+				local_moodec_get_category_list($c)
+			);
+
+			// Render sorting filter
+			$html .= sprintf(
+				'<div class="filter__sort">
+					%s
+					<select name="sort" id="sort">',
+				get_string('filter_sort_label', 'local_moodec')
+			);
+
+				// Output all options for filters
+				foreach ($filters as $f) {
+					
+					// Category option
+					$html .= sprintf(
+						'<option value="%s" %s>%s</option>',
+						$f,
+						$s === $f ? 'selected="selected"' : '',
+						get_string('filter_sort_' . str_replace('-', '_', $f), 'local_moodec')
+					);
+
+				}
+
+			// close sort filter
+			$html .= '</select></div>';
+
+		// close filter-bar form
+		$html .= '</form>';
+
+		return $html;
+
+	}
+
+
+	/**
 	 * Returns the HTML output for the standard cart actions
 	 * @return string  	HTML
 	 */	
