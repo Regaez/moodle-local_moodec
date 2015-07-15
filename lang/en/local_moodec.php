@@ -62,13 +62,13 @@ $string['catalogue_empty'] = 'No products available.';
 $string['catalogue_enrolment_duration_label'] = 'Course duration:';
 $string['filter_category_label'] = 'Category:';
 $string['filter_sort_label'] = 'Sort by:';
-$string['filter_sort_default'] = 'Default';
+$string['filter_sort_default_asc'] = 'Default';
 $string['filter_sort_fullname_asc'] = 'Course Title: A - Z';
 $string['filter_sort_fullname_desc'] = 'Course Title: Z - A';
-$string['filter_sort_price_asc'] = 'Price: Low to High';
-$string['filter_sort_price_desc'] = 'Price: High to Low';
-$string['filter_sort_duration_asc'] = 'Duration: Low to High';
-$string['filter_sort_duration_desc'] = 'Duration: High to Low';
+$string['filter_sort_simple_price_asc'] = 'Price: Low to High';
+$string['filter_sort_simple_price_desc'] = 'Price: High to Low';
+$string['filter_sort_simple_enrolment_duration_asc'] = 'Duration: Low to High';
+$string['filter_sort_simple_enrolment_duration_desc'] = 'Duration: High to Low';
 $string['course_list_category_label'] = 'Category:';
 
 // PRODUCT
