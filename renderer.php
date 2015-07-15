@@ -498,17 +498,12 @@ class local_moodec_renderer extends plugin_renderer_base {
 				// Get the checkout action HTML
 				$html .= $this->checkout_actions($ipnData);
 
-				// Close the checkout form so we can open another below
+				// Close the checkout form so we can open another below for 
+				// the return to store button
 				$html .= '</form>';
 
 				// Return to store button
-				$html .= sprintf(
-					'<form action="%s" method="GET" class="back-to-shop">
-						<input type="submit" value="%s">
-					</form>',
-					new moodle_url('/local/moodec/pages/catalogue.php'),
-					get_string('button_return_store_label', 'local_moodec')
-				);
+				$html .= $this->return_to_store_action();
 
 			} else {
 				// Get the cart action HTML
@@ -524,13 +519,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 			);
 
 			// Return to store button
-			$html .= sprintf(
-				'<form action="%s" method="GET">
-					<input type="submit" value="%s">
-				</form>',
-				new moodle_url('/local/moodec/pages/catalogue.php'),
-				get_string('button_return_store_label', 'local_moodec')
-			);
+			$html .= $this->return_to_store_action();
 
 		}
 
@@ -548,13 +537,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$html = '<div class="cart-actions">';
 
 			// Return to store button
-			$html .= sprintf(
-				'<form action="%s" method="GET">
-					<input type="submit" value="%s">
-				</form>',
-				new moodle_url('/local/moodec/pages/catalogue.php'),
-				get_string('button_return_store_label', 'local_moodec')
-			);
+			$html .= $this->return_to_store_action();
 
 			// Proceed to checkout button
 			$html .= sprintf(
@@ -589,6 +572,22 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$html .= '</div>';
 
 		return $html;
+	}
+
+
+	/**
+	 * Returns the HTML output for the return to store button
+	 * @return string 	HTML
+	 */	
+	function return_to_store_action() {
+		// Return to store button
+		return sprintf(
+			'<form action="%s" method="GET" class="back-to-shop">
+				<input type="submit" value="%s">
+			</form>',
+			new moodle_url('/local/moodec/pages/catalogue.php'),
+			get_string('button_return_store_label', 'local_moodec')
+		);
 	}
 
 	/**
