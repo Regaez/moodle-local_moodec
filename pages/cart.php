@@ -63,4 +63,22 @@ printf('<h1 class="page__title">%s</h1>', get_string('cart_title', 'local_moodec
 echo $renderer->moodec_cart($cart);
 
 
+$relatedOutput = '';
+// Check if there are any related products for each product in the cart
+foreach($cart['courses'] as $id => $variation) {
+	
+	// Get the product for the given ID
+	$product = local_moodec_get_product($id);	
+	// Get the HTML output of the related products renderer
+	$relatedOutput = $renderer->related_products($product);
+
+	// If there is any output, then we are happy and can continue!
+	if( $relatedOutput !== '') {
+		break;
+	}
+}
+
+echo $relatedOutput;
+
+
 echo $OUTPUT->footer();
