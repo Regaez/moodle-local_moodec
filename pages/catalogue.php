@@ -24,6 +24,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('catalogue_title', 'local_moodec'));
 $PAGE->set_heading(get_string('catalogue_title', 'local_moodec'));
 $PAGE->requires->jquery();
+$PAGE->requires->js('/local/moodec/js/catalogue.js');
 
 // Get the renderer for this page
 $renderer = $PAGE->get_renderer('local_moodec');
@@ -214,25 +215,6 @@ $iterator = 0;
 			'local_moodec'
 		)
 	);
-} ?>
+} 
 
-<script>
-	$('.filter-bar select').on('change', function(){
-		$('.filter-bar').submit();
-	});
-
-	$('.product-form .product-tier').on('change', function(){
-		var id = $(this).val();
-		var parent = $(this).parents('.product-item');
-
-		// Update price
-		var newPrice = $('.product-price', parent).attr('data-tier-' + id);
-		$('.product-price .amount', parent).text(newPrice);
-
-		// Update course duration
-		var newDuration = $('.product-duration', parent).attr('data-tier-' + id);
-		$('.product-duration', parent).text(newDuration);
-	});
-</script>
-
-<?php echo $OUTPUT->footer();?>
+echo $OUTPUT->footer();
