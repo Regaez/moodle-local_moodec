@@ -367,116 +367,279 @@ class local_moodec_renderer extends plugin_renderer_base {
 		return $html;
 	}
 
-		/**
-		* Returns the HTML for the Moodec cart
-		* @param 	array 		cart
-		* @return 	string 		the HTML output
-		*/
-		function moodec_cart($cart) {
-				global $CFG;
+	/**
+	* Returns the HTML for the Moodec cart
+	* @param 	array 		cart
+	* @param 	bool 		is it the checkout page
+	* @return 	string 		the HTML output
+	*/
+	function moodec_cart($cart, $checkout = false, $removedProducts = array()) {
+		global $CFG, $USER;
 
-				// Require Moodec lib
-				require_once $CFG->dirroot . '/local/moodec/lib.php';
+		// Require Moodec lib
+		require_once $CFG->dirroot . '/local/moodec/lib.php';
 
-				$html = '';
+		// Initialise vars
+		$html = '';
+		$ipnData = sprintf('U:%d', $USER->id);
+		$itemCount = 1;
 
-				$html .= '<div class="cart-overview">';
+		$html .= '<div class="cart-overview">';
+		
+		// Render only on checkout page
+		if( !!$checkout ) {
 
-				if (is_array($cart['courses']) && 0 < count($cart['courses'])) {
+			// Output cart review message
+			$html .= sprintf(
+				'<p class="cart-review__message">%s</p>',
+				get_string('checkout_message', 'local_moodec')
+			);
 
-						$html .= '<ul class="products">';
+			if (!!$removedProducts && is_array($removedProducts)) {
+				
+				$html .= sprintf(
+					'<p class="cart-review__message--removed">%s</p>', 
+					get_string('checkout_removed_courses_label', 'local_moodec')
+				);
 
-						// Go through each product in the cart
-						foreach ($cart['courses'] as $courseid => $variation) {
+				$html .= '<ul>';
 
-								$product = local_moodec_get_product($courseid);
-
-								$html .= '<li class="product-item">';
-
-										// Product title and variation
-										$html .= sprintf(
-												'<h4 class="product-title"><a href="%s">%s</a></h4>',
-												new moodle_url('/local/moodec/pages/product.php', array('id'=>$courseid)),
-												$variation === 0 ? $product->fullname : $product->fullname . ' - ' . $product->variations[$variation]->name
-										);
-
-										// Product price
-										$html .= sprintf(
-												'<div class="product-price">%s%.02f</div>',
-												local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-												$variation === 0 ? $product->price : $product->variations[$variation]->price
-										);
-
-										// 'Remove' from cart button
-										$html .= sprintf(
-												'<form class="product__form" action="" method="POST">
-													<input type="hidden" name="id" value="%d">
-													<input type="hidden" name="action" value="removeFromCart">
-													<input class="form__submit" type="submit" value="%s">
-												</form>',
-												$courseid,
-												get_string('button_remove_label', 'local_moodec')
-										);
-
-								$html .= '</li>';
-						}
-
-						$html .= '</ul>';
-
-						// Output cart summary section
-						$html .= '<div class="cart-summary">';
-
-								// Cart total price
-								$html .= sprintf(
-										'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%0.2f</h3>',
-										get_string('cart_total', 'local_moodec'),
-										local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-										local_moodec_cart_get_total()
-								);
-
-						$html .= '</div><div class="cart-actions">';
-
-								// Return to store button
-								$html .= sprintf(
-										'<form action="%s" method="GET">
-											<input type="submit" value="%s">
-										</form>',
-										new moodle_url('/local/moodec/pages/catalogue.php'),
-										get_string('button_return_store_label', 'local_moodec')
-								);
-
-								// Proceed to checkout button
-								$html .= sprintf(
-										'<form action="%s" method="GET">
-											<input type="submit" value="%s">
-										</form>',
-										new moodle_url('/local/moodec/pages/checkout.php'),
-										get_string('button_checkout_label', 'local_moodec')
-								);
-
-						$html .= '</div>';
-
-				} else {
-
-						// Empty cart message
-						$html .= sprintf(
-								'<p class="cart-mesage--empty">%s</p>',
-								get_string('cart_empty_message', 'local_moodec')
-						);
-
-						// Return to store button
-						$html .= sprintf(
-								'<form action="%s" method="GET">
-									<input type="submit" value="%s">
-								</form>',
-								new moodle_url('/local/moodec/pages/catalogue.php'),
-								get_string('button_return_store_label', 'local_moodec')
-						);
-
+				foreach ($removedProducts as $product) {
+					$thisCourse = get_course($product);
+					
+					$html .= sprintf(
+						'<li class="cart-review__item--removed">%s</li>', 
+						$thisCourse->fullname
+					);
 				}
 
-				$html .= '</div>';
+				$html .= '</ul>';
+			}
 
-				return $html;
+			$html .= sprintf(
+				'<form class="cart-review" action="%s" method="post">',
+				// TODO: make this a sandbox setting?
+				'https://www.paypal.com/cgi-bin/webscr' 
+			);
 		}
+
+		if (is_array($cart['courses']) && 0 < count($cart['courses'])) {
+
+			// Output required paypal fields
+			if( !!$checkout ) {
+				$html .= $this->paypal_fields();
+			}
+
+			$html .= '<ul class="products">';
+
+			// Go through each product in the cart
+			foreach ($cart['courses'] as $courseid => $variation) {
+
+				$product = local_moodec_get_product($courseid);
+
+				$html .= '<li class="product-item">';
+
+					// Product title and variation
+					$html .= sprintf(
+						'<h4 class="product-title"><a href="%s">%s</a></h4>',
+						new moodle_url('/local/moodec/pages/product.php', array('id'=>$courseid)),
+						$variation === 0 ? $product->fullname : $product->fullname . ' - ' . $product->variations[$variation]->name
+					);
+
+					// Product price
+					$html .= sprintf(
+						'<div class="product-price">%s%.02f</div>',
+						local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+						$variation === 0 ? $product->price : $product->variations[$variation]->price
+					);
+
+					if( !!$checkout ) {
+
+						// Output the hidden paypal fields for this product info
+						$html .= $this->paypal_product_info($product, $variation, $itemCount);
+
+					} else {
+
+						// 'Remove' from cart button
+						$html .= sprintf(
+							'<form class="product__form" action="" method="POST">
+								<input type="hidden" name="id" value="%d">
+								<input type="hidden" name="action" value="removeFromCart">
+								<input class="form__submit" type="submit" value="%s">
+							</form>',
+							$courseid,
+							get_string('button_remove_label', 'local_moodec')
+						);
+
+					}
+
+				$html .= '</li>';
+
+				$ipnData .= sprintf('|C:%d,V:%d', $courseid, $variation);
+				$itemCount++;
+			}
+
+			$html .= '</ul>';
+
+			// Output cart summary section
+			$html .= '<div class="cart-summary">';
+
+				// Cart total price
+				$html .= sprintf(
+					'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%0.2f</h3>',
+					get_string('cart_total', 'local_moodec'),
+					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+					local_moodec_cart_get_total()
+				);
+
+			$html .= '</div>';
+
+			if( !!$checkout ) {
+				// Get the checkout action HTML
+				$html .= $this->checkout_actions($ipnData);
+
+				// Close the checkout form so we can open another below
+				$html .= '</form>';
+
+				// Return to store button
+				$html .= sprintf(
+					'<form action="%s" method="GET" class="back-to-shop">
+						<input type="submit" value="%s">
+					</form>',
+					new moodle_url('/local/moodec/pages/catalogue.php'),
+					get_string('button_return_store_label', 'local_moodec')
+				);
+
+			} else {
+				// Get the cart action HTML
+				$html .= $this->cart_actions();
+			}
+
+		} else {
+
+			// Empty cart message
+			$html .= sprintf(
+				'<p class="cart-mesage--empty">%s</p>',
+				get_string('cart_empty_message', 'local_moodec')
+			);
+
+			// Return to store button
+			$html .= sprintf(
+				'<form action="%s" method="GET">
+					<input type="submit" value="%s">
+				</form>',
+				new moodle_url('/local/moodec/pages/catalogue.php'),
+				get_string('button_return_store_label', 'local_moodec')
+			);
+
+		}
+
+		$html .= '</div>';
+
+		return $html;
+	}	
+
+
+	/**
+	 * Returns the HTML output for the standard cart actions
+	 * @return string  	HTML
+	 */	
+	function cart_actions() {
+		$html = '<div class="cart-actions">';
+
+			// Return to store button
+			$html .= sprintf(
+				'<form action="%s" method="GET">
+					<input type="submit" value="%s">
+				</form>',
+				new moodle_url('/local/moodec/pages/catalogue.php'),
+				get_string('button_return_store_label', 'local_moodec')
+			);
+
+			// Proceed to checkout button
+			$html .= sprintf(
+				'<form action="%s" method="GET">
+					<input type="submit" value="%s">
+				</form>',
+				new moodle_url('/local/moodec/pages/checkout.php'),
+				get_string('button_checkout_label', 'local_moodec')
+			);
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	/**
+	 * Returns the HTML output for the checkout actions
+	 * @param  string  $ipnData  The IPN data required for Paypal
+	 * @return string        	 HTML
+	 */
+	function checkout_actions($ipnData){
+		$html = '<div class="cart-actions">';
+
+			// Output proceed to paypal button
+			$html .= sprintf(
+				'<input type="hidden" name="custom" value="%s">
+				<input type="submit" name="submit"  value="%s">',
+				$ipnData,
+				get_string('button_paypal_label', 'local_moodec')
+			);
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	/**
+	 * Returns the Paypal input fields required
+	 * @return string  HTML
+	 */
+	function paypal_fields(){
+		return sprintf(
+			'<input type="hidden" name="cmd" value="_cart">
+			<input type="hidden" name="charset" value="utf-8">
+			<input type="hidden" name="upload" value="1">
+			<input type="hidden" name="business" value="%s">
+			<input type="hidden" name="currency_code" value="%s">
+			<input type="hidden" name="for_auction" value="false">
+			<input type="hidden" name="no_note" value="1">
+			<input type="hidden" name="no_shipping" value="1">
+			<input type="hidden" name="notify_url" value="%s">
+			<input type="hidden" name="return" value="%s">
+			<input type="hidden" name="cancel_return" value="%s">',
+			get_config('local_moodec', 'paypalbusiness'),
+			get_config('local_moodec', 'currency'),
+			new moodle_url('/local/moodec/ipn.php'),
+			new moodle_url('/local/moodec/pages/catalogue.php'),
+			new moodle_url('/local/moodec/pages/cart.php')
+		);
+	}
+
+
+	/**
+	 * Returns the Paypal item fields
+	 * @param  product  $p  the product
+	 * @param  int 		$v  the product variation id
+	 * @param  int 		$i  the iterator value 
+	 * @return string    	HTML
+	 */
+	function paypal_product_info($p, $v, $i) {
+
+		// Paypal item name field
+		$html = sprintf(
+			'<input type="hidden" name="%s" value="%s">',
+			'item_name_' . $i,
+			$v === 0 ? $p->fullname : $p->fullname . ' - ' . $p->variations[$v]->name
+		);
+
+		// Paypal item amount field
+		$html .= sprintf(
+			'<input type="hidden" name="%s" value="%s">',
+			'amount_' . $i,
+			$v === 0 ? $p->price : $p->variations[$v]->price
+		);
+
+		return $html;
+	}
 }
