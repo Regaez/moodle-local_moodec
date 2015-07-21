@@ -54,7 +54,7 @@ function local_moodec_extends_navigation(global_navigation $nav) {
  * @param  settings_navigation $nav     The settings navigatin object
  * @param  stdclass            $context Course context
  */
-function local_moodec_extends_setting_navigation(settings_navigation $nav, $context) {
+function local_moodec_extends_settings_navigation(settings_navigation $nav, $context) {
 	if ($context->contextlevel >= CONTEXT_COURSE and ($branch = $nav->get('courseadmin'))
 		and has_capability('moodle/course:update', $context)) {
 		$ltiurl = new moodle_url('/local/moodec/settings/course.php', array('id' => $context->instanceid));
