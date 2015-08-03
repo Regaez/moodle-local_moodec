@@ -123,6 +123,8 @@ if ($mform->is_cancelled()) {
 
 		$toform->additional_info['text'] = $existingData->additional_info;
 		$toform->additional_info['format'] = 1;
+
+		$toform->product_tags = $existingData->product_tags;
 	} else {
 		// we need to send the courseid
 		$toform->id = $courseid;

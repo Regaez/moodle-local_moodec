@@ -396,6 +396,7 @@ function local_moodec_get_product($id) {
 			variable_enrolment_duration_5,
 			variable_group_5,
 			additional_info,
+			product_tags,
 			timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
@@ -424,6 +425,7 @@ function local_moodec_get_product($id) {
 			$newProduct->enrolment_duration = (int) $product->simple_enrolment_duration;
 			$newProduct->group = (int) $product->simple_group;
 			$newProduct->additional_info = $product->additional_info;
+			$newProduct->tags = explode(',', $product->product_tags);
 			$newProduct->variable_tiers = (int) $product->variable_tiers;
 			$newProduct->variations = array();
 
@@ -516,6 +518,7 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 			variable_enrolment_duration_5,
 			variable_group_5,
 			additional_info,
+			product_tags,
 			timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
@@ -549,6 +552,7 @@ function local_moodec_get_products($category = null, $sortfield = 'sortorder', $
 			$newProduct->enrolment_duration = (int) $product->simple_enrolment_duration;
 			$newProduct->group = (int) $product->simple_group;
 			$newProduct->additional_info = $product->additional_info;
+			$newProduct->tags = explode(',', $product->product_tags);
 			$newProduct->variable_tiers = (int) $product->variable_tiers;
 			$newProduct->variations = array();
 
@@ -628,6 +632,7 @@ function local_moodec_get_random_products($limit = 1, $category = null) {
 			variable_enrolment_duration_5,
 			variable_group_5,
 			additional_info,
+			product_tags,
 			timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
@@ -661,6 +666,7 @@ function local_moodec_get_random_products($limit = 1, $category = null) {
 			$newProduct->enrolment_duration = (int) $product->simple_enrolment_duration;
 			$newProduct->group = (int) $product->simple_group;
 			$newProduct->additional_info = $product->additional_info;
+			$newProduct->tags = explode(',', $product->product_tags);
 			$newProduct->variable_tiers = (int) $product->variable_tiers;
 			$newProduct->variations = array();
 
@@ -703,6 +709,7 @@ function local_moodec_get_related_products($id, $category = null) {
 			simple_price as price,
 			simple_enrolment_duration as enrolment_duration,
 			additional_info,
+			product_tags,
 			timecreated
 		FROM {local_moodec_course} lmc, {course} c
 		WHERE show_in_store = 1
@@ -730,6 +737,7 @@ function local_moodec_get_related_products($id, $category = null) {
 			$newProduct->sortorder = (int) $product->sortorder;
 			$newProduct->price = (float) $product->price;
 			$newProduct->enrolment_duration = (int) $product->enrolment_duration;
+			$newProduct->tags = explode(',', $product->product_tags);
 
 			array_push($castProducts, $newProduct);
 		}
