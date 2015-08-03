@@ -135,3 +135,7 @@ $string['variable_group'] = 'Group';
 $string['variable_group_title'] = 'Group';
 $string['variable_group_title_help'] = 'Select a group for users to automatically join when they purchase this tier.';
 $string['variable_group_none'] = 'No group';
+
+$string['product_tags'] = 'Product tags';
+$string['product_tags_title'] = 'Product tags';
+$string['product_tags_title_help'] = 'List the keyword tags, comma separated, that will be compared against when performing a search.';

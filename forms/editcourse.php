@@ -192,6 +192,10 @@ class moodec_edit_course_form extends moodleform {
 		$mform->addElement('editor', 'additional_info', get_string('additional_info', 'local_moodec'));
 		$mform->setType('additional_info', PARAM_RAW);
 
+		$mform->addElement('text', 'product_tags', get_string('product_tags', 'local_moodec')); // Add elements to your form
+		$mform->setType('product_tags', PARAM_TEXT); //Set type of element
+		$mform->addHelpButton('product_tags', 'product_tags_title', 'local_moodec');
+
 		$this->add_action_buttons();
 
 		$mform->addElement('hidden', 'id', null);
