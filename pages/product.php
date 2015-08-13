@@ -18,7 +18,15 @@ $courseid = required_param('id', PARAM_INT);
 // Set PAGE variables
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
-$PAGE->set_pagelayout('standard');
+
+// Check if the theme has a moodec pagelayout defined, otherwise use standard
+if (array_key_exists('moodec_product', $PAGE->theme->layouts)) {
+	$PAGE->set_pagelayout('moodec_product');
+} else if(array_key_exists('moodec', $PAGE->theme->layouts)) {
+	$PAGE->set_pagelayout('moodec');
+} else {
+	$PAGE->set_pagelayout('standard');
+}
 
 // Get the renderer for this page
 $renderer = $PAGE->get_renderer('local_moodec');

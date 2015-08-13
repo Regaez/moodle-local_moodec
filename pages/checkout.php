@@ -16,7 +16,16 @@ $systemcontext = context_system::instance();
 
 $PAGE->set_context($systemcontext);
 $PAGE->set_url('/local/moodec/pages/checkout.php');
-$PAGE->set_pagelayout('standard');
+
+// Check if the theme has a moodec pagelayout defined, otherwise use standard
+if (array_key_exists('moodec_checkout', $PAGE->theme->layouts)) {
+	$PAGE->set_pagelayout('moodec_checkout');
+} else if(array_key_exists('moodec', $PAGE->theme->layouts)) {
+	$PAGE->set_pagelayout('moodec');
+} else {
+	$PAGE->set_pagelayout('standard');
+}
+
 $PAGE->set_title(get_string('checkout_title', 'local_moodec'));
 $PAGE->set_heading(get_string('checkout_title', 'local_moodec'));
 
