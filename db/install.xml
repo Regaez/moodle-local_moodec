@@ -31,7 +31,7 @@
                 <FIELD NAME="variable_enrolment_duration_5" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
                 <FIELD NAME="variable_group_5" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
                 <FIELD NAME="additional_info" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="tags" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="product_tags" TYPE="text" NOTNULL="false" SEQUENCE="false" />
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" />
