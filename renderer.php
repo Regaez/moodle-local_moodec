@@ -50,21 +50,25 @@ class local_moodec_renderer extends plugin_renderer_base {
 				// Product description
 				if (!!get_config('local_moodec', 'page_product_show_description')) {
 
-					$html .= sprintf(
-						'<div class="product-description">%s</div>',
-						local_moodec_format_course_summary($product->courseid)
-					);
+					$description = local_moodec_format_course_summary($product->courseid);
 
+					if( 0 < strlen($description) ) {
+						$html .= sprintf(
+							'<div class="product-description">%s</div>',
+							$description
+						);
+					}
 				}
 
 				// Product additional description
 				if (!!get_config('local_moodec', 'page_product_show_additional_description')) {
 
-					$html .= sprintf(
-						'<div class="additional-info">%s</div>',
-						$product->additional_info
-					);
-
+					if( 0 < strlen($product->additional_info)) {
+						$html .= sprintf(
+							'<div class="additional-info">%s</div>',
+							$product->additional_info
+						);
+					}
 				}
 
 				// Additional product details wrapper
