@@ -565,7 +565,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 			// Render sorting filter
 			$html .= sprintf(
 				'<div class="filter__sort">
-					%s
+					<span>%s</span>
 					<select name="sort" id="sort">',
 				get_string('filter_sort_label', 'local_moodec')
 			);
