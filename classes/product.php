@@ -74,7 +74,7 @@ class MoodecProduct {
 	 * Additional product information
 	 * @var [type]
 	 */
-	protected $_additionalInfo;
+	protected $_description;
 
 	/**
 	 * List of tags 
@@ -100,21 +100,21 @@ class MoodecProduct {
 
 		$query = sprintf(
 			'SELECT 
-				lmc.id, 
-				c.id as courseid,
+				lmp.id, 
+				c.id as course_id,
 				fullname,
 				shortname,
-				show_in_store,
+				is_enabled,
 				category,
 				summary,
 				summaryformat
-				pricing_model,
-				additional_info,
-				product_tags,
+				type,
+				descrtption,
+				tags,
 				timecreated
-			FROM {local_moodec_course} lmc, {course} c
-			WHERE lmc.courseid = c.id
-			AND lmc.id = %d',
+			FROM {local_moodec_product} lmp, {course} c
+			WHERE lmp.course_id = c.id
+			AND lmp.id = %d',
 			$id
 		);
 
@@ -124,16 +124,16 @@ class MoodecProduct {
 		// return the products
 		if (!!$product) {
 			$this->_id = (int) $product->id;
-			$this->_courseid = (int) $product->courseid;
-			$this->_enabled = (bool) $product->show_in_store;
+			$this->_courseid = (int) $product->course_id;
+			$this->_enabled = (bool) $product->is_enabled;
 			$this->_fullname = $product->fullname;
 			$this->_shortname = $product->shortname;
-			$this->_type = $product->pricing_model;
+			$this->_type = $product->type;
 			$this->_categoryid = (int) $product->category;
 			$this->_summary = $product->summary;
 			$this->_summaryFormat = (int) $product->summaryformat;
-			$this->_additionalInfo = $product->additional_info;
-			$this->_tags = explode(',', $product->product_tags);
+			$this->_description = $product->description;
+			$this->_tags = explode(',', $product->tags);
 		} else {
         	throw new Exception('Unable to load product using identifier: ' . $id);
    		}
@@ -225,7 +225,7 @@ class MoodecProduct {
 	 * Retrievs the Moodle course id associated with the product
 	 * @return int 		courseid
 	 */
-	public function get_courseid(){
+	public function get_course_id(){
 		return $this->_courseid;
 	}
 
@@ -257,7 +257,15 @@ class MoodecProduct {
 	 * Returns the Moodle category relating to the product
 	 * @return int 	categoryid
 	 */
-	public function get_category(){
+	public function get_category_id(){
 		return $this->_categoryid;
+	}
+
+	/**
+	 * Returns the product description
+	 * @return string description
+	 */
+	public function get_description(){
+		return $this->_description;
 	}
 }

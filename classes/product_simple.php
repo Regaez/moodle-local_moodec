@@ -38,8 +38,8 @@ class MoodecProductSimple extends MoodecProduct {
 	 * @param  boolean $format 		If true, then format the duration as a string
 	 * @return string/int       	Duration as a string, or int
 	 */
-	public function get_enrolment_duration($format = true){
-		return $this->_simpleVariation->get_enrolment_duration($format);
+	public function get_duration($format = true){
+		return $this->_simpleVariation->get_duration($format);
 	}
 
 	/**

@@ -44,7 +44,7 @@ class MoodecProductVariation {
 	 * The number of days to be enrolled for
 	 * @var int
 	 */
-	protected $_enrolmentDuration;
+	protected $_duration;
 
 	/**
 	 * The course group id, 0 = no group
@@ -76,9 +76,10 @@ class MoodecProductVariation {
 			'SELECT 
 				id,
 				price,
+				is_enabled,
 				name,
-				enrolment_duration,
-				groupid
+				duration,
+				group_id
 			FROM {local_moodec_product_variation}
 			WHERE %s = %d',
 			!!$variation ? 'id' : 'product_id', // IF NOT VARIATION, MATCH BASED ON PRODUCT ID
@@ -92,9 +93,10 @@ class MoodecProductVariation {
 		if (!!$product) {
 			$this->_id = (int) $product->id;
 			$this->_name = $product->name;
+			$this->_enabled = (bool) $product->is_enabled;
 			$this->_price = (float) $product->price;
-			$this->_enrolmentDuration = (int) $product->enrolment_duration;
-			$this->_group = (int) $product->groupid;
+			$this->_duration = (int) $product->duration;
+			$this->_group = (int) $product->group_id;
 		} else {
         	throw new Exception('Unable to load product variation information using identifier: ' . $id);
    		}
@@ -105,10 +107,10 @@ class MoodecProductVariation {
 	 * @param  boolean $format 		If true, then format the duration as a string
 	 * @return string/int       	Duration as a string, or int
 	 */
-	public function get_enrolment_duration($format = true){
+	public function get_duration($format = true){
 		if($format) {
 			$output = '';
-			$duration = $this->_enrolmentDuration;
+			$duration = $this->_duration;
 
 			if ($duration < 1) {
 				return get_string('enrolment_duration_unlimited', 'local_moodec');
@@ -138,7 +140,7 @@ class MoodecProductVariation {
 
 			return $output;
 		} else {
-			return $this->_enrolmentDuration;
+			return $this->_duration;
 		}
 	}
 
@@ -148,6 +150,14 @@ class MoodecProductVariation {
 	 */
 	public function get_variation_id(){
 		return $this->_id;
+	}
+
+	/**
+	 * Returns whether the variation is enabled or not
+	 * @return boolean enabled
+	 */	
+	public function is_enabled(){
+		return !!$this->_enabled;
 	}
 
 	/**

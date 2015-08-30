@@ -9,6 +9,11 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// Load Moodle config
+require_once dirname(__FILE__) . '/../../../config.php';
+// Load Moodec lib
+require_once dirname(__FILE__) . '/../lib.php';
+
 class MoodecProductVariable extends MoodecProduct {
 
 	/**
@@ -39,7 +44,9 @@ class MoodecProductVariable extends MoodecProduct {
 	    		$variationid = (int) $pv->id;
 	    		$_variations[] = new MoodecProductVariation($variationid, true);
 	    	}
-	    }
+	    } else {
+        	throw new Exception('Unable to load product variation information using identifier: ' . $id);
+   		}
     }
 
     /**
