@@ -1,42 +1,5 @@
 <XMLDB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PATH="local/moodec/db" VERSION="20150505" COMMENT="XMLDB file for Moodle local/moodec" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
     <TABLES>
-        <TABLE NAME="local_moodec_course" COMMENT="Moodec specific course settings">
-            <FIELDS>
-                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
-                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
-                <FIELD NAME="show_in_store" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="pricing_model" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="simple_price" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="simple_enrolment_duration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="simple_group" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_tiers" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="2" SEQUENCE="false" />
-                <FIELD NAME="variable_name_1" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_price_1" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="variable_enrolment_duration_1" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="variable_group_1" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_name_2" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_price_2" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="variable_enrolment_duration_2" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="variable_group_2" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_name_3" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_price_3" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="variable_enrolment_duration_3" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="variable_group_3" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_name_4" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_price_4" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="variable_enrolment_duration_4" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="variable_group_4" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_name_5" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="variable_price_5" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="variable_enrolment_duration_5" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="variable_group_5" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="additional_info" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="product_tags" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-            </FIELDS>
-            <KEYS>
-                <KEY NAME="primary" TYPE="primary" FIELDS="id" />
-            </KEYS>
-        </TABLE>
         <TABLE NAME="local_moodec_paypal" COMMENT="Holds all known information about PayPal transactions">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
@@ -71,22 +34,23 @@
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
                 <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
                 <FIELD NAME="is_enabled" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="product_type" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="product_tags" TYPE="text" NOTNULL="false" SEQUENCE="false" />
-                <FIELD NAME="additional_info" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="variation_count" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="type" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="tags" TYPE="text" NOTNULL="false" SEQUENCE="false" />
+                <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" />
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" />
             </KEYS>
         </TABLE>
-        <TABLE NAME="local_moodec_product_variation" COMMENT="Moodec product variation settings">
+        <TABLE NAME="local_moodec_variation" COMMENT="Moodec product variation settings">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
                 <FIELD NAME="product_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
                 <FIELD NAME="is_enabled" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
-                <FIELD NAME="name" TYPE="text" NOTNULL="false" DEFAULT="simple" SEQUENCE="false" />
+                <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false" />
                 <FIELD NAME="price" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
-                <FIELD NAME="enrolment_duration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
                 <FIELD NAME="group_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
             </FIELDS>
             <KEYS>

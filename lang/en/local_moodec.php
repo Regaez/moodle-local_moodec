@@ -17,6 +17,7 @@ $string['pluginname'] = 'Moodec';
 $string['moodec_pages'] = 'Page settings';
 $string['moodec_settings'] = 'General settings';
 $string['moodec_course_settings'] = 'Edit product settings';
+$string['moodec_product_settings'] = 'Edit product settings';
 $string['page_setting_heading_catalogue'] = 'Catalogue page';
 $string['page_setting_heading_product'] = 'Product page';
 
@@ -136,6 +137,28 @@ $string['variable_group_title'] = 'Group';
 $string['variable_group_title_help'] = 'Select a group for users to automatically join when they purchase this tier.';
 $string['variable_group_none'] = 'No group';
 
+
+// Edit Product form
+$string['edit_product_form_title'] = 'Product settings for {$a->name}';
+$string['product_enabled'] = 'Enable';
+$string['product_enabled_label'] = 'Toggle whether this product is shown in the store and able to be bought';
+$string['product_description'] = 'Description';
+$string['product_description_help'] = 'The Moodec product description. This can be combined with the default Course summary and used as additional information, or as the only means to display information on the product page.';
 $string['product_tags'] = 'Product tags';
-$string['product_tags_title'] = 'Product tags';
-$string['product_tags_title_help'] = 'List the keyword tags, comma separated, that will be compared against when performing a search.';
+$string['product_tags_help'] = 'List the keyword tags, comma separated, that will be compared against when performing a search.';
+$string['product_type'] = 'Product type';
+$string['product_type_help'] = 'Select the type of product this is. Simple products have a single price, duration and group that can be assigned. Variable products can have up to 10 variations specified.';
+$string['product_type_simple_label'] = 'Simple';
+$string['product_type_variable_label'] = 'Variable';
+$string['product_variation_header'] = 'Variation {$a->count}';
+$string['product_variation_count'] = 'Number of variations';
+$string['product_variation_count_help'] = 'Select the number of variations for variable product types, up to 10. Simple product types only have 1 variation.';
+$string['product_variation_name'] = 'Name';
+$string['product_variation_name_help'] = 'The name to be displayed in the store for this variation. This is not shown for Simple product types.';
+$string['product_variation_price'] = 'Price';
+$string['product_variation_price_help'] = 'The price, set to 2 decimal places.';
+$string['product_variation_duration'] = 'Duration';
+$string['product_variation_duration_help'] = 'Enter the number of days for the course enrolment duration.';
+$string['product_variation_group'] = 'Group';
+$string['product_variation_group_help'] = 'Select a course group for the user to be assigned when they purchase this variation.';
+$string['product_variations_update'] = 'Update variations form';
