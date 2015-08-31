@@ -80,7 +80,7 @@ class MoodecProductVariation {
 				name,
 				duration,
 				group_id
-			FROM {local_moodec_product_variation}
+			FROM {local_moodec_variation}
 			WHERE %s = %d',
 			!!$variation ? 'id' : 'product_id', // IF NOT VARIATION, MATCH BASED ON PRODUCT ID
 			$id

@@ -33,7 +33,7 @@ class MoodecProductVariable extends MoodecProduct {
     	parent::load($id);
 
     	$productVariations = $DB->get_records(
-    		'local_moodec_product_variation', 
+    		'local_moodec_variation', 
     		array(
     			'product_id' => $id
 			)
