@@ -201,6 +201,7 @@ class MoodecProduct {
 	public function get_related(){
 
 		// TODO: get related products
+		$products = array();
 
 		return $products;
 	}
@@ -267,5 +268,13 @@ class MoodecProduct {
 	 */
 	public function get_description(){
 		return $this->_description;
+	}
+
+	/**
+	 * Returns true if the product has a description
+	 * @return boolean 
+	 */
+	public function has_description(){
+		return 0 < strlen($this->_description);
 	}
 }
