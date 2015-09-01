@@ -107,8 +107,8 @@ class moodec_edit_product_form extends moodleform {
 				'local_moodec'
 			),
 			array(
-				'PRODUCT_TYPE_SIMPLE' => get_string('product_type_simple_label', 'local_moodec'),
-				'PRODUCT_TYPE_VARIABLE' => get_string('product_type_variable_label', 'local_moodec')
+				PRODUCT_TYPE_SIMPLE => get_string('product_type_simple_label', 'local_moodec'),
+				PRODUCT_TYPE_VARIABLE => get_string('product_type_variable_label', 'local_moodec')
 			)
 		);
 		$mform->addHelpButton(
@@ -142,10 +142,10 @@ class moodec_edit_product_form extends moodleform {
 			)
 		);
 		$mform->addHelpButton('format', 'product_variation_count', 'local_moodec');
-		$mform->disabledif('format', 'product_type', 'neq', 'PRODUCT_TYPE_VARIABLE');
+		$mform->disabledif('format', 'product_type', 'neq', PRODUCT_TYPE_VARIABLE);
 
 		if(!!$productconfig) {
-			if($productconfig->type === 'PRODUCT_TYPE_VARIABLE') {
+			if($productconfig->type === PRODUCT_TYPE_VARIABLE) {
 				// Force variationCount to be 1, as simple products don't have tiers
 				$variationCount = $productconfig->variation_count;
 			}
@@ -200,7 +200,7 @@ class moodec_edit_product_form extends moodleform {
 					), 
 					array(0, 1)
 				);
-				$mform->disabledif('product_variation_enabled_'.$i, 'product_type', 'neq', 'PRODUCT_TYPE_VARIABLE');
+				$mform->disabledif('product_variation_enabled_'.$i, 'product_type', 'neq', PRODUCT_TYPE_VARIABLE);
 			}
 
 			/** 
@@ -222,7 +222,7 @@ class moodec_edit_product_form extends moodleform {
 				'local_moodec'
 			);
 			if( 1 < $i) {
-				$mform->disabledif('product_variation_name_'.$i, 'product_type', 'neq', 'PRODUCT_TYPE_VARIABLE');
+				$mform->disabledif('product_variation_name_'.$i, 'product_type', 'neq', PRODUCT_TYPE_VARIABLE);
 			}
 
 			/** 
@@ -244,7 +244,7 @@ class moodec_edit_product_form extends moodleform {
 				'local_moodec'
 			);
 			if( 1 < $i) {
-				$mform->disabledif('product_variation_price_'.$i, 'product_type', 'neq', 'PRODUCT_TYPE_VARIABLE');
+				$mform->disabledif('product_variation_price_'.$i, 'product_type', 'neq', PRODUCT_TYPE_VARIABLE);
 			}
 
 			/** 
@@ -266,7 +266,7 @@ class moodec_edit_product_form extends moodleform {
 				'local_moodec'
 			);
 			if( 1 < $i) {
-				$mform->disabledif('product_variation_duration_'.$i, 'product_type', 'neq', 'PRODUCT_TYPE_VARIABLE');
+				$mform->disabledif('product_variation_duration_'.$i, 'product_type', 'neq', PRODUCT_TYPE_VARIABLE);
 			}
 
 			/** 
@@ -288,7 +288,7 @@ class moodec_edit_product_form extends moodleform {
 				'local_moodec'
 			);
 			if( 1 < $i) {
-				$mform->disabledif('product_variation_group_'.$i, 'product_type', 'neq', 'PRODUCT_TYPE_VARIABLE');
+				$mform->disabledif('product_variation_group_'.$i, 'product_type', 'neq', PRODUCT_TYPE_VARIABLE);
 			}
 
 		}

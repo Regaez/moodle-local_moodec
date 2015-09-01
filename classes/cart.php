@@ -135,12 +135,12 @@ class MoodecCart {
 			}
 						
 			// If the variation is not 0 for a simple product, make it so (Number One)
-			if( $newProduct->get_type() === 'PRODUCT_TYPE_SIMPLE' && $vID !== 0) {
+			if( $newProduct->get_type() === PRODUCT_TYPE_SIMPLE && $vID !== 0) {
 				$this->_products[$pID] = 0;
 			}
 
 			// If the product is variable and the variation is disabled, remove
-			if( $newProduct->get_type() === 'PRODUCT_TYPE_VARIABLE') {
+			if( $newProduct->get_type() === PRODUCT_TYPE_VARIABLE) {
 				if( !$newProduct->get_variation($vID) ) {
 					$itemsToRemove[] = $pID;
 				}
@@ -202,7 +202,7 @@ class MoodecCart {
 
 		// Update the cart total, using the variation price, or simple price
 		// depending on what has been added
-		if( $v !== 0 && $p->get_type() === 'PRODUCT_TYPE_VARIABLE') {
+		if( $v !== 0 && $p->get_type() === PRODUCT_TYPE_VARIABLE) {
 			$this->_cartTotal += $productToAdd->get_variation($v)->get_price();
 		} else {
 			$this->_cartTotal += $productToAdd->get_price();

@@ -66,7 +66,7 @@ if ($mform->is_cancelled()) {
 	$recordProduct->tags 			= $data->product_tags;
 	$recordProduct->description 	= $data->product_description['text'];
 
-	if($recordProduct->type === 'PRODUCT_TYPE_SIMPLE') {
+	if($recordProduct->type === PRODUCT_TYPE_SIMPLE) {
 		// if it is a simple product, we ONLY update the 1 variation
 		// any others are ignored
 		$recordProduct->variation_count = 1;
