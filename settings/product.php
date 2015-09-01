@@ -81,10 +81,19 @@ if ($mform->is_cancelled()) {
 
 		// In the mform, we named variations incrementally,
 		// so now we need to use variables to match the field names
+		$enabled 	= 'product_variation_enabled_' . $i;
 		$name 		= 'product_variation_name_' . $i;
 		$price 		= 'product_variation_price_' . $i;
 		$duration 	= 'product_variation_duration_' . $i;
 		$group 		= 'product_variation_group_' . $i;
+
+		// We force the first variation to be enabled
+		// All products need at least 1 variation
+		if( $i === 1) {
+			$newRecord->is_enabled 	= 1;
+		} else {
+			$newRecord->is_enabled	= $data->$enabled;
+		}
 
 		$newRecord->name 		= $data->$name;
 		$newRecord->price 		= $data->$price;
@@ -104,6 +113,18 @@ if ($mform->is_cancelled()) {
 		// Update product variations
 		$existingVariations = $DB->get_records('local_moodec_variation', array('product_id' => $recordProduct->id));
 
+		// First, we disable ALL variations (these will be selectively re-enabled by the user)
+		// ----
+		foreach ($existingVariations as $v) {
+			$tempVariation 				= new stdClass();
+			$tempVariation->id 			= $v->id;
+			$tempVariation->is_enabled 	= 0;
+			
+			$DB->update_record('local_moodec_variation', $tempVariation);
+		}
+		// ----
+
+		// Then we store our new variation information
 		for ($i=0; $i < count($recordVariations); $i++) { 
 			
 			// Add product_id field to variation record
@@ -175,11 +196,13 @@ if ($mform->is_cancelled()) {
 			$counter = 1;
 			foreach ($existingVariationData as $variation) {
 				// Map the properties to the form fields				
+				$enabled 	= 'product_variation_enabled_'.$counter;
 				$name 		= 'product_variation_name_'.$counter;
 				$price 		= 'product_variation_price_'.$counter;
 				$duration 	= 'product_variation_duration_'.$counter;
 				$group 		= 'product_variation_group_'.$counter;
 
+				$toForm->$enabled 	= $variation->is_enabled;
 				$toForm->$name 		= $variation->name;
 				$toForm->$price 	= $variation->price;
 				$toForm->$duration 	= $variation->duration;

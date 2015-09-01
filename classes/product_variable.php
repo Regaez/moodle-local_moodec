@@ -35,7 +35,7 @@ class MoodecProductVariable extends MoodecProduct {
     	$productVariations = $DB->get_records(
     		'local_moodec_variation', 
     		array(
-    			'product_id' => $id
+    			'product_id' => $id,
 			)
 		);
 
@@ -50,21 +50,43 @@ class MoodecProductVariable extends MoodecProduct {
     }
 
     /**
-     * Retrieves the product variations
+     * Retrieves the product variation
      * @param  int 			$id 				variation_id
-     * @return MoodecProductVariation|array     Either the specific variation, or array of all
+     * @return MoodecProductVariation     		Either the specific variation
      */
-    public function get_variations($id = null){
+    public function get_variation($id = null, $returnDisabled = false){
 
-    	if( !is_null($id) ) {
-    		// Check if there is a variation matching that ID
-    		if( array_key_exists($id, $this->_variations) ) {
-    			return $this->_variations[$id];
-    		} 
+		// Check if there is a variation matching that ID
+		if( array_key_exists($id, $this->_variations) ) {
+			if( $this->_variations[$id]->is_enabled() || $returnDisabled ) {
+				return $this->_variations[$id];
+			}
+		} 
 
-    		return false;
+		return false;
+    }
+
+    /**
+     * Returns the product variations
+     * @param  boolean 	$returnAll 	true if disabled variations should be returned
+     * @return array             	variations
+     */	
+    public function get_variations($returnAll = false) {
+
+    	if( $returnAll ) {
+    		return $this->_variations;
     	}
 
-    	return $this->_variations;
-    }
+		$enabledVariations = array();
+
+		// We only want to return variations which are enabled
+    	foreach ($this->_variations as $id => $v) {
+    		if( $v->is_enabled() ) {
+    			$enabledVariations[$id] = $v; 
+    		}
+    	}
+
+    	return $enabledVariations;
+	}
+
 }

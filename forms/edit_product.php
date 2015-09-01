@@ -177,6 +177,32 @@ class moodec_edit_product_form extends moodleform {
 				)
 			);
 
+			// The first variation is mandatory, so we don't show enabled field
+			if( 1 < $i) {
+				
+				/** 
+				 * PRODUCT VARIATION ENABLED FIELD
+				 * @var Textbox
+				 */
+				$mform->addElement(
+					'advcheckbox',
+					'product_variation_enabled_'.$i,
+					get_string(
+						'product_variation_enabled',
+						'local_moodec'
+					), 
+					get_string(
+						'product_variation_enabled_label',
+						'local_moodec'
+					), 
+					array(
+						'group' => 1
+					), 
+					array(0, 1)
+				);
+				$mform->disabledif('product_variation_enabled_'.$i, 'product_type', 'neq', 'PRODUCT_TYPE_VARIABLE');
+			}
+
 			/** 
 			 * PRODUCT VARIATION NAME FIELD
 			 * @var Textbox
