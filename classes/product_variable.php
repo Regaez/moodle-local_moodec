@@ -57,7 +57,12 @@ class MoodecProductVariable extends MoodecProduct {
     public function get_variations($id = null){
 
     	if( !is_null($id) ) {
-    		return $this->_variations[$id];
+    		// Check if there is a variation matching that ID
+    		if( array_key_exists($id, $this->_variations) ) {
+    			return $this->_variations[$id];
+    		} 
+
+    		return false;
     	}
 
     	return $this->_variations;
