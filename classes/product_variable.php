@@ -42,7 +42,7 @@ class MoodecProductVariable extends MoodecProduct {
     	if(!!$productVariations) {
 	    	foreach ($productVariations as $pv) {
 	    		$variationid = (int) $pv->id;
-	    		$_variations[] = new MoodecProductVariation($variationid, true);
+	    		$_variations[$variationid] = new MoodecProductVariation($variationid, true);
 	    	}
 	    } else {
         	throw new Exception('Unable to load product variation information using identifier: ' . $id);
@@ -51,9 +51,15 @@ class MoodecProductVariable extends MoodecProduct {
 
     /**
      * Retrieves the product variations
-     * @return array 	variations
+     * @param  int 			$id 				variation_id
+     * @return MoodecProductVariation|array     Either the specific variation, or array of all
      */
-    public function get_variations(){
+    public function get_variations($id = null){
+
+    	if( !is_null($id) ) {
+    		return $this->_variations[$id];
+    	}
+
     	return $this->_variations;
     }
 }
