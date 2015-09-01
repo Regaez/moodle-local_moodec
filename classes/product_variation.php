@@ -148,7 +148,7 @@ class MoodecProductVariation {
 	 * Retrieves the variation id
 	 * @return int  product variation id
 	 */
-	public function get_variation_id(){
+	public function get_id(){
 		return $this->_id;
 	}
 
