@@ -37,21 +37,32 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 		navigation_node::TYPE_CONTAINER
 	);
 
-	// Check if there are any products in the database
-	$productsExist = $DB->get_records_sql('SELECT * FROM {local_moodec_course}');
+	if (!!get_config('local_moodec', 'page_product_enable')) {
 
-	if(!!$productsExist) {
+		// We store the courses by category
+		$categories = $DB->get_records('course_categories');
 
-		// Actually get the products
-		$products = local_moodec_get_products();
+		if (!!$categories) {
+			foreach ($categories as $category) {
+				if($category->visible) {
 
-		if (!!get_config('local_moodec', 'page_product_enable')) {
-			// Add products to the store menu
-			foreach ($products as $product) {
-				$storenode->add(
-					$product->fullname,
-					new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid))
-				);
+					$catnode = $storenode->add(
+						$category->name,
+						new moodle_url('/local/moodec/pages/catalogue.php', array('category' => $category->id)),
+						navigation_node::TYPE_CONTAINER
+					);
+
+					// Actually get the products
+					$products = local_moodec_get_products(-1, $category->id, 'fullname');
+
+					// Add products to the store menu
+					foreach ($products as $product) {
+						$catnode->add(
+							$product->get_fullname(),
+							new moodle_url('/local/moodec/pages/product.php', array('id' => $product->get_id()))
+						);
+					}
+				}
 			}
 		}
 	}
