@@ -112,32 +112,6 @@ $string['enrolment_duration_week_plural'] = 'weeks';
 $string['enrolment_duration_day'] = 'day';
 $string['enrolment_duration_day_plural'] = 'days';
 
-// Edit course form
-$string['edit_course_form_title'] = 'Product settings for {$a->name}';
-$string['show_in_store'] = 'Enable';
-$string['show_in_store_label'] = 'Show this course on the catalogue page';
-$string['additional_info'] = 'Additional product information';
-$string['pricing_model'] = 'Pricing model';
-
-$string['simple_price'] = 'Course price';
-$string['simple_price_default'] = '0';
-$string['simple_enrolment_duration'] = 'Enrolment duration';
-$string['simple_enrolment_duration_help'] = 'Set the enrolment duration for this course (in days). A value of 0 will make the enrolment never expire.';
-$string['simple_enrolment_duration_default'] = '0';
-$string['simple_group'] = 'Group';
-$string['simple_group_help'] = 'Select a group for users to automatically join when they are enrolled in the course.';
-
-$string['variable_tiers'] = 'Number of tiers';
-$string['variable_name'] = 'Name';
-$string['variable_name_default'] = 'Tier {$a->tier}';
-$string['variable_price'] = 'Price';
-$string['variable_enrolment_duration'] = 'Enrolment duration';
-$string['variable_group'] = 'Group';
-$string['variable_group_title'] = 'Group';
-$string['variable_group_title_help'] = 'Select a group for users to automatically join when they purchase this tier.';
-$string['variable_group_none'] = 'No group';
-
-
 // Edit Product form
 $string['edit_product_form_title'] = 'Product settings for {$a->name}';
 $string['product_enabled'] = 'Enable';
