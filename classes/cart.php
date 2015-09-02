@@ -20,7 +20,7 @@ class MoodecCart {
 	 * The name of the session/cookie for the cart
 	 * @var string
 	 */
-	const $_storageID = 'MoodecCart';
+	const STORAGE_ID = 'MoodecCart';
 
 	/**
 	 * Associative array of products, with the product ID as the key, variation ID as value
@@ -58,17 +58,17 @@ class MoodecCart {
 		$sessionCartTotal = 0;
 
 		// SESSION is preferred over the COOKIE
-		if( isset($_SESSION[$this->_storageID]) ) {
+		if( isset($_SESSION[self::STORAGE_ID]) ) {
 
 			// Get cart from PHP session
-			list($sessionProducts, $sessionCartTotal, $sessionTime) = unserialize($_SESSION[$this->_storageID]);
+			list($sessionProducts, $sessionCartTotal, $sessionTime) = unserialize($_SESSION[self::STORAGE_ID]);
 
 		} 
 
-		if( isset($_COOKIE[$this->_storageID]) ){
+		if( isset($_COOKIE[self::STORAGE_ID]) ){
 
 			// Get cart from the cookies
-			list($cookieProducts, $cookieCartTotal, $cookieTime) = unserialize($_COOKIE[$this->_storageID]);
+			list($cookieProducts, $cookieCartTotal, $cookieTime) = unserialize($_COOKIE[self::STORAGE_ID]);
 
 		}
 
@@ -107,10 +107,10 @@ class MoodecCart {
 		$data = serialize(array($this->_products, $this->_cartTotal, $this->_lastUpdated));
 
 		// Set the PHP session
-		$_SESSION[$this->_storageID] = $data;
+		$_SESSION[self::STORAGE_ID] = $data;
 
-		// Set the COOKIE
-		setcookie($this->_storageID, $data, time() + 31536000, '/');
+		// Set the COOKIE, will last 1 year
+		setcookie(self::STORAGE_ID, $data, time() + 31536000, '/');
 	}
 
 	/**
@@ -120,6 +120,7 @@ class MoodecCart {
 	 * @return void
 	 */
 	public function refresh(){
+		global $USER;
 
 		// We'll use this to store a list of products no longer enabled
 		$itemsToRemove = array();
@@ -142,6 +143,16 @@ class MoodecCart {
 			// If the product is variable and the variation is disabled, remove
 			if( $newProduct->get_type() === PRODUCT_TYPE_VARIABLE) {
 				if( !$newProduct->get_variation($vID) ) {
+					$itemsToRemove[] = $pID;
+				}
+			}
+
+			// If the user is logged in, check if they're already enrolled in this course
+			if(isloggedin() ) {
+				$context = context_course::instance($newProduct->get_course_id());
+				$isEnrolled = is_enrolled($context, $USER, '', true);
+
+				if ($isEnrolled) {
 					$itemsToRemove[] = $pID;
 				}
 			}
@@ -173,6 +184,7 @@ class MoodecCart {
 	 * @return  bool 					product exists
 	 */
 	public function check($id){
+		$id = (int) $id;
 		
 		// Reset pointer to beginning of array	
 		reset($this->_products);
@@ -187,6 +199,9 @@ class MoodecCart {
 	 * @param int 				$v 		product variation_id
 	 */
 	public function add($p, $v = 0){
+		$p = (int) $p;
+		$v = (int) $v;
+
 
 		// Check if the product is already in the cart
 		if( $this->check($p) ) {
@@ -202,7 +217,7 @@ class MoodecCart {
 
 		// Update the cart total, using the variation price, or simple price
 		// depending on what has been added
-		if( $v !== 0 && $p->get_type() === PRODUCT_TYPE_VARIABLE) {
+		if( $productToAdd->get_type() === PRODUCT_TYPE_VARIABLE) {
 			$this->_cartTotal += $productToAdd->get_variation($v)->get_price();
 		} else {
 			$this->_cartTotal += $productToAdd->get_price();
@@ -220,6 +235,7 @@ class MoodecCart {
 	 * @return bool     		success or fail
 	 */
 	public function remove($id) {
+		$id = (int) $id;
 
 		// First, we need to check if the product is ACTUALLY in the cart
 		if( $this->check($id) ){
@@ -227,10 +243,10 @@ class MoodecCart {
 			$productToRemove = local_moodec_get_product($id);
 
 			// Get the variation id for this product
-			$v = $this->_product[$id];
+			$v = $this->_products[$id];
 
 			// Now we deduct the price from the cart total
-			if( $v !== 0 ) {
+			if( $productToRemove->get_type() === PRODUCT_TYPE_VARIABLE ) {
 				$this->_cartTotal -= $productToRemove->get_variation($v)->get_price();
 			} else {
 				$this->_cartTotal -= $productToRemove->get_price();
@@ -263,7 +279,7 @@ class MoodecCart {
 	 */
 	public function get_total($format = true){
 
-		if( $format ) {
+		if( !!$format ) {
 			return number_format($this->_cartTotal, 2, '.', ',');
 		}
 
@@ -276,5 +292,13 @@ class MoodecCart {
 	 */
 	public function get_size(){
 		return count($this->_products);
+	}
+
+	/**
+	 * Returns whether the cart is empty or not
+	 * @return boolean
+	 */
+	public function is_empty(){
+		return 0 === count($this->_products);
 	}
 }
