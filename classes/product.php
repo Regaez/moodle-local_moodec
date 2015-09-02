@@ -196,14 +196,17 @@ class MoodecProduct {
 
 	/**
 	 * Return array of related products
-	 * @return array products
+	 * @param int 		$limit 		the max number of related products to be returned
+	 * @return array 				products
 	 */
-	public function get_related(){
+	public function get_related($limit = 3){
 
-		// TODO: get related products
-		$products = array();
-
-		return $products;
+		// TODO: 	Figure out where to set limit
+		// 			Perhaps plugin settings?
+		// 			Or just stay as parameter?
+		
+		// We get random products that are in the same category as this product
+		return local_moodec_get_random_products($limit, $this->_categoryid, $this->_id);
 	}
 
 	/**
