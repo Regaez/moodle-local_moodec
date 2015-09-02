@@ -13,11 +13,11 @@ require_once dirname(__FILE__) . '/../../../config.php';
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
 // Get the ID of the course to be displayed
-$courseid = required_param('id', PARAM_INT);
+$productid = required_param('id', PARAM_INT);
 
 // Set PAGE variables
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $courseid));
+$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $productid));
 
 // Check if the theme has a moodec pagelayout defined, otherwise use standard
 if (array_key_exists('moodec_product', $PAGE->theme->layouts)) {
@@ -35,22 +35,22 @@ $renderer = $PAGE->get_renderer('local_moodec');
 $PAGE->requires->jquery();
 $PAGE->requires->js(new moodle_url('/local/moodec/js/product.js'));
 
-// Course must exist for there to be a product shown
-if (!($course = $DB->get_record('course', array('id' => $courseid)))) {
-	print_error('invalidcourseid', 'error');
-}
-
 // Get the product via the course id
-$product = local_moodec_get_product($courseid);
+$product = local_moodec_get_product($productid);
 
 // Check if the product actually exists/is available
 if (!$product) {
 	print_error('courseunavailable', 'error');
 }
 
+// Course must exist for there to be a product shown
+if (!($course = $DB->get_record('course', array('id' => $product->get_course_id())))) {
+	print_error('invalidcourseid', 'error');
+}
+
 //needs to have the product verified before setting page heading & title
-$PAGE->set_title(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
-$PAGE->set_heading(get_string('product_title', 'local_moodec', array('coursename' => $product->fullname)));
+$PAGE->set_title(get_string('product_title', 'local_moodec', array('coursename' => $product->get_fullname() )));
+$PAGE->set_heading(get_string('product_title', 'local_moodec', array('coursename' => $product->get_fullname() )));
 
 
 echo $OUTPUT->header();
