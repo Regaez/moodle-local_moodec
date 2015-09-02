@@ -37,12 +37,12 @@ $renderer = $PAGE->get_renderer('local_moodec');
 //
 
 // Get the cart in it's current state
-$cart = local_moodec_get_cart();
+$cart = new MoodecCart();
 
 // If we are adding to the cart, process this first
 if (isset($_POST['action']) && $_POST['action'] === 'addToCart') {
 	// Updates the cart var with the new addition
-	$cart = local_moodec_cart_add($_POST['id']);
+	$cart->add($_POST['id']);
 	// redirect back to the course page
 	redirect(new moodle_url('/local/moodec/pages/cart.php'));
 }
@@ -51,14 +51,14 @@ if (isset($_POST['action']) && $_POST['action'] === 'addToCart') {
 // If we are adding to the cart, process this first
 if (isset($_POST['action']) && $_POST['action'] === 'addVariationToCart') {
 	// Updates the cart var with the new addition
-	$cart = local_moodec_cart_add($_POST['id'], $_POST['variation']);
+	$cart->add($_POST['id'], $_POST['variation']);
 	// redirect back to the course page
 	redirect(new moodle_url('/local/moodec/pages/cart.php'));
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'removeFromCart') {
 	// Updates the cart var with the new addition
-	$cart = local_moodec_cart_remove($_POST['id']);
+	$cart->remove($_POST['id']);
 	// redirect back to the course page
 	redirect(new moodle_url('/local/moodec/pages/cart.php'));
 }
@@ -74,10 +74,11 @@ echo $renderer->moodec_cart($cart);
 
 $relatedOutput = '';
 // Check if there are any related products for each product in the cart
-foreach($cart['courses'] as $id => $variation) {
+foreach($cart->get() as $id => $variation) {
 	
 	// Get the product for the given ID
-	$product = local_moodec_get_product($id);	
+	$product = local_moodec_get_product($id);
+		
 	// Get the HTML output of the related products renderer
 	$relatedOutput = $renderer->related_products($product);
 
