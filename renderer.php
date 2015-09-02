@@ -28,7 +28,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 		// Require Moodec lib
 		require_once $CFG->dirroot . '/local/moodec/lib.php';
 
-		$cart = local_moodec_get_cart();
+		$cart = new MoodecCart();
 
 		// Product single wrapper
 		$html = '<div class="product-single">';
@@ -36,7 +36,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 			// Product title
 			$html .= sprintf(
 				'<h1 class="product__title">%s</h1>',
-				get_string('product_title', 'local_moodec', array('coursename' => $product->fullname))
+				get_string('product_title', 'local_moodec', array('coursename' => $product->get_fullname()) )
 			);
 
 			// Product/course image
@@ -50,7 +50,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 				// Product description
 				if (!!get_config('local_moodec', 'page_product_show_description')) {
 
-					$description = local_moodec_format_course_summary($product->courseid);
+					$description = $product->get_summary();
 
 					if( 0 < strlen($description) ) {
 						$html .= sprintf(
@@ -63,10 +63,10 @@ class local_moodec_renderer extends plugin_renderer_base {
 				// Product additional description
 				if (!!get_config('local_moodec', 'page_product_show_additional_description')) {
 
-					if( 0 < strlen($product->additional_info)) {
+					if( $product->has_description() ) {
 						$html .= sprintf(
 							'<div class="additional-info">%s</div>',
-							$product->additional_info
+							$product->get_description()
 						);
 					}
 				}
@@ -82,28 +82,28 @@ class local_moodec_renderer extends plugin_renderer_base {
 							get_string('enrolment_duration_label', 'local_moodec')
 						);
 
-						if( $product->pricing_model === 'simple') {
+						if( $product->get_type() === PRODUCT_TYPE_SIMPLE) {
 
 							$html .= sprintf(
 								'<span class="product-duration">%s</span>',
-								local_moodec_format_enrolment_duration($product->enrolment_duration)
+								$product->get_duration()
 							);
 						} else {
 							$attr = '';
 
-							foreach ($product->variations as $v) {
+							foreach ($product->get_variations() as $v) {
 								$attr .= sprintf('data-tier-%d="%s" ',
-									$v->variation_id,
-									local_moodec_format_enrolment_duration($v->enrolment_duration)
+									$v->get_id(),
+									$v->get_duration()
 								);
 							}
 
-							$firstVariation = reset($product->variations);
+							list($firstVariation) = array_values($product->get_variations());
 
 							$html .= sprintf(
 								'<span class="product-duration" %s>%s</span>',
 								$attr,
-								local_moodec_format_enrolment_duration($firstVariation->enrolment_duration)
+								$firstVariation->get_duration()
 							);
 						}
 
@@ -117,7 +117,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 						$category = $DB->get_record(
 							'course_categories',
 							array(
-								'id' => $product->category
+								'id' => $product->get_category_id()
 							)
 						);
 
@@ -125,7 +125,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 						$categoryURL = new moodle_url(
 							$CFG->wwwroot . '/local/moodec/pages/catalogue.php',
 							array(
-								'category' => $product->category
+								'category' => $product->get_category_id()
 							)
 						);
 
@@ -150,7 +150,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					}
 
 					// Product Price
-					if($product->pricing_model === 'simple') {
+					if($product->get_type() === PRODUCT_TYPE_SIMPLE) {
 
 						$html .= '<div class="product-price">';
 
@@ -164,7 +164,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 							$html .= sprintf(
 								'<span class="product-price__value">%s<span class="amount">%.2f</span></span>',
 								local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-								$product->price
+								$product->get_price()
 							);
 
 						$html .= '</div>';
@@ -173,23 +173,23 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 						$attr = '';
 
-						foreach ($product->variations as $v) {
-							$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);
+						foreach ($product->get_variations() as $v) {
+							$attr .= sprintf('data-tier-%d="%.2f" ', $v->get_id(), $v->get_price() );
 						}
 
-						$firstVariation = reset($product->variations);
+						list($firstVariation) = array_values($product->get_variations());
 
 						$html .= sprintf(
 							'<div class="product-price" %s><span class="product-price__label">%s</span> <span class="product-price__value">%s<span class="amount">%.2f</span></span></div>',
 							$attr,
 							get_string('price_label', 'local_moodec'),
 							local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-							$firstVariation->price
+							$firstVariation->get_price()
 						);
 					}
 
 					// Add to cart button states
-					if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
+					if (isloggedin() && is_enrolled(context_course::instance($product->get_course_id(), MUST_EXIST))) {
 
 						// Display 'enrolled' button
 						$html .= sprintf(
@@ -199,7 +199,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 							get_string('button_enrolled_label', 'local_moodec')
 						);
 
-					} else if (is_array($cart['courses']) && array_key_exists($product->courseid, $cart['courses'])) {
+					} else if ( $cart->check($product->get_id()) ) {
 
 						// Display 'in cart' button
 						$html .= sprintf(
@@ -212,7 +212,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					} else {
 
 						// Check whether this is a simple or variable product
-						if($product->pricing_model === 'simple') {
+						if($product->get_type() === PRODUCT_TYPE_SIMPLE) {
 
 							// Display simple product 'add to cart' form
 							$html .= sprintf(
@@ -222,7 +222,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 									<input type="submit" class="product-form__add" value="%s">
 								</form>',
 								new moodle_url('/local/moodec/pages/cart.php'),
-								$product->courseid,
+								$product->get_id(),
 								get_string('button_add_label', 'local_moodec')
 							);
 
@@ -237,12 +237,12 @@ class local_moodec_renderer extends plugin_renderer_base {
 							);
 
 							// output variations
-							foreach($product->variations as $variation) {
+							foreach($product->get_variations() as $variation) {
 
 								$html .= sprintf(
 									'<option value="%d">%s</option>',
-									$variation->variation_id,
-									$variation->name
+									$variation->get_id(),
+									$variation->get_name()
 								);
 
 							}
@@ -253,7 +253,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 									<input type="hidden" name="id" value="%d">
 									<input type="submit" class="product-form__add" value="%s">
 								</form>',
-								$product->courseid,
+								$product->get_id(),
 								get_string('button_add_label', 'local_moodec')
 							);
 
@@ -289,7 +289,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$iterator = 0;
 
 		// Get products related to the product passed to us
-		$products = local_moodec_get_related_products($product->courseid, $product->category);
+		$products = $product->get_related();
 
 		// We only output anything if there ARE related products
 		if (is_array($products) && 0 < count($products)) {
@@ -306,23 +306,23 @@ class local_moodec_renderer extends plugin_renderer_base {
 				// Output container to hold product items
 				$html .= '<ul class="grid-container">';
 
-				foreach ($products as $product) {
+				foreach ($products as $p) {
 
 					$html .= '<li class="grid-item">';
 
 						// Product image
-						$html .= $this->product_image($product);
+						$html .= $this->product_image($p);
 
 						// Product title
 						$html .= sprintf(
 							'<h5>%s</h5>',
-							$product->fullname
+							$p->get_fullname()
 						);
 
 						// Product link
 						$html .= sprintf(
 							'<a href="%s" class="product-view btn">%s</a>',
-							new moodle_url('/local/moodec/pages/product.php', array('id' => $product->courseid)),
+							new moodle_url('/local/moodec/pages/product.php', array('id' => $p->get_id()) ),
 							get_string('product_related_button_label', 'local_moodec')
 						);
 
@@ -358,13 +358,13 @@ class local_moodec_renderer extends plugin_renderer_base {
 		require_once $CFG->dirroot . '/local/moodec/lib.php';
 
 		$html = '';
-		$imageURL = local_moodec_get_course_image_url($product->courseid);
+		$imageURL = $product->get_image_url();
 
 		if ( !!$imageURL ) {
 			$html = sprintf(
 				'<img src="%s" alt="%s" class="product-image">',
 				$imageURL,
-				$product->fullname
+				$product->get_fullname()
 			);
 		}
 
@@ -408,12 +408,12 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 				$html .= '<ul>';
 
-				foreach ($removedProducts as $product) {
-					$thisCourse = get_course($product);
+				foreach ($removedProducts as $p) {
+					$thisProduct = local_moodec_get_product($p);
 					
 					$html .= sprintf(
 						'<li class="cart-review__item--removed">%s</li>', 
-						$thisCourse->fullname
+						$thisProduct->get_fullname()
 					);
 				}
 
@@ -427,7 +427,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 			);
 		}
 
-		if (is_array($cart['courses']) && 0 < count($cart['courses'])) {
+		if ( $cart->is_empty() === false ) {
 
 			// Output required paypal fields
 			if( !!$checkout ) {
@@ -437,30 +437,30 @@ class local_moodec_renderer extends plugin_renderer_base {
 			$html .= '<ul class="products">';
 
 			// Go through each product in the cart
-			foreach ($cart['courses'] as $courseid => $variation) {
+			foreach ($cart->get() as $pID => $vID) {
 
-				$product = local_moodec_get_product($courseid);
+				$product = local_moodec_get_product($pID);
 
 				$html .= '<li class="product-item">';
 
 					// Product title and variation
 					$html .= sprintf(
 						'<h4 class="product-title"><a href="%s">%s</a></h4>',
-						new moodle_url('/local/moodec/pages/product.php', array('id'=>$courseid)),
-						$variation === 0 ? $product->fullname : $product->fullname . ' - ' . $product->variations[$variation]->name
+						new moodle_url('/local/moodec/pages/product.php', array( 'id' => $product->get_id() )),
+						$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_fullname() : $product->get_fullname() . ' - ' . $product->get_variation($vID)->get_name()
 					);
 
 					// Product price
 					$html .= sprintf(
 						'<div class="product-price">%s%.02f</div>',
 						local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-						$variation === 0 ? $product->price : $product->variations[$variation]->price
+						$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_price() : $product->get_variation($vID)->get_price()
 					);
 
 					if( !!$checkout ) {
 
 						// Output the hidden paypal fields for this product info
-						$html .= $this->paypal_product_info($product, $variation, $itemCount);
+						$html .= $this->paypal_product_info($product, $vID, $itemCount);
 
 					} else {
 
@@ -471,7 +471,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 								<input type="hidden" name="action" value="removeFromCart">
 								<input class="form__submit" type="submit" value="%s">
 							</form>',
-							$courseid,
+							$product->get_id(),
 							get_string('button_remove_label', 'local_moodec')
 						);
 
@@ -479,7 +479,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 				$html .= '</li>';
 
-				$ipnData .= sprintf('|C:%d,V:%d', $courseid, $variation);
+				$ipnData .= sprintf('|C:%d,V:%d', $product->get_course_id(), $vID);
 				$itemCount++;
 			}
 
@@ -493,7 +493,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%0.2f</h3>',
 					get_string('cart_total', 'local_moodec'),
 					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-					local_moodec_cart_get_total()
+					$cart->get_total()
 				);
 
 			$html .= '</div>';
@@ -698,14 +698,14 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$html = sprintf(
 			'<input type="hidden" name="%s" value="%s">',
 			'item_name_' . $i,
-			$v === 0 ? $p->fullname : $p->fullname . ' - ' . $p->variations[$v]->name
+			$p->get_type() === PRODUCT_TYPE_SIMPLE ? $p->get_fullname() : $p->get_fullname() . ' - ' . $p->get_variations($v)->get_name()
 		);
 
 		// Paypal item amount field
 		$html .= sprintf(
 			'<input type="hidden" name="%s" value="%s">',
 			'amount_' . $i,
-			$v === 0 ? $p->price : $p->variations[$v]->price
+			$p->get_type() === PRODUCT_TYPE_SIMPLE ? $p->get_price() : $p->get_variations($v)->get_price()
 		);
 
 		return $html;
