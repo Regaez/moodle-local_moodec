@@ -30,7 +30,7 @@ class MoodecProductSimple extends MoodecProduct {
 	public function load($id) {
 		parent::load($id);
 
-		$_simpleVariation = new MoodecProductVariation($id);
+		$this->_simpleVariation = new MoodecProductVariation($id);
 	}
 
 	/**
