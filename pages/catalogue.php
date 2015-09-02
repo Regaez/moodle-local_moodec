@@ -49,7 +49,7 @@ if ($sort !== null && 0 < strlen($sort) && strpos('-', $sort) !== -1) {
 }
 
 // Get the cart in it's current state
-$cart = local_moodec_get_cart();
+$cart = new MoodecCart();
 
 echo $OUTPUT->header();
 
@@ -63,7 +63,7 @@ echo $OUTPUT->header();
 echo $renderer->filter_bar($categoryID, $sort); 
 
 
-$products = local_moodec_get_products($categoryID, $sortfield, $sortorder, $page);
+$products = local_moodec_get_products($page, $categoryID, $sortfield, $sortorder);
 
 if (is_array($products) && 0 < count($products)) {
 	?>
@@ -75,15 +75,15 @@ $iterator = 0;
 	$itemLimit = (int) get_config('local_moodec', 'pagination');
 	foreach ($products as $product) {
 
-		$productURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->courseid));
-		$imageURL = local_moodec_get_course_image_url($product->courseid);
-		$category = $DB->get_record('course_categories', array('id' => $product->category));
-		$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $product->category));
+		$productURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->get_id()));
+		$imageURL = $product->get_image_url();
+		$category = $DB->get_record('course_categories', array('id' => $product->get_category_id()));
+		$categoryURL = new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $product->get_category_id()));
 
-		if (strlen($product->summary) < 100) {
-			$summary = $product->summary;
+		if (strlen($product->get_summary()) < 100) {
+			$summary = $product->get_summary();
 		} else {
-			$summary = substr($product->summary, 0, 100) . '...';
+			$summary = substr($product->get_summary(), 0, 100) . '...';
 		}?>
 
 	<div class="product-item">
@@ -92,9 +92,9 @@ $iterator = 0;
 			<div class="product-details__wrapper">
 				<h3 class="product-title">
 					<?php if (!!get_config('local_moodec', 'page_product_enable')) {?>
-					<a href="<?php echo $productURL;?>"><?php echo $product->fullname;?></a>
+					<a href="<?php echo $productURL;?>"><?php echo $product->get_fullname();?></a>
 					<?php } else {
-						echo $product->fullname;
+						echo $product->get_fullname();
 					}?>
 				</h3>
 
@@ -103,30 +103,29 @@ $iterator = 0;
 				<?php }?>
 
 				<?php if (!!get_config('local_moodec', 'page_catalogue_show_additional_description')) {?>
-				<div class="product-summary additional"><?php echo $product->additional_info;?></div>
+				<div class="product-summary additional"><?php echo $product->get_description();?></div>
 				<?php }?>
 
 				<?php if(!!get_config('local_moodec', 'page_catalogue_show_duration')) { ?>
 					<p><?php echo get_string('catalogue_enrolment_duration_label', 'local_moodec');?> <?php
 
-						if( $product->pricing_model === 'simple') {
-							printf('<span class="product-duration">%s</span>',local_moodec_format_enrolment_duration($product->enrolment_duration)
-							);
+						if( $product->get_type() === PRODUCT_TYPE_SIMPLE) {
+							printf('<span class="product-duration">%s</span>', $product->get_duration());
 						} else {
 							$attr = '';
 
-							foreach ($product->variations as $v) {
+							foreach ($product->get_variations() as $v) {
 								$attr .= sprintf('data-tier-%d="%s" ',
-									$v->variation_id,
-									local_moodec_format_enrolment_duration($v->enrolment_duration)
+									$v->get_id(),
+									$v->get_duration()
 								);
 							}
 
-							$firstVariation = reset($product->variations);
+							list($firstVariation) = array_values($product->get_variations());
 
 							printf('<span class="product-duration" %s>%s</span>',
 								$attr,
-								local_moodec_format_enrolment_duration($firstVariation->enrolment_duration)
+								$firstVariation->get_duration()
 							);
 						}
 					?></p>
@@ -141,21 +140,21 @@ $iterator = 0;
 
 			<?php if (!!get_config('local_moodec', 'page_catalogue_show_price')) {?>
 
-				<?php if($product->pricing_model === 'simple') { ?>
-					<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->price;?></h4>
+				<?php if($product->get_type() === PRODUCT_TYPE_SIMPLE) { ?>
+					<h4 class="product-price"><?php echo local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->get_price();?></h4>
 				<?php } else {
 					$attr = '';
 
-					foreach ($product->variations as $v) {
-						$attr .= sprintf('data-tier-%d="%.2f" ', $v->variation_id, $v->price);
+					foreach ($product->get_variations() as $v) {
+						$attr .= sprintf('data-tier-%d="%.2f" ', $v->get_id(), $v->get_price());
 					}
 
-					$firstVariation = reset($product->variations);
+					list($firstVariation) = array_values($product->get_variations());
 
 					printf('<h4 class="product-price" %s>%s<span class="amount">%.2f</span></h4>',
 						$attr,
 						local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-						$firstVariation->price
+						$firstVariation->get_price()
 					);
 
 				} ?>
@@ -163,13 +162,13 @@ $iterator = 0;
 
 			<?php
 			if (!!get_config('local_moodec', 'page_catalogue_show_button')) {
-				if (isloggedin() && is_enrolled(context_course::instance($product->courseid, MUST_EXIST))) {
+				if (isloggedin() && is_enrolled(context_course::instance($product->get_course_id(), MUST_EXIST))) {
 				?>
 				<div class="product-form">
 					<button class="product-form__add button--enrolled" disabled="disabled"><?php echo get_string('button_enrolled_label', 'local_moodec');?></button>
 				</div>
 
-			<?php } else if (is_array($cart['courses']) && array_key_exists($product->courseid, $cart['courses'])) {?>
+			<?php } else if( $cart->check($product->get_id()) ){?>
 
 				<div class="product-form">
 					<button class="product-form__add button--cart" disabled="disabled"><?php echo get_string('button_in_cart_label', 'local_moodec');?></button>
@@ -177,10 +176,10 @@ $iterator = 0;
 
 			<?php } else {?>
 
-				<?php if( $product->pricing_model === 'simple') { ?>
+				<?php if( $product->get_type() === PRODUCT_TYPE_SIMPLE) { ?>
 
 				<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
-					<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
+					<input type="hidden" name="id" value="<?php echo $product->get_id();?>">
 					<input type="hidden" name="action" value="addToCart">
 					<button class="product-form__add"><?php echo get_string('button_add_label', 'local_moodec');?></button>
 				</form>
@@ -188,14 +187,14 @@ $iterator = 0;
 				<?php } else { ?>
 
 				<form action="/local/moodec/pages/cart.php" method="POST" class="product-form">
-					<input type="hidden" name="id" value="<?php echo $product->courseid;?>">
+					<input type="hidden" name="id" value="<?php echo $product->get_id();?>">
 					<input type="hidden" name="action" value="addVariationToCart">
 					<select class="product-tier" name="variation">
 
-						<?php foreach($product->variations as $variation) {?>
+						<?php foreach($product->get_variations() as $variation) {?>
 
-							<option value="<?php echo $variation->variation_id; ?>">
-								<?php echo $variation->name; ?>
+							<option value="<?php echo $variation->get_id(); ?>">
+								<?php echo $variation->get_name(); ?>
 							</option>
 
 						<?php } ?>
