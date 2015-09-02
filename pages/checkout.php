@@ -38,28 +38,14 @@ require_login();
 $removedProducts = (array) json_decode(optional_param('enrolled', '', PARAM_TEXT));
 
 // Get the cart in it's current state
-$cart = local_moodec_get_cart();
-
-$removed = array();
+$cart = new MoodecCart();
 
 // If your cart is empty, redirect to cart page.
-if (!is_array($cart['courses']) || 0 === count($cart['courses'])) {
+if ( $cart->is_empty() ) {
 	redirect(new moodle_url('/local/moodec/pages/cart.php'));
 }
 
-foreach ($cart['courses'] as $product => $value) {
-	$context = context_course::instance($product);
-	$isEnrolled = is_enrolled($context, $USER, '', true);
-
-	if ($isEnrolled) {
-		local_moodec_cart_remove($product);
-		$removed[] = $product;
-	}
-}
-
-if (0 < count($removed)) {
-	redirect(new moodle_url('/local/moodec/pages/checkout.php', array('enrolled' => json_encode($removed))));
-}
+$removedProducts = $cart->refresh();
 
 echo $OUTPUT->header(); ?>
 
