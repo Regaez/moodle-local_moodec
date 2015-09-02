@@ -11,6 +11,22 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+// Declare product type constants
+define('PRODUCT_TYPE_SIMPLE', 'PRODUCT_TYPE_SIMPLE');
+define('PRODUCT_TYPE_VARIABLE', 'PRODUCT_TYPE_VARIABLE');
+
+// Load the required Moodec classes
+require_once $CFG->dirroot . '/local/moodec/classes/product.php';
+require_once $CFG->dirroot . '/local/moodec/classes/product_simple.php';
+require_once $CFG->dirroot . '/local/moodec/classes/product_variable.php';
+require_once $CFG->dirroot . '/local/moodec/classes/product_variation.php';
+require_once $CFG->dirroot . '/local/moodec/classes/cart.php';
+
+/**
+ * Extend the default Moodle navigation
+ * @param  global_navigation $nav
+ * @return void                 
+ */
 function local_moodec_extends_navigation(global_navigation $nav) {
 	global $PAGE, $DB;
 
