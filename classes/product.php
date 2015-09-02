@@ -107,9 +107,9 @@ class MoodecProduct {
 				is_enabled,
 				category,
 				summary,
-				summaryformat
+				c.summaryformat as summary_format,
 				type,
-				descrtption,
+				description,
 				tags,
 				timecreated
 			FROM {local_moodec_product} lmp, {course} c
@@ -131,7 +131,7 @@ class MoodecProduct {
 			$this->_type = $product->type;
 			$this->_categoryid = (int) $product->category;
 			$this->_summary = $product->summary;
-			$this->_summaryFormat = (int) $product->summaryformat;
+			$this->_summaryFormat = (int) $product->summary_format;
 			$this->_description = $product->description;
 			$this->_tags = explode(',', $product->tags);
 		} else {
