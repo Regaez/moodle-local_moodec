@@ -99,9 +99,9 @@ function local_moodec_extends_settings_navigation(settings_navigation $nav, $con
 function local_moodec_get_currencies() {
 	// See https://www.paypal.com/cgi-bin/webscr?cmd=p/sell/mc/mc_intro-outside,
 	// 3-character ISO-4217: https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_currency_codes
-	$codes = array(
-		'AUD', 'BRL', 'CAD', 'CHF', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD', 'HUF', 'ILS', 'JPY',
-		'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'TWD', 'USD');
+	// See https://www.paymentexpress.com/technical_resources/ecommerce_hosted/pxpay.html
+
+	$codes = array('AUD','CAD','CHF','DKK','EUR','GBP','HKD','JPY','MYR','NZD','SGD','THB','USD');
 	$currencies = array();
 	foreach ($codes as $c) {
 		$currencies[$c] = new lang_string($c, 'core_currencies');
@@ -119,29 +119,17 @@ function local_moodec_get_currency_symbol($currency) {
 
 	$codes = array(
 		'AUD' => '$',
-		'BRL' => 'R$',
 		'CAD' => '$',
 		'CHF' => 'CHF',
-		'CZK' => 'Kč',
 		'DKK' => 'kr',
 		'EUR' => '€',
 		'GBP' => '£',
 		'HKD' => '$',
-		'HUF' => 'Ft',
-		'ILS' => '₪',
 		'JPY' => '¥',
-		'MXN' => '$',
 		'MYR' => 'RM',
-		'NOK' => 'kr',
 		'NZD' => '$',
-		'PHP' => '₱',
-		'PLN' => 'zł',
-		'RUB' => 'руб',
-		'SEK' => 'kr',
 		'SGD' => '$',
 		'THB' => '฿',
-		'TRY' => '₺',
-		'TWD' => 'NT$',
 		'USD' => '$',
 	);
 
