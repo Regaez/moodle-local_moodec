@@ -15,6 +15,11 @@ defined('MOODLE_INTERNAL') || die;
 define('PRODUCT_TYPE_SIMPLE', 'PRODUCT_TYPE_SIMPLE');
 define('PRODUCT_TYPE_VARIABLE', 'PRODUCT_TYPE_VARIABLE');
 
+// Declare gateway type constants
+define('MOODEC_GATEWAY_PAYPAL', 'MOODEC_GATEWAY_PAYPAL');
+define('MOODEC_GATEWAY_DPS', 'MOODEC_GATEWAY_DPS');
+
+
 // Load the required Moodec classes
 require_once $CFG->dirroot . '/local/moodec/classes/product.php';
 require_once $CFG->dirroot . '/local/moodec/classes/product_simple.php';
