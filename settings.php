@@ -85,22 +85,6 @@ if ($hassiteconfig) {
 	);
 	$ADMIN->add('local_moodec', $settings);
 
-	$settings->add(
-		new admin_setting_configtext(
-			'local_moodec/paypalbusiness',
-			get_string(
-				'businessemail',
-				'local_moodec'
-			),
-			get_string(
-				'businessemail_desc',
-				'local_moodec'
-			),
-			'',
-			PARAM_EMAIL
-		)
-	);
-
 	$paypalcurrencies = local_moodec_get_currencies();
 	$settings->add(
 		new admin_setting_configselect(
@@ -128,6 +112,137 @@ if ($hassiteconfig) {
 			),
 			10,
 			PARAM_INT
+		)
+	);
+
+	//
+	// Add category to local plugins category
+	//
+	$ADMIN->add(
+		'local_moodec',
+		new admin_category(
+			'moodec_payment',
+			get_string(
+				'payment_title',
+				'local_moodec'
+			)
+		)
+	);
+
+	//
+	// ADD PAYPAL PAYMENT SETTINGS PAGE
+	//
+	$settings = new admin_settingpage(
+		'local_moodec_settings_dps',
+		get_string(
+			'payment_dps_title',
+			'local_moodec'
+		)
+	);
+	$ADMIN->add('moodec_payment', $settings);
+
+	// 
+	// Add dps enable checkbox
+	// 
+	$settings->add(
+		new admin_setting_configcheckbox(
+			'local_moodec/payment_dps_enable',
+			get_string(
+				'payment_enable',
+				'local_moodec'
+			),
+			get_string(
+				'payment_enable_desc',
+				'local_moodec'
+			),
+			0
+		)
+	);
+
+	// 
+	// Add DPS PxPay userid setting
+	// 
+	$settings->add(
+		new admin_setting_configtext(
+			'local_moodec/payment_dps_userid',
+			get_string(
+				'payment_dps_userid',
+				'local_moodec'
+			),
+			get_string(
+				'payment_dps_userid_desc',
+				'local_moodec'
+			),
+			'',
+			PARAM_TEXT
+		)
+	);
+
+	// 
+	// Add DPS PxPayKey setting
+	// 
+	$settings->add(
+		new admin_setting_configtext(
+			'local_moodec/payment_dps_key',
+			get_string(
+				'payment_dps_key',
+				'local_moodec'
+			),
+			get_string(
+				'payment_dps_key_desc',
+				'local_moodec'
+			),
+			'',
+			PARAM_TEXT
+		)
+	);
+
+	//
+	// ADD PAYPAL PAYMENT SETTINGS PAGE
+	//
+	$settings = new admin_settingpage(
+		'local_moodec_settings_paypal',
+		get_string(
+			'payment_paypal_title',
+			'local_moodec'
+		)
+	);
+	$ADMIN->add('moodec_payment', $settings);
+
+	// 
+	// Add paypal enable checkbox
+	// 
+	$settings->add(
+		new admin_setting_configcheckbox(
+			'local_moodec/payment_paypal_enable',
+			get_string(
+				'payment_enable',
+				'local_moodec'
+			),
+			get_string(
+				'payment_enable_desc',
+				'local_moodec'
+			),
+			0
+		)
+	);
+
+	// 
+	// Add paypal business email setting
+	// 
+	$settings->add(
+		new admin_setting_configtext(
+			'local_moodec/payment_paypal_email',
+			get_string(
+				'payment_paypal_email',
+				'local_moodec'
+			),
+			get_string(
+				'payment_paypal_email_desc',
+				'local_moodec'
+			),
+			'',
+			PARAM_EMAIL
 		)
 	);
 

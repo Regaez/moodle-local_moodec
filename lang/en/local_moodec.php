@@ -55,6 +55,19 @@ $string['currency'] = 'Currency';
 $string['pagination'] = 'Courses per page';
 $string['pagination_desc'] = 'The number of courses to be displayed per page in the catalogue';
 
+$string['payment_title'] = 'Payment Gateways';
+$string['payment_enable'] = 'Enable';
+$string['payment_enable_desc'] = 'Enable this payment gateway';
+$string['payment_dps_title'] = 'DPS';
+$string['payment_dps_userid'] = 'PxPay User ID';
+$string['payment_dps_userid_desc'] = 'Enter your DPS PxPay merchant user id';
+$string['payment_dps_key'] = 'PxPay Key';
+$string['payment_dps_key_desc'] = 'Enter your DPS PxPay merchant key';
+$string['payment_paypal_title'] = 'Paypal';
+$string['payment_paypal_email'] = 'Email';
+$string['payment_paypal_email_desc'] = 'Enter your Paypal business email address';
+
+
 // Pages
 
 // CATALOGUE
