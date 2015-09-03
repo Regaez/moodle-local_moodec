@@ -26,6 +26,8 @@ require_once $CFG->dirroot . '/local/moodec/classes/product_simple.php';
 require_once $CFG->dirroot . '/local/moodec/classes/product_variable.php';
 require_once $CFG->dirroot . '/local/moodec/classes/product_variation.php';
 require_once $CFG->dirroot . '/local/moodec/classes/cart.php';
+require_once $CFG->dirroot . '/local/moodec/classes/transaction.php';
+require_once $CFG->dirroot . '/local/moodec/classes/transaction_item.php';
 
 /**
  * Extend the default Moodle navigation
