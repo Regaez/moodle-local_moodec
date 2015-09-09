@@ -100,6 +100,24 @@ class MoodecTransaction {
 	}
 
 	/**
+	 * Updates the DB table with the current class properties
+	 * @return void
+	 */
+	private function update(){
+		global $DB;
+
+		$updatedRecord 					= new stdClass();
+		$updatedRecord->id 				= $this->_id;
+		$updatedRecord->user_id 		= $this->_userId;
+		$updatedRecord->txn_id 			= $this->_txnId;
+		$updatedRecord->status 			= $this->_status;
+		$updatedRecord->gateway 		= $this->_gateway;
+		$updatedRecord->purchase_date 	= $this->_purchaseDate;
+
+		$DB->update_record('local_moodec_transaction', $updatedRecord);
+	}
+
+	/**
 	 * Loads the transaction details from the DB
 	 * @param  int 		$id 	transaction_id
 	 * @return void    
@@ -146,6 +164,26 @@ class MoodecTransaction {
 		}
 
 		$this->_items = $loadedItems;
+	}
+
+	/**
+	 * Sets the transaction status to be marked as fail
+	 * Calls update to the DB
+	 * @return void
+	 */
+	public function fail(){
+		$this->_status = self::STATUS_FAILED;
+		$this->update();
+	}
+
+	/**
+	 * Sets the transaction to be marked as complete
+	 * Calls update to the DB
+	 * @return void
+	 */
+	public function complete(){
+		$this->_status = self:STATUS_COMPLETE;
+		$this->update();
 	}
 
 	/**
@@ -209,11 +247,29 @@ class MoodecTransaction {
 	}
 
 	/**
+	 * Sets the txnId for this transaction, as returned by
+	 * @param [type] $txnId [description]
+	 */
+	public function set_txn_id($txnId){
+		$this->_txnId = $txnId;
+		$this->update();
+	}
+
+	/**
 	 * Returns the gateway used for this transaction
 	 * @return string gateway
 	 */
 	public function get_gateway(){
 		return $this->_gateway;
+	}
+
+	/**
+	 * Sets the gateway for this transaction (use lib file constants)
+	 * @param string 	$gate 		MOODEC_GATEWAY_PAYPAL|MOODEC_GATEWAY_DPS
+	 */	
+	public function set_gateway($gate){
+		$this->_gateway = $gate;
+		$this->update();
 	}
 
 	/**
