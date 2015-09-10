@@ -183,6 +183,7 @@ class MoodecTransaction {
 	 */
 	public function complete(){
 		$this->_status = self:STATUS_COMPLETE;
+		$this->_purchaseDate = time();
 		$this->update();
 	}
 
