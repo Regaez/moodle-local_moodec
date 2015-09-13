@@ -66,6 +66,8 @@ $string['payment_dps_key_desc'] = 'Enter your DPS PxPay merchant key';
 $string['payment_paypal_title'] = 'Paypal';
 $string['payment_paypal_email'] = 'Email';
 $string['payment_paypal_email_desc'] = 'Enter your Paypal business email address';
+$string['payment_paypal_sandbox'] = 'Use sandbox mode';
+$string['payment_paypal_sandbox_desc'] = 'This will enable Paypal sandbox for the gateway';
 
 
 // Pages

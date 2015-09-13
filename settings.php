@@ -246,6 +246,24 @@ if ($hassiteconfig) {
 		)
 	);
 
+	// 
+	// Add paypal sandbox checkbox
+	// 
+	$settings->add(
+		new admin_setting_configcheckbox(
+			'local_moodec/payment_paypal_sandbox',
+			get_string(
+				'payment_sandbox',
+				'local_moodec'
+			),
+			get_string(
+				'payment_sandbox_desc',
+				'local_moodec'
+			),
+			0
+		)
+	);
+
 	//
 	// Add page settings
 	//
