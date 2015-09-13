@@ -388,7 +388,7 @@ function local_moodec_get_groups($id) {
 	global $CFG;
 	require_once $CFG->libdir . '/grouplib.php';
 	$arr = array(
-		0 => get_string('variable_group_none', 'local_moodec')
+		0 => get_string('product_variation_group_none', 'local_moodec')
 	);
 	$groups = groups_get_all_groups($id);
 

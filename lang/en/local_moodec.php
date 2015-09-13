@@ -153,3 +153,4 @@ $string['product_variation_duration_help'] = 'Enter the number of days for the c
 $string['product_variation_group'] = 'Group';
 $string['product_variation_group_help'] = 'Select a course group for the user to be assigned when they purchase this variation.';
 $string['product_variations_update'] = 'Update variations form';
+$string['product_variation_group_none'] = 'No group';
