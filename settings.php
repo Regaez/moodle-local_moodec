@@ -253,11 +253,11 @@ if ($hassiteconfig) {
 		new admin_setting_configcheckbox(
 			'local_moodec/payment_paypal_sandbox',
 			get_string(
-				'payment_sandbox',
+				'payment_paypal_sandbox',
 				'local_moodec'
 			),
 			get_string(
-				'payment_sandbox_desc',
+				'payment_paypal_sandbox_desc',
 				'local_moodec'
 			),
 			0
