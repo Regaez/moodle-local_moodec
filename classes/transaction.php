@@ -20,9 +20,10 @@ class MoodecTransaction {
 	 * The transaction STATUS constants
 	 * @var int
 	 */
-	const STATUS_PENDING = 0;
-	const STATUS_COMPLETE = 1;
-	const STATUS_FAILED = 2;
+	const STATUS_NOT_SUBMITTED = 0;
+	const STATUS_PENDING = 1;
+	const STATUS_COMPLETE = 2;
+	const STATUS_FAILED = 3;
 
 	/**
 	 * The MoodecTransaction id
@@ -91,7 +92,7 @@ class MoodecTransaction {
 		global $DB, $USER;
 
 		$newRecord 					= new stdClass();
-		$newRecord->status 			= self::STATUS_PENDING;
+		$newRecord->status 			= self::STATUS_NOT_SUBMITTED;
 		$newRecord->user_id 		= $USER->id;
 		//$newRecord->gateway 		= get_config('local_moodec', 'active_gateway'); // get from config which gateway they're using?
 		$newRecord->purchase_date 	= time();
@@ -134,7 +135,7 @@ class MoodecTransaction {
 			$this->_txnId = (int) $record->txn_id;
 			$this->_userId = (int) $record->user_id;
 			$this->_gateway = $record->gateway;
-			$this->_status = $record->status;
+			$this->_status = (int) $record->status;
 			$this->_purchaseDate = $record->purchase_date;
 
 			// Load the transaction items
@@ -173,6 +174,15 @@ class MoodecTransaction {
 	 */
 	public function fail(){
 		$this->_status = self::STATUS_FAILED;
+		$this->update();
+	}
+
+	/**
+	 * Sets the transaction status to be marked as pending
+	 * @return void
+	 */
+	public function pending(){
+		$this->_status = self::STATUS_PENDING;
 		$this->update();
 	}
 
