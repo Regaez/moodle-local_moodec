@@ -35,6 +35,12 @@ class MoodecCart {
 	protected $_cartTotal;
 
 	/**
+	 * If they've visited the checkout page, this will contain an existing transaction ID
+	 * @var int
+	 */
+	protected $_transactionId;
+
+	/**
 	 * Stores the last time the 
 	 * @var [type]
 	 */
@@ -49,6 +55,7 @@ class MoodecCart {
 		// By default, the cart is empty
 		$this->_products = array();
 		$this->_cartTotal = 0;
+		$this->_transactionId = null;
 
 		$sessionTime = 0;
 		$sessionProducts = array();
@@ -61,14 +68,14 @@ class MoodecCart {
 		if( isset($_SESSION[self::STORAGE_ID]) ) {
 
 			// Get cart from PHP session
-			list($sessionProducts, $sessionCartTotal, $sessionTime) = unserialize($_SESSION[self::STORAGE_ID]);
+			list($sessionProducts, $sessionCartTotal, $sessionTransactionId, $sessionTime) = unserialize($_SESSION[self::STORAGE_ID]);
 
 		} 
 
 		if( isset($_COOKIE[self::STORAGE_ID]) ){
 
 			// Get cart from the cookies
-			list($cookieProducts, $cookieCartTotal, $cookieTime) = unserialize($_COOKIE[self::STORAGE_ID]);
+			list($cookieProducts, $cookieCartTotal, $cookieTransactionId, $cookieTime) = unserialize($_COOKIE[self::STORAGE_ID]);
 
 		}
 
@@ -77,12 +84,14 @@ class MoodecCart {
 
 			$this->_products = $sessionProducts;
 			$this->_cartTotal = $sessionCartTotal;
+			$this->_transactionId = $sessionTransactionId;
 			$this->_lastUpdated = $sessionTime;
 
 		} else if( $cookieTime !== 0 ) {
 
 			$this->_products = $cookieProducts;
 			$this->_cartTotal = $cookieCartTotal;
+			$this->_transactionId = $cookieTransactionId;
 			$this->_lastUpdated = $cookieTime;
 
 		}
@@ -104,7 +113,7 @@ class MoodecCart {
 		$this->_lastUpdated = time();
 
 		// serialize the data for storage
-		$data = serialize(array($this->_products, $this->_cartTotal, $this->_lastUpdated));
+		$data = serialize(array($this->_products, $this->_cartTotal, $this->_transactionId, $this->_lastUpdated));
 
 		// Set the PHP session
 		$_SESSION[self::STORAGE_ID] = $data;
@@ -300,5 +309,30 @@ class MoodecCart {
 	 */
 	public function is_empty(){
 		return 0 === count($this->_products);
+	}
+
+	/**
+	 * Will return the transactionId if set, otherwise false
+	 * @return int|bool 
+	 */	
+	public function get_transaction_id(){
+		if( !is_null($this->_transactionId) ) {
+			return $this->_transactionId;
+		} 
+
+		return false;
+	}
+
+	/**
+	 * Set the transaction id for the cart
+	 * @param int $id 
+	 */
+	public function set_transaction_id($id) {
+		$id = (int) $id;
+
+		$this->_transactionId = $id;
+
+		// update the cart storage
+		$this->update();
 	}
 }
