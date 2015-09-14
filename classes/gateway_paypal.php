@@ -17,21 +17,28 @@ require_once dirname(__FILE__) . '/../lib.php';
 class MoodecGatewayPaypal extends MoodecGateway {
 
 	function __construct($transaction) {
-		parent::__construct();
+		parent::__construct($transaction);
 
 		$this->_gatewayName = get_string('payment_paypal_title', 'local_moodec');
 
 		// Checks if sandbox mode is enabled
 		if( !!get_config('local_moodec', 'payment_paypal_sandbox') ) {
-			$this->_gatewayURL = 'www.sandbox.paypal.com/cgi-bin/webscr'; // the Paypal sandbox URL
+			$this->_gatewayURL = 'https://www.sandbox.paypal.com/cgi-bin/webscr'; // the Paypal sandbox URL
 		} else {
 			$this->_gatewayURL = 'https://www.paypal.com/cgi-bin/webscr';
 		}
 	}
 
 	// handle the IPN notification	
-	public function handle($data){
+	public function handle($data = null){
 		global $DB;
+
+		if( is_null($data) ) {
+
+			$this->_transaction->fail();
+
+			return false;
+		}
 		
 		// If status is not completed or pending then unenrol the student if already enrolled
 		// and notify admin
@@ -80,6 +87,8 @@ class MoodecGatewayPaypal extends MoodecGateway {
 
 			$this->send_error_to_admin("Payment pending", $data);
 
+			$this->_transaction->pending();
+
 			return false;
 		}
 
@@ -124,7 +133,7 @@ class MoodecGatewayPaypal extends MoodecGateway {
 	public function render(){
 
 		// output form
-		$html = sprintf('<form action="%s" method="POST">');
+		$html = sprintf('<form action="%s" method="POST">', $this->_gatewayURL);
 
 			$html .= sprintf(
 				'<input type="hidden" name="cmd" value="_cart">
@@ -139,8 +148,7 @@ class MoodecGatewayPaypal extends MoodecGateway {
 				<input type="hidden" name="notify_url" value="%s">
 				<input type="hidden" name="return" value="%s">
 				<input type="hidden" name="cancel_return" value="%s">',
-				$this->_gatewayURL,
-				get_config('local_moodec', 'paypalbusiness'),
+				get_config('local_moodec', 'payment_paypal_email'),
 				get_config('local_moodec', 'currency'),
 				$this->_transaction->get_id(),
 				new moodle_url('/local/moodec/payment/paypal/ipn.php'),
@@ -157,16 +165,16 @@ class MoodecGatewayPaypal extends MoodecGateway {
 
 				// Output name
 				$html .= sprintf(
-					'<input type="hidden" name="%s" value="%s">'
+					'<input type="hidden" name="%s" value="%s">',
 					'item_name_' . $count,
-					$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_name() : $product->get_name() . ' - ' . $product->get_variation($item->get_variation_id())->get_name()
+					$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_fullname() : $product->get_fullname() . ' - ' . $product->get_variation($item->get_variation_id())->get_name()
 				);
 
 				// Output name
 				$html .= sprintf(
-					'<input type="hidden" name="%s" value="%s">'
-					'item_name_' . $count,
-					$item->get_cost();
+					'<input type="hidden" name="%s" value="%s">',
+					'amount_' . $count,
+					$item->get_cost()
 				);
 
 				$count++;
@@ -179,7 +187,7 @@ class MoodecGatewayPaypal extends MoodecGateway {
 
 		$html .= sprintf('</form>');
 
-		echo $html;
+		return $html;
 	}
 
 }
