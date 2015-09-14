@@ -93,6 +93,7 @@ class MoodecTransaction {
 
 		$newRecord 					= new stdClass();
 		$newRecord->status 			= self::STATUS_NOT_SUBMITTED;
+		$newRecord->txnId 			= '';
 		$newRecord->user_id 		= $USER->id;
 		//$newRecord->gateway 		= get_config('local_moodec', 'active_gateway'); // get from config which gateway they're using?
 		$newRecord->purchase_date 	= time();
@@ -165,6 +166,27 @@ class MoodecTransaction {
 		}
 
 		$this->_items = $loadedItems;
+	}
+
+	/**
+	 * This function clears the items associated with the transaction
+	 * @return void
+	 */
+	public function reset(){
+		global $DB;
+
+		// If status is complete, then this transaction has already been processed
+		// Therefore, we want to make a new one
+		if( $this->_status === self::STATUS_COMPLETE ) {
+			// Create a new DB instance
+			$this->create();
+		} else {
+			// If status is not complete, we want to clear the items from the DB and this instance
+			$DB->delete_records('local_moodec_trans_item', array('transaction_id' => $this->_id));
+		}
+
+		// Reset the items array
+		$this->_items = array();
 	}
 
 	/**

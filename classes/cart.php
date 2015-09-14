@@ -182,6 +182,8 @@ class MoodecCart {
 		// Reset the cart to it's default state
 		$this->_products = array();
 		$this->_cartTotal = 0;
+		$this->_transactionId = null;
+		$this->_lastUpdated = time();
 
 		// update the cart storage
 		$this->update();
@@ -263,6 +265,10 @@ class MoodecCart {
 
 			// And unset the array value
 			unset($this->_products[$id]);
+
+			if( 0 === count($this->_products) ) {
+				$this->_transactionId = null;
+			}
 
 			// update the cart storage
 			$this->update();
