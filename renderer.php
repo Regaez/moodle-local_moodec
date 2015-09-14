@@ -377,7 +377,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 	* @param 	bool 		is it the checkout page
 	* @return 	string 		the HTML output
 	*/
-	function moodec_cart($cart, $checkout = false, $removedProducts = array()) {
+	function moodec_cart($cart) {
 		global $CFG, $USER;
 
 		// Require Moodec lib
@@ -385,54 +385,10 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 		// Initialise vars
 		$html = '';
-		$ipnData = sprintf('U:%d', $USER->id);
-		$itemCount = 1;
 
 		$html .= '<div class="cart-overview">';
-		
-		// Render only on checkout page
-		if( !!$checkout ) {
-
-			// Output cart review message
-			$html .= sprintf(
-				'<p class="cart-review__message">%s</p>',
-				get_string('checkout_message', 'local_moodec')
-			);
-
-			if (!!$removedProducts && is_array($removedProducts)) {
-				
-				$html .= sprintf(
-					'<p class="cart-review__message--removed">%s</p>', 
-					get_string('checkout_removed_courses_label', 'local_moodec')
-				);
-
-				$html .= '<ul>';
-
-				foreach ($removedProducts as $p) {
-					$thisProduct = local_moodec_get_product($p);
-					
-					$html .= sprintf(
-						'<li class="cart-review__item--removed">%s</li>', 
-						$thisProduct->get_fullname()
-					);
-				}
-
-				$html .= '</ul>';
-			}
-
-			$html .= sprintf(
-				'<form class="cart-review" action="%s" method="post">',
-				// TODO: make this a sandbox setting?
-				'https://www.paypal.com/cgi-bin/webscr' 
-			);
-		}
 
 		if ( $cart->is_empty() === false ) {
-
-			// Output required paypal fields
-			if( !!$checkout ) {
-				$html .= $this->paypal_fields();
-			}
 
 			$html .= '<ul class="products">';
 
@@ -457,30 +413,18 @@ class local_moodec_renderer extends plugin_renderer_base {
 						$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_price() : $product->get_variation($vID)->get_price()
 					);
 
-					if( !!$checkout ) {
-
-						// Output the hidden paypal fields for this product info
-						$html .= $this->paypal_product_info($product, $vID, $itemCount);
-
-					} else {
-
-						// 'Remove' from cart button
-						$html .= sprintf(
-							'<form class="product__form" action="" method="POST">
-								<input type="hidden" name="id" value="%d">
-								<input type="hidden" name="action" value="removeFromCart">
-								<input class="form__submit" type="submit" value="%s">
-							</form>',
-							$product->get_id(),
-							get_string('button_remove_label', 'local_moodec')
-						);
-
-					}
+					// 'Remove' from cart button
+					$html .= sprintf(
+						'<form class="product__form" action="" method="POST">
+							<input type="hidden" name="id" value="%d">
+							<input type="hidden" name="action" value="removeFromCart">
+							<input class="form__submit" type="submit" value="%s">
+						</form>',
+						$product->get_id(),
+						get_string('button_remove_label', 'local_moodec')
+					);
 
 				$html .= '</li>';
-
-				$ipnData .= sprintf('|C:%d,V:%d', $product->get_course_id(), $vID);
-				$itemCount++;
 			}
 
 			$html .= '</ul>';
@@ -498,21 +442,8 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 			$html .= '</div>';
 
-			if( !!$checkout ) {
-				// Get the checkout action HTML
-				$html .= $this->checkout_actions($ipnData);
-
-				// Close the checkout form so we can open another below for 
-				// the return to store button
-				$html .= '</form>';
-
-				// Return to store button
-				$html .= $this->return_to_store_action();
-
-			} else {
-				// Get the cart action HTML
-				$html .= $this->cart_actions();
-			}
+			// Get the cart action HTML
+			$html .= $this->cart_actions();
 
 		} else {
 
@@ -527,6 +458,104 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 		}
 
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	/**
+	* Returns the HTML for the Moodec cart review on the checkout page
+	* @param 	array 		cart
+	* @param 	bool 		is it the checkout page
+	* @return 	string 		the HTML output
+	*/
+	function cart_review($cart, $removedProducts = array()) {
+		global $CFG, $USER;
+
+		// Require Moodec lib
+		require_once $CFG->dirroot . '/local/moodec/lib.php';
+
+		// OPEN cart-overview
+		$html = '<div class="cart-overview">';
+
+		// Output cart review message
+		$html .= sprintf(
+			'<p class="cart-review__message">%s</p>',
+			get_string('checkout_message', 'local_moodec')
+		);
+
+		if (!!$removedProducts && is_array($removedProducts)) {
+			
+			$html .= sprintf(
+				'<p class="cart-review__message--removed">%s</p>', 
+				get_string('checkout_removed_courses_label', 'local_moodec')
+			);
+
+			$html .= '<ul>';
+
+			foreach ($removedProducts as $p) {
+				$thisProduct = local_moodec_get_product($p);
+				
+				$html .= sprintf(
+					'<li class="cart-review__item--removed">%s</li>', 
+					$thisProduct->get_fullname()
+				);
+			}
+
+			$html .= '</ul>';
+		}
+		
+
+		if ( $cart->is_empty() === false ) {
+
+			$html .= '<ul class="products">';
+
+			// Go through each product in the cart
+			foreach ($cart->get() as $pID => $vID) {
+
+				$product = local_moodec_get_product($pID);
+
+				$html .= '<li class="product-item">';
+
+					// Product title and variation
+					$html .= sprintf(
+						'<h4 class="product-title"><a href="%s">%s</a></h4>',
+						new moodle_url('/local/moodec/pages/product.php', array( 'id' => $product->get_id() )),
+						$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_fullname() : $product->get_fullname() . ' - ' . $product->get_variation($vID)->get_name()
+					);
+
+					// Product price
+					$html .= sprintf(
+						'<div class="product-price">%s%.02f</div>',
+						local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+						$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_price() : $product->get_variation($vID)->get_price()
+					);
+
+				$html .= '</li>';
+			}
+
+			$html .= '</ul>';
+
+			// Output cart summary section
+			$html .= '<div class="cart-summary">';
+
+				// Cart total price
+				$html .= sprintf(
+					'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%0.2f</h3>',
+					get_string('cart_total', 'local_moodec'),
+					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+					$cart->get_total()
+				);
+
+			$html .= '</div>';
+
+			// Return to store button
+			$html .= $this->return_to_store_action();
+
+
+		}
+
+		// CLOSE cart-overview
 		$html .= '</div>';
 
 		return $html;
