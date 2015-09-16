@@ -160,6 +160,14 @@ abstract class MoodecGateway {
 	}
 
 	/**
+	 * Returns the gateway URL
+	 * @return string 
+	 */
+	public function get_url(){
+		return $this->_gatewayURL;
+	}
+
+	/**
 	 * The function to handle the transaction 
 	 * @return void
 	 */
