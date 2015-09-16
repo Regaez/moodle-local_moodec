@@ -132,12 +132,12 @@ class MoodecTransaction {
 
 		// Set the data
 		if (!!$record) {
-			$this->_id = (int) $id;
-			$this->_txnId = (int) $record->txn_id;
-			$this->_userId = (int) $record->user_id;
-			$this->_gateway = $record->gateway;
-			$this->_status = (int) $record->status;
-			$this->_purchaseDate = $record->purchase_date;
+			$this->_id 				= (int) $id;
+			$this->_txnId 			= (int) $record->txn_id;
+			$this->_userId 			= (int) $record->user_id;
+			$this->_gateway 		= 		$record->gateway;
+			$this->_status 			= (int) $record->status;
+			$this->_purchaseDate 	= 		$record->purchase_date;
 
 			// Load the transaction items
 			$this->load_items();
@@ -319,5 +319,19 @@ class MoodecTransaction {
 	 */
 	public function get_date(){
 		return $_purchaseDate;
+	}
+
+	/**
+	 * Returns the amount for this transaction
+	 * @return float 
+	 */
+	public function get_cost(){
+		$amount = 0.00;
+
+		foreach ($this->_items as $item) {
+			$amount += $item->get_cost();
+		}
+
+		return $amount;
 	}
 }
