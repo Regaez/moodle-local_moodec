@@ -16,6 +16,9 @@ define('NO_DEBUG_DISPLAY', true);
 require_once "../../../../config.php";
 require_once $CFG->dirroot . '/local/moodec/lib.php';
 
+// Require this for curl class
+require_once $CFG->libdir . '/filelib.php';
+
 /// Keep out casual intruders
 if (empty($_POST) or !empty($_GET)) {
 	print_error("Sorry, you can not use the script that way.");
@@ -47,9 +50,9 @@ $options = array(
 	'returntransfer' => true,
 	'httpheader' => array('application/x-www-form-urlencoded', "Host: www.paypal.com"),
 	'timeout' => 30,
-	'CURLOPT_HTTP_VERSION' => CURL_HTTP_VERSION_1_1,
+	'CURLOPT_HTTP_VERSION' => CURL_HTTP_VERSION_1_1
 );
-$location = "https://www.paypal.com/cgi-bin/webscr";
+$location = $gateway->get_url();
 $result = $c->post($location, $req, $options);
 
 // CHECK TRANSACTION CURRENT STATUS
