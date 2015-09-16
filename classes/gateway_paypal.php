@@ -31,7 +31,8 @@ class MoodecGatewayPaypal extends MoodecGateway {
 
 	// handle the IPN notification	
 	public function handle($data = null){
-		global $DB;
+		global $DB, $CFG;
+		require_once $CFG->libdir . '/eventslib.php';
 
 		if( is_null($data) ) {
 
@@ -110,9 +111,9 @@ class MoodecGatewayPaypal extends MoodecGateway {
 		}
 
 		// Check if the payment was less than the transaction cost
-		if( $data->payment_gross < $this->_transaction->get_cost() ) {
+		if( $data->mc_gross < $this->_transaction->get_cost() ) {
 			
-			message_paypal_error_to_admin("Amount paid is not enough (".$data->payment_gross." < ".$this->_transaction->get_cost().")", $data);
+			$this->send_error_to_admin("Amount paid is not enough (".$data->mc_gross." < ".$this->_transaction->get_cost().")", $data);
 
 			$this->_transaction->fail();
 
@@ -122,6 +123,9 @@ class MoodecGatewayPaypal extends MoodecGateway {
 		// Lastly, verify the general transaction items and user
 		if( $this->verify_transaction() ) {
 			
+			$this->_transaction->set_txn_id($data->txn_id);
+			$this->_transaction->set_gateway(MOODEC_GATEWAY_PAYPAL);
+
 			$this->complete_enrolment();
 
 			return true;
@@ -189,5 +193,4 @@ class MoodecGatewayPaypal extends MoodecGateway {
 
 		return $html;
 	}
-
 }
