@@ -42,6 +42,9 @@ abstract class MoodecGateway {
 
 
 	function __construct($transaction) {
+		global $CFG;
+		require_once $CFG->libdir . '/enrollib.php';
+
 		// Set the transaction to be handled
 		$this->_transaction = $transaction;
 		// Get the enrolment plugin
@@ -93,6 +96,10 @@ abstract class MoodecGateway {
 	 * @return void
 	 */
 	protected function complete_enrolment(){
+		global $CFG, $DB;
+
+		require_once $CFG->libdir . '/enrollib.php';
+		require_once $CFG->dirroot . '/group/lib.php';
 
 		// ENROL USER INTO EACH OF THE TRANSACTION ITEMS
 		foreach ($this->_transaction->get_items() as $item) {
@@ -111,12 +118,18 @@ abstract class MoodecGateway {
 			}
 
 			// This will enrol the user! yay!
-			$this->_enrolPlugin->enrol_user($instance, $user->id, $instance->roleid, $timestart, $timeend);
+			$this->_enrolPlugin->enrol_user($instance, $this->_transaction->get_user_id(), $instance->roleid, $timestart, $timeend);
 
 
 			// if there is a group set (ie NOT 0), then add them to it
-			if ( !!$product->get_group_id() ) { 
-				groups_add_member($product->get_group_id(), $this->_transaction->get_user_id() );
+			if( $product->get_type() === PRODUCT_TYPE_SIMPLE ) {
+				if ( !!$product->get_group() ) { 
+					groups_add_member($product->get_group(), $this->_transaction->get_user_id() );
+				}
+			} else {
+				if ( !!$product->get_variations($item->get_variation_id())->get_group() ) { 
+					groups_add_member($product->get_variations($item->get_variation_id())->get_group(), $this->_transaction->get_user_id() );
+				}
 			}	
 
 		}
@@ -132,12 +145,16 @@ abstract class MoodecGateway {
 	 * @return void          
 	 */
 	protected function send_error_to_admin($subject, $data = array()) {
+		global $CFG;
+		require_once $CFG->libdir . '/eventslib.php';
+
 		$admin = get_admin();
 		$site = get_site();
 
 		$message = sprintf(
 			'%s: Transaction #%d failed.\n\n%s\n\n',
 			$site->fullname,
+			$this->_transaction->get_id(),
 			$subject
 		);
 
