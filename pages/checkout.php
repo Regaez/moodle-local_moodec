@@ -1,10 +1,10 @@
 <?php
 /**
- *Moodec Checkout Page
+ * Moodec Checkout
  *
  * @package     local
  * @subpackage  local_moodec
- * @author   	Thomas Threadgold
+ * @author      Thomas Threadgold - based on code by others (Paypal Enrolment plugin)
  * @copyright   2015 LearningWorks Ltd
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,48 +32,66 @@ $PAGE->set_heading(get_string('checkout_title', 'local_moodec'));
 // Get the renderer for this page
 $renderer = $PAGE->get_renderer('local_moodec');
 
+// Force the user to login/create an account to access this page
 require_login();
-// require_capability('local/moodec:checkout', $systemcontext);
 
-$removedProducts = (array) json_decode(optional_param('enrolled', '', PARAM_TEXT));
-
-// Get the cart in it's current state
+// Get the cart
 $cart = new MoodecCart();
 
-// If your cart is empty, redirect to cart page.
-if ( $cart->is_empty() ) {
-	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+// Check if the products in the cart are valid, store the ones that are not
+// (so we can notify the user they've been removed)
+$removedProducts = $cart->refresh();
+
+// Check if a transaction has already been made for this cart
+if( !!$cart->get_transaction_id() ) {
+
+	// Get the existing transaction if the cart has recorded one
+	$transaction = new MoodecTransaction($cart->get_transaction_id());
+	// We reset the transaction, in case the items in the cart have changed 
+	$transaction->reset();
+
+} else {
+
+	// Otherwise create a new transaction
+	$transaction = new MoodecTransaction();
+
 }
 
-$removedProducts = $cart->refresh();
+// Set the transactionId in the cart to that of the transaction
+// We do this in case the transaction reset created a new transaction
+// Or, to add the transaction id to the cart if one didn't already exist
+$cart->set_transaction_id($transaction->get_id());
+
+// We need to add all the products in the cart to the transaction
+foreach( $cart->get() as $pID => $vID ) {
+
+	// Get the product in the cart
+	$product = local_moodec_get_product($pID);
+
+	// Add the product to the transaction, relative to variation
+	if( $product->get_type() === PRODUCT_TYPE_VARIABLE ) {
+		$transaction->add($pID, $product->get_variation($vID)->get_price(), $vID);
+	} else {
+		$transaction->add($pID, $product->get_price());
+	}
+}
 
 echo $OUTPUT->header(); ?>
 
 <h1 class="page__title"><?php echo get_string('checkout_title', 'local_moodec'); ?></h1>
 
-<?php
+<?php // Output cart review
+echo $renderer->cart_review($cart, $removedProducts);
 
-if (isguestuser()) {
+// Render all active Gateway options
+if( !!get_config('local_moodec', 'payment_dps_enable') ){
+	$gatewayDPS = new MoodecGatewayDPS($transaction);
+	echo $gatewayDPS->render();
+}
 
-	$SESSION->wantsurl = new moodle_url('/local/moodec/pages/checkout.php');
-
-	printf(
-		'<p>%s</p>',
-		get_string('checkout_guest_message', 'local_moodec')
-	);
-
-	printf(
-		'<form method="GET" action="%s"><input type="hidden" name="sesskey" value="%s"><input type="submit" value="%s"></form>',
-		new moodle_url('/login'),
-		$USER->sesskey,
-		get_string('button_logout_label', 'local_moodec')
-	);
-
-} else {
-
-	// Output the checkout cart
-	echo $renderer->moodec_cart($cart, true, $removedProducts);
-
+if( !!get_config('local_moodec', 'payment_paypal_enable') ){
+	$gatewayPaypal = new MoodecGatewayPaypal($transaction);
+	echo $gatewayPaypal->render();
 }
 
 echo $OUTPUT->footer();
