@@ -40,13 +40,23 @@ abstract class MoodecGateway {
 	 */
 	protected $_enrolPlugin;
 
-
+	/**
+	 * Creates a gateway class
+	 * @param MoodecTransaction|int 	$transaction 	A transaction class or transaction ID
+	 */
 	function __construct($transaction) {
 		global $CFG;
 		require_once $CFG->libdir . '/enrollib.php';
 
 		// Set the transaction to be handled
-		$this->_transaction = $transaction;
+		if( $transaction instanceof MoodecTransaction ) {
+			// We have been passed an existing instance, so use it
+			$this->_transaction = $transaction;
+		} else {
+			// We have been passed the ID, so make a new instance of transaction
+			$this->_transaction = new MoodecTransaction($transaction);
+		}
+
 		// Get the enrolment plugin
 		$this->_enrolPlugin = enrol_get_plugin('moodec');
 		// Set gateway properties to default strings;
