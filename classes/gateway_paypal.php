@@ -156,7 +156,7 @@ class MoodecGatewayPaypal extends MoodecGateway {
 				get_config('local_moodec', 'currency'),
 				$this->_transaction->get_id(),
 				new moodle_url('/local/moodec/payment/paypal/ipn.php'),
-				new moodle_url('/local/moodec/payment/paypal/receipt.php'),
+				new moodle_url('/my'), // PERHAPS MAKE THIS CONFIGURABLE?
 				new moodle_url('/local/moodec/pages/cart.php')
 			); 
 
