@@ -114,11 +114,11 @@ abstract class MoodecGateway {
 			if( $product->get_type() === PRODUCT_TYPE_SIMPLE ) {
 				$timeend = $timestart + ( $product->get_duration() * 86400 );
 			} else {
-				$timeend = $timestart + ( $product->get_variations($item->get_variation_id())->get_duration() * 86400 );
+				$timeend = $timestart + ( $product->get_variation($item->get_variation_id())->get_duration() * 86400 );
 			}
 
 			// This will enrol the user! yay!
-			$this->_enrolPlugin->enrol_user($instance, $this->_transaction->get_user_id(), $instance->roleid, $timestart, $timeend);
+			$this->_enrolPlugin->enrol_user($instance, $this->_transaction->get_user_id(), $instance->roleid, $timestart, $timeend, ENROL_USER_ACTIVE);
 
 
 			// if there is a group set (ie NOT 0), then add them to it
@@ -127,8 +127,8 @@ abstract class MoodecGateway {
 					groups_add_member($product->get_group(), $this->_transaction->get_user_id() );
 				}
 			} else {
-				if ( !!$product->get_variations($item->get_variation_id())->get_group() ) { 
-					groups_add_member($product->get_variations($item->get_variation_id())->get_group(), $this->_transaction->get_user_id() );
+				if ( !!$product->get_variation($item->get_variation_id())->get_group() ) { 
+					groups_add_member($product->get_variation($item->get_variation_id())->get_group(), $this->_transaction->get_user_id() );
 				}
 			}	
 
