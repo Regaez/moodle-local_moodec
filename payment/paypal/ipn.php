@@ -38,11 +38,9 @@ foreach ($_POST as $key => $value) {
 	$data->$key = $value;
 }
 
-// GET TRANSACTION FROM DATA
-$transaction = new MoodecTransaction((int) $data->custom);
-
 // GET THE PAYPAL GATEWAY TO BE USED
-$gateway = new MoodecGatewayPaypal($transaction);
+// THE CUSTOM FIELD IS THE TRANSACTION ID
+$gateway = new MoodecGatewayPaypal((int) $data->custom);
 
 // CONFIRM NOTIFICATION WITH PAYPAL
 $c = new curl();
@@ -54,13 +52,6 @@ $options = array(
 );
 $location = $gateway->get_url();
 $result = $c->post($location, $req, $options);
-
-// CHECK TRANSACTION CURRENT STATUS
-if( $transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
-	// this transaction has already been marked as complete, so we don't want to go
-	// through the process again
-	die;
-}
 
 // Read the response from Paypal
 if (0 < strlen($result) && strcmp($result, "VERIFIED") == 0) {

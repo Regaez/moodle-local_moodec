@@ -34,6 +34,13 @@ class MoodecGatewayPaypal extends MoodecGateway {
 		global $DB, $CFG;
 		require_once $CFG->libdir . '/eventslib.php';
 
+		// CHECK TRANSACTION CURRENT STATUS
+		if( $this->_transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
+			// this transaction has already been marked as complete, so we don't want to go
+			// through the process again
+			return false;
+		}
+
 		if( is_null($data) ) {
 
 			$this->_transaction->fail();
