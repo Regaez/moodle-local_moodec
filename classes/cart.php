@@ -96,12 +96,17 @@ class MoodecCart {
 
 		}
 
-		// Reload the cart products from the DB.
-		// --- 
-		// Perhaps only call this at the checkout, when it matters,
-		// rather than every time the cart is instantiated...?
-		// ---
-		//$this->refresh();
+		// When we create the cart, check if there is a transaction associated with it,
+		// and if there is, check if it is complete.
+		// If the transaction is complete, then this cart has been purchased,
+		// so we need to clear it. 		
+		if( !!$this->get_transaction_id() ) {
+			$transaction = new MoodecTransaction($this->get_transaction_id());
+
+			if( $transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
+				$this->clear();
+			}
+		}
 	}
 
 	/**
