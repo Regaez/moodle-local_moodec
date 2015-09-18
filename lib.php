@@ -30,6 +30,7 @@ require_once $CFG->dirroot . '/local/moodec/classes/transaction.php';
 require_once $CFG->dirroot . '/local/moodec/classes/transaction_item.php';
 require_once $CFG->dirroot . '/local/moodec/classes/gateway.php';
 require_once $CFG->dirroot . '/local/moodec/classes/gateway_paypal.php';
+require_once $CFG->dirroot . '/local/moodec/classes/gateway_dps.php';
 
 /**
  * Extend the default Moodle navigation
