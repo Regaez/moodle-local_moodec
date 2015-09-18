@@ -69,6 +69,7 @@ $string['payment_paypal_email_desc'] = 'Enter your Paypal business email address
 $string['payment_paypal_sandbox'] = 'Use sandbox mode';
 $string['payment_paypal_sandbox_desc'] = 'This will enable Paypal sandbox for the gateway';
 
+$string['error_dpsinitiate'] = 'Could not initiate a transaction with the DPS payment server - please try again later.';
 
 // Pages
 
