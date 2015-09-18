@@ -27,7 +27,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 
 		// Checks if sandbox mode is enabled
 		if( !!get_config('local_moodec', 'payment_dps_sandbox') ) {
-			$this->_gatewayURL = 'https://sec.paymentexpress.com/pxaccess/pxpay.aspx'; // the DPS sandbox URL
+			$this->_gatewayURL = 'https://uat.paymentexpress.com/pxaccess/pxpay.aspx'; // the DPS sandbox URL
 		} else {
 			$this->_gatewayURL = 'https://sec.paymentexpress.com/pxaccess/pxpay.aspx';
 		}
