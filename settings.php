@@ -197,6 +197,24 @@ if ($hassiteconfig) {
 		)
 	);
 
+	// 
+	// Add DPS sandbox checkbox
+	// 
+	$settings->add(
+		new admin_setting_configcheckbox(
+			'local_moodec/payment_dps_sandbox',
+			get_string(
+				'payment_dps_sandbox',
+				'local_moodec'
+			),
+			get_string(
+				'payment_dps_sandbox_desc',
+				'local_moodec'
+			),
+			0
+		)
+	);
+
 	//
 	// ADD PAYPAL PAYMENT SETTINGS PAGE
 	//
