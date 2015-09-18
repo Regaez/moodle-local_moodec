@@ -92,7 +92,7 @@ class MoodecGatewayDPS extends MoodecGateway {
             clean_param(get_config('local_moodec', 'currency'), PARAM_CLEAN),	// Currency
             clean_param('Transaction #' . $this->_transaction->get_id(), PARAM_CLEAN), // Merchant reference
             clean_param($USER->email, PARAM_CLEAN), // Email
-            clean_param($txnId, PARAM_CLEAN)
+            clean_param($txnId, PARAM_CLEAN),
             clean_param(time().$this->_transaction->get_id(), PARAM_CLEAN), // TxnId
             new moodle_url('/local/moodec/payment/dps/success.php'), // URL Success
             new moodle_url('/local/moodec/payment/dps/fail.php') 	// URL Fail
@@ -165,7 +165,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 		}
 
 		// Check that the transaction id matches the response one
-		if ($this->_transaction->get_txn_id() != $response->TxnId))) {
+		if ($this->_transaction->get_txn_id() != $response->TxnId) {
 		    $this->send_error_to_admin("Transaction IDs do not match! This ID: " . $this->_transaction->get_id() . ", Response TxnId: " . $response->TxnId, $response);
 		    $this->_transaction->fail();
 		    return false;
