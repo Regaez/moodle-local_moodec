@@ -23,7 +23,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 
 		$this->_gatewayName = get_string('payment_dps_title', 'local_moodec');
 
-		$this->_internalGatewayURL = new moodle_url('/local/moodec/payment/dps/gateway.php');
+		$this->_internalGatewayURL = new moodle_url('/local/moodec/payment/dps/index.php');
 
 		// Checks if sandbox mode is enabled
 		if( !!get_config('local_moodec', 'payment_dps_sandbox') ) {
@@ -71,7 +71,7 @@ class MoodecGatewayDPS extends MoodecGateway {
         	"<GenerateRequest>
             	<PxPayUserId>%s</PxPayUserId>
             	<PxPayKey>%s</PxPayKey>
-            	<AmountInput>%f</AmountInput>
+            	<AmountInput>%.2f</AmountInput>
             	<CurrencyInput>%s</CurrencyInput>
             	<MerchantReference>%s</MerchantReference>
             	<EmailAddress>%s</EmailAddress>
@@ -88,7 +88,7 @@ class MoodecGatewayDPS extends MoodecGateway {
             </GenerateRequest>",
             clean_param(get_config('local_moodec', 'payment_dps_userid'), PARAM_CLEAN), // PxPay User ID
             clean_param(get_config('local_moodec', 'payment_dps_key'), PARAM_CLEAN),	// PxPay Key
-            clean_param(format_float($this->_transaction->get_cost(), 2), PARAM_CLEAN), // Amount
+            clean_param($this->_transaction->get_cost(), PARAM_CLEAN), // Amount
             clean_param(get_config('local_moodec', 'currency'), PARAM_CLEAN),	// Currency
             clean_param('Transaction #' . $this->_transaction->get_id(), PARAM_CLEAN), // Merchant reference
             clean_param($USER->email, PARAM_CLEAN), // Email
@@ -134,7 +134,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 
 		// Abort if the transaction is already complete
 		if( $this->_transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
-			return false;
+			return true;
 		}
 
 		// Check to see if the data is null
@@ -180,15 +180,13 @@ class MoodecGatewayDPS extends MoodecGateway {
 
 		// Check if the payment was less than the transaction cost
 		if( $response->AmountSettlement < $this->_transaction->get_cost() ) {
-			
 			$this->send_error_to_admin("Amount paid is not enough (".$response->AmountSettlement." < ".$this->_transaction->get_cost().")", $response);
 			$this->_transaction->fail();
 			return false;
 		}
 
 		// enrol and continue if DPS returns "APPROVED"
-		if ($response->success == 1 and $response->response == "APPROVED") {
-
+		if ($response->Success == 1 and $response->ResponseText == "APPROVED") {
 			// Lastly, verify the general transaction items and user
 			if( $this->verify_transaction() ) {
 				
@@ -199,6 +197,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 
 		}
 
+		$this->send_error_to_admin("Something uncaught prevented the transaction from completing!", $response);
 		return false;
 	}
 
@@ -208,7 +207,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 		$html = sprintf('<form action="%s" method="POST">', $this->_internalGatewayURL);
 
 			$html .= sprintf(
-				'<input type="hidden" name="transaction" value="%s">',
+				'<input type="hidden" name="id" value="%s">',
 				$this->_transaction->get_id()
 			); 
 
