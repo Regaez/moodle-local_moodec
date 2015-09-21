@@ -116,18 +116,27 @@ abstract class MoodecGateway {
 
 			$product = local_moodec_get_product($item->get_product_id());
 
-			$timestart = time();
+			// We set the start time to be 1 min earlier (this is so the course will immediately show up in the course overview block - otherwise you need to wait til the current minute ticks over)
+			$timestart = time() - 60;
 			$timeend = 0;
 			$instance = $DB->get_record('enrol', array('courseid' => $product->get_course_id(), 'enrol' => 'moodec'));
 
 			// Check if the product is simple, or variable
+			// And retrieve the enrolment duration for this product
 			if( $product->get_type() === PRODUCT_TYPE_SIMPLE ) {
-				$timeend = $timestart + ( $product->get_duration() * 86400 );
+				$enrolmentDuration = $product->get_duration();
 			} else {
-				$timeend = $timestart + ( $product->get_variation($item->get_variation_id())->get_duration() * 86400 );
+				$enrolmentDuration = $product->get_variation($item->get_variation_id())->get_duration();
+			}
+			
+			// If the course is not unlimited, set the duration to be the current time, plus the number of days, converted to seconds. (from product settings)
+			if( $enrolmentDuration !== 0 ) {
+				$timeend = $timestart + ( $enrolmentDuration * 86400 );	
 			}
 
 			// This will enrol the user! yay!
+			// We set the user enrolment to be 'active', because any users that were previously 
+			// enrolled will be marked as 'suspended' automatically when their enrolment expires
 			$this->_enrolPlugin->enrol_user($instance, $this->_transaction->get_user_id(), $instance->roleid, $timestart, $timeend, ENROL_USER_ACTIVE);
 
 
