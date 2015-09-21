@@ -38,6 +38,10 @@ require_login();
 // Get the cart
 $cart = new MoodecCart();
 
+if ( $cart->is_empty() ) {
+	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+}
+
 // Check if the products in the cart are valid, store the ones that are not
 // (so we can notify the user they've been removed)
 $removedProducts = $cart->refresh();
