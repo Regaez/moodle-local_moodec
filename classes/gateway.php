@@ -182,7 +182,6 @@ abstract class MoodecGateway {
 		}
 
 		$eventdata = new stdClass();
-		$eventdata->modulename = 'moodle';
 		$eventdata->component = 'local_moodec';
 		$eventdata->name = 'payment_gateway';
 		$eventdata->userfrom = $admin;
