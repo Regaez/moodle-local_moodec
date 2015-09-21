@@ -4,7 +4,7 @@
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
                 <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
-                <FIELD NAME="is_enabled" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="is_enabled" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" />
                 <FIELD NAME="variation_count" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
                 <FIELD NAME="type" TYPE="text" NOTNULL="false" SEQUENCE="false" />
                 <FIELD NAME="tags" TYPE="text" NOTNULL="false" SEQUENCE="false" />
@@ -18,7 +18,7 @@
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
                 <FIELD NAME="product_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
-                <FIELD NAME="is_enabled" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+                <FIELD NAME="is_enabled" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" />
                 <FIELD NAME="name" TYPE="text" NOTNULL="false" SEQUENCE="false" />
                 <FIELD NAME="price" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="2" />
                 <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
