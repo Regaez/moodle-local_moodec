@@ -25,5 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = array(
-    'payment_gateway' => array(),
+    'payment_gateway' => array(
+    	'capability' => 'moodle/site:config'
+    )
 );

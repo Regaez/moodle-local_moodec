@@ -73,6 +73,8 @@ $string['payment_paypal_sandbox_desc'] = 'This will enable Paypal sandbox for th
 
 $string['error_dpsinitiate'] = 'Could not initiate a transaction with the DPS payment server - please try again later.';
 
+$string['messageprovider:payment_gateway'] = 'Notifications from the Moodec Payment Gateway';
+
 // Pages
 
 // CATALOGUE
