@@ -65,6 +65,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 		global $USER;
 
 		$txnId = time() . $this->_transaction->get_id();
+		$site = get_site();
 
         // create the "Generate Request" XML message
         $xmlrequest = sprintf(
@@ -76,8 +77,8 @@ class MoodecGatewayDPS extends MoodecGateway {
             	<MerchantReference>%s</MerchantReference>
             	<EmailAddress>%s</EmailAddress>
             	<TxnData1>%d</TxnData1>
-            	<TxnData2></TxnData2>
-            	<TxnData3></TxnData3>
+            	<TxnData2>%s</TxnData2>
+            	<TxnData3>%s</TxnData3>
             	<TxnType>Purchase</TxnType>
             	<TxnId>%d</TxnId>
             	<BillingId></BillingId>
@@ -93,6 +94,8 @@ class MoodecGatewayDPS extends MoodecGateway {
             clean_param('Transaction #' . $this->_transaction->get_id(), PARAM_CLEAN), // Merchant reference
             clean_param($USER->email, PARAM_CLEAN), // Email
             clean_param($txnId, PARAM_CLEAN),
+            clean_param(substr($site->shortname, 0, 50), PARAM_CLEAN),
+            clean_param(substr("{$USER->lastname}, {$USER->firstname}", 0, 50), PARAM_CLEAN),
             clean_param(time().$this->_transaction->get_id(), PARAM_CLEAN), // TxnId
             new moodle_url('/local/moodec/payment/dps/success.php'), // URL Success
             new moodle_url('/local/moodec/payment/dps/fail.php') 	// URL Fail
@@ -125,6 +128,8 @@ class MoodecGatewayDPS extends MoodecGateway {
 		);
 		$xmlreply = $this->query($xmlrequest);
 		$response = $this->get_dom($xmlreply);
+
+		$this->send_error_to_admin("DPS transaction failed!", $response);
 
 		$this->_transaction->fail();
 	}
