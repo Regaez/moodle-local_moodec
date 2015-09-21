@@ -175,7 +175,7 @@ abstract class MoodecGateway {
 		$eventdata = new stdClass();
 		$eventdata->modulename = 'moodle';
 		$eventdata->component = 'local_moodec';
-		$eventdata->name = 'local_moodec_payment';
+		$eventdata->name = 'payment_gateway';
 		$eventdata->userfrom = $admin;
 		$eventdata->userto = $admin;
 		$eventdata->subject = $this->_gatewayName . " ERROR: " . $subject;
