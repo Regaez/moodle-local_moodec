@@ -170,8 +170,8 @@ $iterator = 0;
 
 			<?php } else if( $cart->check($product->get_id()) ){?>
 
-				<div class="product-form">
-					<button class="product-form__add button--cart" disabled="disabled"><?php echo get_string('button_in_cart_label', 'local_moodec');?></button>
+				<div class="product-single__form">
+					<a href="<?php echo new moodle_url('/local/moodec/pages/cart.php'); ?>" class="product-form__add btn button--cart"><?php echo get_string('button_in_cart_label', 'local_moodec');?></a>
 				</div>
 
 			<?php } else {?>
