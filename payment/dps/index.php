@@ -16,7 +16,14 @@ $transactionID = required_param('id', PARAM_INT);  // plugin instance id
 
 require_login();
 
-$gateway = new MoodecGatewayDPS($transactionID);
+$transaction = new MoodecTransaction($transactionID);
+
+// If the transaction is already completed, we do not want to do it again
+if( $transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
+	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+}
+
+$gateway = new MoodecGatewayDPS($transaction);
 
 $response = $gateway->begin();
 
