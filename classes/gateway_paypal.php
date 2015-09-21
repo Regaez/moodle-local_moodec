@@ -34,6 +34,9 @@ class MoodecGatewayPaypal extends MoodecGateway {
 		global $DB, $CFG;
 		require_once $CFG->libdir . '/eventslib.php';
 
+		// Set the gateway to be Paypal
+		$this->_transaction->set_gateway(MOODEC_GATEWAY_PAYPAL);
+
 		// CHECK TRANSACTION CURRENT STATUS
 		if( $this->_transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
 			// this transaction has already been marked as complete, so we don't want to go
@@ -131,7 +134,6 @@ class MoodecGatewayPaypal extends MoodecGateway {
 		if( $this->verify_transaction() ) {
 			
 			$this->_transaction->set_txn_id($data->txn_id);
-			$this->_transaction->set_gateway(MOODEC_GATEWAY_PAYPAL);
 
 			$this->complete_enrolment();
 
