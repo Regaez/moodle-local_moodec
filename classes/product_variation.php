@@ -81,7 +81,8 @@ class MoodecProductVariation {
 				duration,
 				group_id
 			FROM {local_moodec_variation}
-			WHERE %s = %d',
+			WHERE %s = %d
+			LIMIT 1',
 			!!$variation ? 'id' : 'product_id', // IF NOT VARIATION, MATCH BASED ON PRODUCT ID
 			$id
 		);
