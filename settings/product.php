@@ -17,6 +17,7 @@ $courseid = required_param('id', PARAM_INT);
 
 $PAGE->set_pagelayout('admin');
 $PAGE->requires->jquery();
+$PAGE->requires->js('/local/moodec/js/settings_product.js');
 
 // Validate course id
 if(!!$courseid) {
