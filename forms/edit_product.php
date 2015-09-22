@@ -309,6 +309,31 @@ class moodec_edit_product_form extends moodleform {
 	//Custom validation should be added here
 	function validation($data, $files) {
 		// TODO: add validation
-		return array();
+		
+		$errors = parent::validation($data, $files);
+		
+		$numVars = (int) $data['format'];
+
+		for ($i=1; $i <= $numVars; $i++) { 
+			
+			$name = 'product_variation_name_' . $i;
+			$price = 'product_variation_price_' . $i;
+			$duration = 'product_variation_duration_' . $i;
+
+			if( empty($data[$name]) && $data['product_type'] !== PRODUCT_TYPE_SIMPLE ) {
+				$errors[$name] = get_string('error_invalid_name', 'local_moodec');
+			}
+
+			if( !is_numeric($data[$price]) ) {
+				$errors[$price] = get_string('error_invalid_price', 'local_moodec');
+			}
+
+			if( !is_numeric($data[$duration]) ) {
+				$errors[$duration] = get_string('error_invalid_duration', 'local_moodec');
+			}
+
+		}
+
+		return $errors;
 	}
 }

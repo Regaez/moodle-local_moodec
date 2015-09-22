@@ -71,7 +71,11 @@ $string['payment_paypal_email_desc'] = 'Enter your Paypal business email address
 $string['payment_paypal_sandbox'] = 'Use sandbox mode';
 $string['payment_paypal_sandbox_desc'] = 'This will enable Paypal sandbox for the gateway';
 
+// Errors
 $string['error_dpsinitiate'] = 'Could not initiate a transaction with the DPS payment server - please try again later.';
+$string['error_invalid_name'] = 'Required field. Please enter a name.';
+$string['error_invalid_price'] = 'Invalid format: please enter a single number only, such as 20 or 19.99 - no currency symbols or letters are allowed.';
+$string['error_invalid_duration'] = 'Invalid format: please enter a single number, indicating the days for the duration of the course. The number 0 represents an unlimited duration.';
 
 $string['messageprovider:payment_gateway'] = 'Notifications from the Moodec Payment Gateway';
 
