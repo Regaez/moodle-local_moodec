@@ -47,7 +47,7 @@
                 <FIELD NAME="transaction_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The MoodecTransaction id"/>
                 <FIELD NAME="product_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The MoodecProduct id"/>
                 <FIELD NAME="variation_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The MoodecProductVariation id"/>
-                <FIELD NAME="item_cost" TYPE="float" LENGTH="10" NOTNULL="false" SEQUENCE="false"  COMMENT="The cost of this item at time of transaction"/>
+                <FIELD NAME="item_cost" TYPE="float" LENGTH="10" NOTNULL="false" DECIMALS="2" SEQUENCE="false"  COMMENT="The cost of this item at time of transaction"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
