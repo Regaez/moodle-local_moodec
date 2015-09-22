@@ -152,6 +152,6 @@ class MoodecTransactionItem {
 	 * @return float 	itemCost
 	 */
 	public function get_cost() {
-		return $this->_itemCost;
+		return (float) $this->_itemCost;
 	}
 }
