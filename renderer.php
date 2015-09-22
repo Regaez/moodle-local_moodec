@@ -203,8 +203,8 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 						// Display 'in cart' button
 						$html .= sprintf(
-							'<form action="%s" method="GET" class="product-single__form">
-								<input type="submit" class="product-form__add button--cart" value="%s">
+							'<div class="product-single__form">
+								<a href="%s" class="product-form__add btn button--cart">%s</a>
 							</div>',
 							new moodle_url('/local/moodec/pages/cart.php'),
 							get_string('button_in_cart_label', 'local_moodec')
