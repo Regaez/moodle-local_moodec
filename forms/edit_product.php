@@ -144,9 +144,14 @@ class moodec_edit_product_form extends moodleform {
 		$mform->addHelpButton('format', 'product_variation_count', 'local_moodec');
 		$mform->disabledif('format', 'product_type', 'neq', PRODUCT_TYPE_VARIABLE);
 
+		// If the product has been saved before, then it will have config settings
+		// If it hasn't been saved, then it's okay to only show 1 variation
 		if(!!$productconfig) {
-			if($productconfig->type === PRODUCT_TYPE_VARIABLE) {
-				// Force variationCount to be 1, as simple products don't have tiers
+			// If it's a variable product, with multiple variations, and variationCount is equal to 1 
+			// (this indicates the number of variations has not been specified via optional_param)
+			// Then we set the number of variations displayed, to be the amount in the product config
+			// If variationCount is not 1, then it means the user has changed the amount of variations for this product, so we show the desired amount
+			if($productconfig->type === PRODUCT_TYPE_VARIABLE && $variationCount === 1 ) {
 				$variationCount = $productconfig->variation_count;
 			}
 		}
