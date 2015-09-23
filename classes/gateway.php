@@ -138,9 +138,9 @@ abstract class MoodecGateway {
 			// Check if the product is simple, or variable
 			// And retrieve the enrolment duration for this product
 			if( $product->get_type() === PRODUCT_TYPE_SIMPLE ) {
-				$enrolmentDuration = $product->get_duration();
+				$enrolmentDuration = $product->get_duration(false);
 			} else {
-				$enrolmentDuration = $product->get_variation($item->get_variation_id())->get_duration();
+				$enrolmentDuration = $product->get_variation($item->get_variation_id())->get_duration(false);
 			}
 			
 			// If the course is not unlimited, set the duration to be the current time, plus the number of days, converted to seconds. (from product settings)
