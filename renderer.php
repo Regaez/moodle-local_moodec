@@ -111,7 +111,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 
 					// Product category
-					if (!!get_config('local_moodec', 'page_catalogue_show_category')) {
+					if (!!get_config('local_moodec', 'page_product_show_category')) {
 
 						// Get the category the product belongs to
 						$category = $DB->get_record(
