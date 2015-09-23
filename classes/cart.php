@@ -23,6 +23,13 @@ class MoodecCart {
 	const STORAGE_ID = 'MoodecCart';
 
 	/**
+	 * The string time version of the Moodec Cart.
+	 * If the version here is newer than the version stored by the user, we ditch the old cart
+	 * @var string 
+	 */
+	const CART_VERSION = '2015092300';
+
+	/**
 	 * Associative array of products, with the product ID as the key, variation ID as value
 	 * @var array	
 	 */
@@ -60,35 +67,56 @@ class MoodecCart {
 		$sessionTime = 0;
 		$sessionProducts = array();
 		$sessionCartTotal = 0;
+		$sessionVersion = '';
+		$sessionData = array();
+
 		$cookieTime = 0;
 		$cookieProducts = array();
-		$sessionCartTotal = 0;
+		$cookieCartTotal = 0;
+		$cookieVersion = '';
+		$cookieData = array();
 
 		// SESSION is preferred over the COOKIE
 		if( isset($_SESSION[self::STORAGE_ID]) ) {
 
-			// Get cart from PHP session
-			list($sessionProducts, $sessionCartTotal, $sessionTransactionId, $sessionTime) = unserialize($_SESSION[self::STORAGE_ID]);
+			list($sessionVersion, $sessionData) = unserialize($_SESSION[self::STORAGE_ID]);
 
-		} 
+			// we check if the version is current, before setting extracting the data
+			// this way if it's old, we won't throw an error for a missing field
+			if( $sessionVersion === self::CART_VERSION ) {
+				list($sessionProducts, $sessionCartTotal, $sessionTransactionId, $sessionTime) = $sessionData;
+			} else {
+				// if the session is not the current cart version, we destroy it
+				unset($_SESSION[self::STORAGE_ID]);
+			}
+		}
 
-		if( isset($_COOKIE[self::STORAGE_ID]) ){
+		// Now we do the same for the cookie
+		if( isset($_COOKIE[self::STORAGE_ID]) ) {
 
-			// Get cart from the cookies
-			list($cookieProducts, $cookieCartTotal, $cookieTransactionId, $cookieTime) = unserialize($_COOKIE[self::STORAGE_ID]);
+			list($cookieVersion, $cookieData) = unserialize($_COOKIE[self::STORAGE_ID]);
 
+			if( $sessionVersion === self::CART_VERSION ) {
+				// Get cart from the cookies
+				list($cookieProducts, $cookieCartTotal, $cookieTransactionId, $cookieTime) = $cookieData;
+			} else {
+				// if the cookie is not the current cart version, we destroy it
+				unset($_COOKIE[self::STORAGE_ID]);
+			}
 		}
 
 		// Check which is newer; the session, or the cookie
 		if( $cookieTime < $sessionTime ) {
 
+			// If session is newer, then we set the cart properties from the session
 			$this->_products = $sessionProducts;
 			$this->_cartTotal = $sessionCartTotal;
 			$this->_transactionId = $sessionTransactionId;
 			$this->_lastUpdated = $sessionTime;
 
-		} else if( $cookieTime !== 0 ) {
+		} else if( !!$cookieTime ) {
 
+			// otherwise, we set the cart to the cookie vars
 			$this->_products = $cookieProducts;
 			$this->_cartTotal = $cookieCartTotal;
 			$this->_transactionId = $cookieTransactionId;
@@ -117,8 +145,18 @@ class MoodecCart {
 
 		$this->_lastUpdated = time();
 
+		// We store the cart data in a separate array
+		// This way we can check the version before trying to extract the info
+		$cartData = array(
+			$this->_products,
+			$this->_cartTotal,
+			$this->_transactionId,
+			$this->_lastUpdated
+		);
+
 		// serialize the data for storage
-		$data = serialize(array($this->_products, $this->_cartTotal, $this->_transactionId, $this->_lastUpdated));
+		$data = serialize(array(self::CART_VERSION, $cartData));
+
 
 		// Set the PHP session
 		$_SESSION[self::STORAGE_ID] = $data;
