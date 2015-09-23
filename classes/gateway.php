@@ -59,6 +59,12 @@ abstract class MoodecGateway {
 
 		// Get the enrolment plugin
 		$this->_enrolPlugin = enrol_get_plugin('moodec');
+
+		// If the moodec enrolment plugin is not found (although that shouldn't happen, as it is a dependency of this plugin) then fall back to manual
+		if( is_null($this->_enrolPlugin) ) {
+			$this->_enrolPlugin = enrol_get_plugin('manual');
+		}
+
 		// Set gateway properties to default strings;
 		$this->_gatewayName = '';
 		$this->_gatewayURL = '';
@@ -120,6 +126,14 @@ abstract class MoodecGateway {
 			$timestart = time() - 60;
 			$timeend = 0;
 			$instance = $DB->get_record('enrol', array('courseid' => $product->get_course_id(), 'enrol' => 'moodec'));
+
+			if( !$instance ) {
+				// Notify admin that the enrolment method is not active on the course
+				$this->send_error_to_admin("Moodec enrolment method not active on course ". $product->get_course_id() . ". Transaction #" . $this->_transaction->get_id() . " defaulted to manual enrolment method");
+
+				// get the manual enrolment method instance for the course instead
+				$instance = $DB->get_record('enrol', array('courseid' => $product->get_course_id(), 'enrol' => 'manual'));				
+			}
 
 			// Check if the product is simple, or variable
 			// And retrieve the enrolment duration for this product
