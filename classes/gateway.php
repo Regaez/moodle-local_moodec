@@ -131,7 +131,9 @@ abstract class MoodecGateway {
 				// Notify admin that the enrolment method is not active on the course
 				$this->send_error_to_admin("Moodec enrolment method not active on course ". $product->get_course_id() . ". Transaction #" . $this->_transaction->get_id() . " defaulted to manual enrolment method");
 
-				// get the manual enrolment method instance for the course instead
+				// set the enrol plugin to use manual
+				$this->_enrolPlugin = enrol_get_plugin('manual');
+				// and get the manual enrolment method instance for the course instead
 				$instance = $DB->get_record('enrol', array('courseid' => $product->get_course_id(), 'enrol' => 'manual'));				
 			}
 
