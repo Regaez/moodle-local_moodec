@@ -16,6 +16,138 @@ defined('MOODLE_INTERNAL') || die;
  */
 class local_moodec_renderer extends plugin_renderer_base {
 
+	function catalogue($products) {
+
+		$html = '';
+
+		if (is_array($products) && 0 < count($products)) {
+
+			// OPEN PRODUCT LIST
+			$html .= sprintf('<div class="product-list">');
+
+			foreach ($products as $product) {
+				
+				$html .= $this->catalogue_item($product);
+
+			}
+
+			// CLOSE PRODUCT LIST
+			$html .= sprintf('</div>');
+
+		} else {
+
+			$html .= sprintf(
+				'<div class="catalogue-empty">%s</div>',
+				get_string(
+					'catalogue_empty',
+					'local_moodec'
+				)
+			);
+		}
+
+		return $html;
+	}
+
+	function catalogue_item($product) {
+		global $CFG;
+
+		// Require Moodec lib
+		require_once $CFG->dirroot . '/local/moodec/lib.php';
+
+		// OPEN PRODUCT ITEM
+		$html = sprintf('<div class="product-item">');
+
+			// OPEN PRODUCT DETAILS
+			$html .= sprintf('<div class="product-details">');
+
+				// output product image
+				if (!!get_config('local_moodec', 'page_catalogue_show_image')) {
+					$html .= $this->product_image($product);
+				}
+
+				// OPEN PRODUCT DETAILS WRAPPER
+				$html .= sprintf('<div class="product-details__wrapper">');
+
+					// output page title
+					$html .= $this->product_title($product);
+
+					//output course summary
+					if (!!get_config('local_moodec', 'page_catalogue_show_description')) {
+						$html .= sprintf(
+							'<div class="product-summary">%s</div>',
+							$product->get_summary()
+						);
+					}
+
+					// output product description
+					if (!!get_config('local_moodec', 'page_catalogue_show_additional_description')) {
+						$html .= sprintf(
+							'<div class="product-summary additional">%s</div>',
+							$product->get_description()
+						);
+					}
+
+					// output product duration
+					if(!!get_config('local_moodec', 'page_catalogue_show_duration')) {
+						$html .= $this->product_duration($product);
+					}	
+
+					// output product category			
+					if (!!get_config('local_moodec', 'page_catalogue_show_category')) {
+						$html .= $this->product_category($product);
+					}
+
+				// CLOSE PRODUCT DETAILS WRAPPER
+				$html .= sprintf('</div>');
+
+			// CLOSE PRODUCT DETAILS
+			$html .= sprintf('</div>');
+			
+			// OPEN PRODUCT ACTIONS
+			$html .= sprintf('<div class="product-actions">');
+
+				//output price
+				if (!!get_config('local_moodec', 'page_catalogue_show_price')) {
+
+					if($product->get_type() === PRODUCT_TYPE_SIMPLE) { 
+						
+						$html .= sprintf(
+							'<h4 class="product-price">%s</h4>',
+							local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . $product->get_price()
+						);
+
+					} else {
+						$attr = '';
+
+						foreach ($product->get_variations() as $v) {
+							$attr .= sprintf('data-tier-%d="%.2f" ', $v->get_id(), $v->get_price());
+						}
+
+						list($firstVariation) = array_values($product->get_variations());
+
+						$html .= sprintf('<h4 class="product-price" %s>%s<span class="amount">%.2f</span></h4>',
+							$attr,
+							local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
+							$firstVariation->get_price()
+						);
+
+					}
+				}
+
+				// output button
+				if (!!get_config('local_moodec', 'page_catalogue_show_button')) {
+					$html .= $this->product_button($product);
+				}
+
+			// CLOSE PRODUCT ACTIONS
+			$html .= sprintf('</div>');
+		
+		// CLOSE PRODUCT ITEM
+		$html .= sprintf('</div>');
+
+		return $html;
+	}
+
 
 	/**
 	 * Outputs the information for the single product page
@@ -367,6 +499,230 @@ class local_moodec_renderer extends plugin_renderer_base {
 				$imageURL,
 				$product->get_fullname()
 			);
+		}
+
+		return $html;
+	}
+
+	function product_title($product) {
+
+		$html = sprintf('<h3 class="product-title">');
+
+		if (!!get_config('local_moodec', 'page_product_enable')) {
+			$html .= sprintf(
+				'<a href="%s">%s</a>',
+				new moodle_url('/local/moodec/pages/product.php', array('id' => $product->get_id())),
+				$product->get_fullname()
+			);
+		} else {
+			$html .= $product->get_fullname();
+		}
+		
+		$html .= sprintf('</h3>');
+
+		return $html;
+	}
+
+	function product_duration($product) {
+
+		// Product duration
+		$html = '<div class="product-duration__wrapper">';
+
+			// Product duration label
+			$html .= sprintf(
+				'<span class="product-duration__label">%s</span> ',
+				get_string('catalogue_enrolment_duration_label', 'local_moodec')
+			);
+
+			if( $product->get_type() === PRODUCT_TYPE_SIMPLE) {
+				$html .= sprintf(
+					'<span class="product-duration">%s</span>',
+					$product->get_duration()
+				);
+			} else {
+				$attr = '';
+
+				foreach ($product->get_variations() as $v) {
+					$attr .= sprintf(
+						'data-tier-%d="%s" ',
+						$v->get_id(),
+						$v->get_duration()
+					);
+				}
+
+				list($firstVariation) = array_values($product->get_variations());
+
+				$html .= sprintf(
+					'<span class="product-duration" %s>%s</span>',
+					$attr,
+					$firstVariation->get_duration()
+				);
+			}
+		
+		// Product duration wrapper close
+		$html .= sprintf('</div>');
+
+		return $html;
+	}
+
+	function product_category($product) {
+		global $CFG, $DB;
+
+		// Get the category the product belongs to
+		$category = $DB->get_record(
+			'course_categories',
+			array(
+				'id' => $product->get_category_id()
+			)
+		);
+
+		// Get the url to link to the category page with the filter active
+		$categoryURL = new moodle_url(
+			$CFG->wwwroot . '/local/moodec/pages/catalogue.php',
+			array(
+				'category' => $product->get_category_id()
+			)
+		);
+
+		// Category wrapper
+		$html = '<div class="product-category__wrapper">';
+
+			// Category label
+			$html .= sprintf(
+				'<span class="product-category__label">%s</span> ',
+				get_string('course_list_category_label', 'local_moodec')
+			);
+
+			// Category link
+			$html .= sprintf(
+				'<a class="product-category__link" href="%s">%s</a>',
+				$categoryURL,
+				$category->name
+			);
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	function product_button($product) {
+
+		$cart = new MoodecCart();
+
+		if (isloggedin() && is_enrolled(context_course::instance($product->get_course_id(), MUST_EXIST))) {
+			
+			$html = sprintf(
+				'<div class="product-form"><button class="product-form__add button--enrolled" disabled="disabled">%s</button></div>',
+				get_string('button_enrolled_label', 'local_moodec')
+			);
+
+		} else if( $cart->check($product->get_id()) ){
+
+			// Display 'in cart' button
+			$html = sprintf(
+				'<div class="product-single__form">
+					<a href="%s" class="product-form__add btn button--cart">%s</a>
+				</div>',
+				new moodle_url('/local/moodec/pages/cart.php'),
+				get_string('button_in_cart_label', 'local_moodec')
+			);
+
+		} else {
+
+			// Check whether this is a simple or variable product
+			if($product->get_type() === PRODUCT_TYPE_SIMPLE) {
+
+				// Display simple product 'add to cart' form
+				$html = sprintf(
+					'<form action="%s" method="POST" class="product-form">
+						<input type="hidden" name="action" value="addToCart">
+						<input type="hidden" name="id" value="%d">
+						<input type="submit" class="product-form__add" value="%s">
+					</form>',
+					new moodle_url('/local/moodec/pages/cart.php'),
+					$product->get_id(),
+					get_string('button_add_label', 'local_moodec')
+				);
+
+			} else {
+
+				// Variable product selection 'add to cart' form
+				$html = sprintf(
+					'<form action="%s" method="POST" class="product-form">
+						<input type="hidden" name="action" value="addVariationToCart">
+						<select class="product-tier" name="variation">',
+					new moodle_url('/local/moodec/pages/cart.php')
+				);
+
+				// output variations
+				foreach($product->get_variations() as $variation) {
+
+					$html .= sprintf(
+						'<option value="%d">%s</option>',
+						$variation->get_id(),
+						$variation->get_name()
+					);
+
+				}
+
+				// output rest of the form
+				$html .= sprintf(
+					'	</select>
+						<input type="hidden" name="id" value="%d">
+						<input type="submit" class="product-form__add" value="%s">
+					</form>',
+					$product->get_id(),
+					get_string('button_add_label', 'local_moodec')
+				);
+
+			}
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Outputs the HTML for the pagination
+	 * @param  array  $products    An array of the products to be paginated
+	 * @param  integer $currentPage The index of the current page
+	 * @param  int  $category    the category ID
+	 * @param  string  $sort        the string sorting parameter
+	 * @return string               the HTML output
+	 */
+	function pagination($products, $currentPage = 0, $category = null, $sort = null) {
+
+		$html = '';
+
+		// Calculate total page count
+		$pageCount = ceil(count($products) / get_config('local_moodec', 'pagination'));
+
+		// Only output pagination when there is more than one page
+		if (1 < $pageCount && $currentPage <= $pageCount ) {
+
+			$html .= sprintf('<div class="pagination-bar"><ul class="pagination">');
+
+			$params = array();
+
+			if ($sort !== null) {
+				$params['sort'] = $sort;
+			}
+
+			if ($category !== null && !!$category ) {
+				$params['category'] = $category;
+			}
+
+			for ($paginator = 1; $paginator <= $pageCount; $paginator++) {
+				$params['page'] = $paginator;
+
+				$html .= sprintf('<li class="page-item"><a href="%s" %s>%d</a></li>',
+					new moodle_url('/local/moodec/pages/catalogue.php', $params),
+					$paginator === $currentPage ? 'class="active"' : '',
+					$paginator
+				);
+
+			}
+
+			$html .= sprintf('</ul></div>');
 		}
 
 		return $html;

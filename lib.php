@@ -344,49 +344,6 @@ function local_moodec_get_category_list($id) {
 	return $list;
 }
 
-/**
- * Outputs the HTML for the pagination
- * @param  array  $products    An array of the products to be paginated
- * @param  integer $currentPage The index of the current page
- * @param  int  $category    the category ID
- * @param  string  $sort        the string sorting parameter
- * @return string               the HTML output
- */
-function local_moodec_output_pagination($products, $currentPage = 0, $category = null, $sort = null) {
-
-	// Calculate total page count
-	$pageCount = ($currentPage - 1) + ceil(count($products) / get_config('local_moodec', 'pagination'));
-
-	// Only output pagination when there is more than one page
-	if (1 < $pageCount) {
-
-		printf('<div class="pagination-bar"><ul class="pagination">');
-
-		$params = array();
-
-		if ($sort !== null) {
-			$params['sort'] = $sort;
-		}
-
-		if ($category !== null) {
-			$params['category'] = $category;
-		}
-
-		for ($paginator = 1; $paginator <= $pageCount; $paginator++) {
-			$params['page'] = $paginator;
-
-			printf('<li class="page-item"><a href="%s" %s>%d</a></li>',
-				new moodle_url('/local/moodec/pages/catalogue.php', $params),
-				$paginator === $currentPage ? 'class="active"' : '',
-				$paginator
-			);
-
-		}
-
-		printf('</ul></div>');
-	}
-}
-
 function local_moodec_get_groups($id) {
 	global $CFG;
 	require_once $CFG->libdir . '/grouplib.php';
@@ -400,4 +357,18 @@ function local_moodec_get_groups($id) {
 	}
 
 	return $arr;
+}
+
+function local_moodec_extract_sort_vars($sort) {
+	$sortfield = 'sortorder';
+	$sortorder = 'ASC';
+
+	if ($sort !== null && 0 < strlen($sort) && strpos('-', $sort) !== -1) {
+		$sortArray = explode('-', $sort);
+
+		$sortfield = $sortArray[0];
+		$sortorder = strtoupper($sortArray[1]);
+	}
+
+	return array($sortfield, $sortorder);
 }
