@@ -17,7 +17,7 @@ $courseid = required_param('id', PARAM_INT);
 
 $PAGE->set_pagelayout('admin');
 $PAGE->requires->jquery();
-$PAGE->requires->js('/local/moodec/js/settings_product.js');
+$PAGE->requires->js(new moodle_url($CFG->wwwroot . '/local/moodec/js/settings_product.js'));
 
 // Validate course id
 if(!!$courseid) {
@@ -47,7 +47,7 @@ $mform = new moodec_edit_product_form();
 if ($mform->is_cancelled()) {
 
 	// redirect back to the course page
-	redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+	redirect(new moodle_url($CFG->wwwroot . '/course/view.php', array('id' => $courseid)));
 
 } else if ($data = $mform->get_data()) {
 	// Now we process validated data
@@ -163,7 +163,7 @@ if ($mform->is_cancelled()) {
 
 	if (!!$result) {
 		// redirect back to the course page
-		redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+		redirect(new moodle_url($CFG->wwwroot . '/course/view.php', array('id' => $courseid)));
 	} else {
 		// TODO: throw exception
 		echo 'something went wrong...';

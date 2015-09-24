@@ -19,7 +19,7 @@ $page = optional_param('page', 1, PARAM_INT);
 $systemcontext = context_system::instance();
 
 $PAGE->set_context($systemcontext);
-$PAGE->set_url('/local/moodec/pages/catalogue.php');
+$PAGE->set_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php');
 
 // Check if the theme has a moodec pagelayout defined, otherwise use standard
 if (array_key_exists('moodec_catalogue', $PAGE->theme->layouts)) {
@@ -33,7 +33,7 @@ if (array_key_exists('moodec_catalogue', $PAGE->theme->layouts)) {
 $PAGE->set_title(get_string('catalogue_title', 'local_moodec'));
 $PAGE->set_heading(get_string('catalogue_title', 'local_moodec'));
 $PAGE->requires->jquery();
-$PAGE->requires->js('/local/moodec/js/catalogue.js');
+$PAGE->requires->js(new moodle_url($CFG->wwwroot . '/local/moodec/js/catalogue.js'));
 
 // Get the renderer for this page
 $renderer = $PAGE->get_renderer('local_moodec');

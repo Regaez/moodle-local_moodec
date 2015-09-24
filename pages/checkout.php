@@ -15,7 +15,7 @@ require_once $CFG->dirroot . '/local/moodec/lib.php';
 $systemcontext = context_system::instance();
 
 $PAGE->set_context($systemcontext);
-$PAGE->set_url('/local/moodec/pages/checkout.php');
+$PAGE->set_url($CFG->wwwroot . '/local/moodec/pages/checkout.php');
 
 // Check if the theme has a moodec pagelayout defined, otherwise use standard
 if (array_key_exists('moodec_checkout', $PAGE->theme->layouts)) {
@@ -39,7 +39,7 @@ require_login();
 $cart = new MoodecCart();
 
 if ( $cart->is_empty() ) {
-	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+	redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'));
 }
 
 // Check if the products in the cart are valid, store the ones that are not

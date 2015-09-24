@@ -144,7 +144,8 @@ class MoodecGatewayPaypal extends MoodecGateway {
 	}
 
 	public function render(){
-
+		global $CFG;
+		
 		// output form
 		$html = sprintf('<form action="%s" method="POST">', $this->_gatewayURL);
 
@@ -164,9 +165,9 @@ class MoodecGatewayPaypal extends MoodecGateway {
 				get_config('local_moodec', 'payment_paypal_email'),
 				get_config('local_moodec', 'currency'),
 				$this->_transaction->get_id(),
-				new moodle_url('/local/moodec/payment/paypal/ipn.php'),
-				new moodle_url('/my'), // PERHAPS MAKE THIS CONFIGURABLE?
-				new moodle_url('/local/moodec/pages/cart.php')
+				new moodle_url($CFG->wwwroot . '/local/moodec/payment/paypal/ipn.php'),
+				new moodle_url($CFG->wwwroot . '/my'), // PERHAPS MAKE THIS CONFIGURABLE?
+				new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php')
 			); 
 
 			// Count is used to incrementally name the item fields

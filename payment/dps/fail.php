@@ -26,4 +26,4 @@ $gateway = new MoodecGatewayDPS($cart->get_transaction_id());
 // Now handle the data from DPS
 $gateway->abort($data);
 
-redirect(new moodle_url('/local/moodec/pages/cart.php')); // PERHAPS MAKE CONFIGURABLE?
+redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php')); // PERHAPS MAKE CONFIGURABLE?

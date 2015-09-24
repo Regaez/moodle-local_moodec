@@ -38,12 +38,12 @@ require_once $CFG->dirroot . '/local/moodec/classes/gateway_dps.php';
  * @return void                 
  */
 function local_moodec_extends_navigation(global_navigation $nav) {
-	global $PAGE, $DB;
+	global $CFG, $PAGE, $DB;
 
 	// Add store container to menu
 	$storenode = $PAGE->navigation->add(
 		get_string('catalogue_title', 'local_moodec'),
-		new moodle_url('/local/moodec/pages/catalogue.php'),
+		new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php'),
 		navigation_node::TYPE_CONTAINER
 	);
 
@@ -58,7 +58,7 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 
 					$catnode = $storenode->add(
 						$category->name,
-						new moodle_url('/local/moodec/pages/catalogue.php', array('category' => $category->id)),
+						new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', array('category' => $category->id)),
 						navigation_node::TYPE_CONTAINER
 					);
 
@@ -69,7 +69,7 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 					foreach ($products as $product) {
 						$catnode->add(
 							$product->get_fullname(),
-							new moodle_url('/local/moodec/pages/product.php', array('id' => $product->get_id()))
+							new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->get_id()))
 						);
 					}
 				}
@@ -80,7 +80,7 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 	// Add cart page to menu
 	$PAGE->navigation->add(
 		get_string('cart_title', 'local_moodec'),
-		new moodle_url('/local/moodec/pages/cart.php')
+		new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php')
 	);
 }
 
@@ -92,9 +92,11 @@ function local_moodec_extends_navigation(global_navigation $nav) {
  * @param  stdclass            $context Course context
  */
 function local_moodec_extends_settings_navigation(settings_navigation $nav, $context) {
+	global $CFG;
+
 	if ($context->contextlevel >= CONTEXT_COURSE and ($branch = $nav->get('courseadmin'))
 		and has_capability('moodle/course:update', $context)) {
-		$url = new moodle_url('/local/moodec/settings/product.php', array('id' => $context->instanceid));
+		$url = new moodle_url($CFG->wwwroot . '/local/moodec/settings/product.php', array('id' => $context->instanceid));
 		$branch->add(get_string('moodec_product_settings', 'local_moodec'), $url, $nav::TYPE_CONTAINER, null, 'moodec' . $context->instanceid, new pix_icon('i/settings', ''));
 	}
 }

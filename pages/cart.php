@@ -15,7 +15,7 @@ require_once $CFG->dirroot . '/local/moodec/lib.php';
 $systemcontext = context_system::instance();
 
 $PAGE->set_context($systemcontext);
-$PAGE->set_url('/local/moodec/pages/cart.php');
+$PAGE->set_url($CFG->wwwroot . '/local/moodec/pages/cart.php');
 
 // Check if the theme has a moodec pagelayout defined, otherwise use standard
 if (array_key_exists('moodec_cart', $PAGE->theme->layouts)) {
@@ -44,7 +44,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'addToCart') {
 	// Updates the cart var with the new addition
 	$cart->add($_POST['id']);
 	// redirect back to the course page
-	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+	redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'));
 }
 
 
@@ -53,14 +53,14 @@ if (isset($_POST['action']) && $_POST['action'] === 'addVariationToCart') {
 	// Updates the cart var with the new addition
 	$cart->add($_POST['id'], $_POST['variation']);
 	// redirect back to the course page
-	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+	redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'));
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'removeFromCart') {
 	// Updates the cart var with the new addition
 	$cart->remove($_POST['id']);
 	// redirect back to the course page
-	redirect(new moodle_url('/local/moodec/pages/cart.php'));
+	redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'));
 }
 
 echo $OUTPUT->header();

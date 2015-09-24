@@ -19,11 +19,13 @@ class MoodecGatewayDPS extends MoodecGateway {
 	protected $_internalGatewayURL = '';
 
 	function __construct($transaction) {
+		global $CFG;
+
 		parent::__construct($transaction);
 
 		$this->_gatewayName = get_string('payment_dps_title', 'local_moodec');
 
-		$this->_internalGatewayURL = new moodle_url('/local/moodec/payment/dps/index.php');
+		$this->_internalGatewayURL = new moodle_url($CFG->wwwroot . '/local/moodec/payment/dps/index.php');
 
 		// Checks if sandbox mode is enabled
 		if( !!get_config('local_moodec', 'payment_dps_sandbox') ) {
@@ -62,7 +64,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 	}
 
 	public function begin(){
-		global $USER;
+		global $CFG, $USER;
 
 		$txnId = time() . $this->_transaction->get_id();
 		$site = get_site();
@@ -97,8 +99,8 @@ class MoodecGatewayDPS extends MoodecGateway {
             clean_param(substr($site->shortname, 0, 50), PARAM_CLEAN),
             clean_param(substr("{$USER->lastname}, {$USER->firstname}", 0, 50), PARAM_CLEAN),
             clean_param(time().$this->_transaction->get_id(), PARAM_CLEAN), // TxnId
-            new moodle_url('/local/moodec/payment/dps/success.php'), // URL Success
-            new moodle_url('/local/moodec/payment/dps/fail.php') 	// URL Fail
+            new moodle_url($CFG->wwwroot . '/local/moodec/payment/dps/success.php'), // URL Success
+            new moodle_url($CFG->wwwroot . '/local/moodec/payment/dps/fail.php') 	// URL Fail
         );
 
 		// Query DPS with the xml request

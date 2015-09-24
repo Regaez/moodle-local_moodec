@@ -28,7 +28,7 @@ $response = $gateway->handle($data);
 
 // If we successfully handle the data, then redirect
 if ( !!$response) {
-	redirect(new moodle_url('/my')); // PERHAPS MAKE CONFIGURABLE?
+	redirect(new moodle_url($CFG->wwwroot . '/my')); // PERHAPS MAKE CONFIGURABLE?
 } else {
     print_error('error_enrolfail', 'local_moodec');
 }

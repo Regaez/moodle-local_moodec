@@ -17,7 +17,7 @@ $productid = required_param('id', PARAM_INT);
 
 // Set PAGE variables
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url('/local/moodec/pages/product.php', array('id' => $productid));
+$PAGE->set_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $productid));
 
 // Check if the theme has a moodec pagelayout defined, otherwise use standard
 if (array_key_exists('moodec_product', $PAGE->theme->layouts)) {
@@ -33,7 +33,7 @@ $renderer = $PAGE->get_renderer('local_moodec');
 
 // Include required javascript
 $PAGE->requires->jquery();
-$PAGE->requires->js(new moodle_url('/local/moodec/js/product.js'));
+$PAGE->requires->js(new moodle_url($CFG->wwwroot . '/local/moodec/js/product.js'));
 
 // Get the product via the course id
 $product = local_moodec_get_product($productid);
