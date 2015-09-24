@@ -169,7 +169,7 @@ class MoodecCart {
 	 * Reloads the products from the DB to get up-to-date info
 	 * and removes any products that are now invalid
 	 * THIS IS ESPECIALLY NECESSARY FOR PEOPLE WITH OLD CARTS
-	 * @return void
+	 * @return array 	list of product ids that have been removed
 	 */
 	public function refresh(){
 		global $USER;
@@ -214,6 +214,8 @@ class MoodecCart {
 		foreach ($itemsToRemove as $id) {
 			$this->remove($id);
 		}
+
+		return $itemsToRemove;
 	}
 
 	/**

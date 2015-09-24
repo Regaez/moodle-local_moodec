@@ -87,15 +87,4 @@ echo $OUTPUT->header(); ?>
 <?php // Output cart review
 echo $renderer->cart_review($cart, $removedProducts);
 
-// Render all active Gateway options
-if( !!get_config('local_moodec', 'payment_dps_enable') ){
-	$gatewayDPS = new MoodecGatewayDPS($transaction);
-	echo $gatewayDPS->render();
-}
-
-if( !!get_config('local_moodec', 'payment_paypal_enable') ){
-	$gatewayPaypal = new MoodecGatewayPaypal($transaction);
-	echo $gatewayPaypal->render();
-}
-
 echo $OUTPUT->footer();

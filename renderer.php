@@ -909,6 +909,27 @@ class local_moodec_renderer extends plugin_renderer_base {
 			// Return to store button
 			$html .= $this->return_to_store_action();
 
+			// Render all active Gateway options
+			if( !!get_config('local_moodec', 'payment_dps_enable') ){
+				$gatewayDPS = new MoodecGatewayDPS($cart->get_transaction_id());
+				$html .= $gatewayDPS->render();
+			}
+
+			if( !!get_config('local_moodec', 'payment_paypal_enable') ){
+				$gatewayPaypal = new MoodecGatewayPaypal($cart->get_transaction_id());
+				$html .= $gatewayPaypal->render();
+			}
+
+		} else {
+
+			// Empty cart message
+			$html .= sprintf(
+				'<p class="cart-mesage--empty">%s</p>',
+				get_string('cart_empty_message', 'local_moodec')
+			);
+
+			// Return to store button
+			$html .= $this->return_to_store_action();
 
 		}
 
