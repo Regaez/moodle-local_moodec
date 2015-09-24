@@ -338,7 +338,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 							'<div class="product-single__form">
 								<a href="%s" class="product-form__add btn button--cart">%s</a>
 							</div>',
-							new moodle_url('/local/moodec/pages/cart.php'),
+							new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'),
 							get_string('button_in_cart_label', 'local_moodec')
 						);
 
@@ -354,7 +354,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 									<input type="hidden" name="id" value="%d">
 									<input type="submit" class="product-form__add" value="%s">
 								</form>',
-								new moodle_url('/local/moodec/pages/cart.php'),
+								new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'),
 								$product->get_id(),
 								get_string('button_add_label', 'local_moodec')
 							);
@@ -366,7 +366,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 								'<form action="%s" method="POST" class="product-single__form">
 									<input type="hidden" name="action" value="addVariationToCart">
 									<select class="product-tier" name="variation">',
-								new moodle_url('/local/moodec/pages/cart.php')
+								new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php')
 							);
 
 							// output variations
@@ -455,7 +455,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 						// Product link
 						$html .= sprintf(
 							'<a href="%s" class="product-view btn">%s</a>',
-							new moodle_url('/local/moodec/pages/product.php', array('id' => $p->get_id()) ),
+							new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $p->get_id()) ),
 							get_string('product_related_button_label', 'local_moodec')
 						);
 
@@ -505,13 +505,14 @@ class local_moodec_renderer extends plugin_renderer_base {
 	}
 
 	function product_title($product) {
+		global $CFG;
 
 		$html = sprintf('<h3 class="product-title">');
 
 		if (!!get_config('local_moodec', 'page_product_enable')) {
 			$html .= sprintf(
 				'<a href="%s">%s</a>',
-				new moodle_url('/local/moodec/pages/product.php', array('id' => $product->get_id())),
+				new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array('id' => $product->get_id())),
 				$product->get_fullname()
 			);
 		} else {
@@ -606,6 +607,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 	}
 
 	function product_button($product) {
+		global $CFG;
 
 		$cart = new MoodecCart();
 
@@ -623,7 +625,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 				'<div class="product-single__form">
 					<a href="%s" class="product-form__add btn button--cart">%s</a>
 				</div>',
-				new moodle_url('/local/moodec/pages/cart.php'),
+				new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'),
 				get_string('button_in_cart_label', 'local_moodec')
 			);
 
@@ -639,7 +641,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 						<input type="hidden" name="id" value="%d">
 						<input type="submit" class="product-form__add" value="%s">
 					</form>',
-					new moodle_url('/local/moodec/pages/cart.php'),
+					new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'),
 					$product->get_id(),
 					get_string('button_add_label', 'local_moodec')
 				);
@@ -651,7 +653,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					'<form action="%s" method="POST" class="product-form">
 						<input type="hidden" name="action" value="addVariationToCart">
 						<select class="product-tier" name="variation">',
-					new moodle_url('/local/moodec/pages/cart.php')
+					new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php')
 				);
 
 				// output variations
@@ -690,6 +692,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 	 * @return string               the HTML output
 	 */
 	function pagination($products, $currentPage = 0, $category = null, $sort = null) {
+		global $CFG;
 
 		$html = '';
 
@@ -715,7 +718,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 				$params['page'] = $paginator;
 
 				$html .= sprintf('<li class="page-item"><a href="%s" %s>%d</a></li>',
-					new moodle_url('/local/moodec/pages/catalogue.php', $params),
+					new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php', $params),
 					$paginator === $currentPage ? 'class="active"' : '',
 					$paginator
 				);
@@ -759,7 +762,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					// Product title and variation
 					$html .= sprintf(
 						'<h4 class="product-title"><a href="%s">%s</a></h4>',
-						new moodle_url('/local/moodec/pages/product.php', array( 'id' => $product->get_id() )),
+						new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array( 'id' => $product->get_id() )),
 						$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_fullname() : $product->get_fullname() . ' - ' . $product->get_variation($vID)->get_name()
 					);
 
@@ -877,7 +880,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					// Product title and variation
 					$html .= sprintf(
 						'<h4 class="product-title"><a href="%s">%s</a></h4>',
-						new moodle_url('/local/moodec/pages/product.php', array( 'id' => $product->get_id() )),
+						new moodle_url($CFG->wwwroot . '/local/moodec/pages/product.php', array( 'id' => $product->get_id() )),
 						$product->get_type() === PRODUCT_TYPE_SIMPLE ? $product->get_fullname() : $product->get_fullname() . ' - ' . $product->get_variation($vID)->get_name()
 					);
 
@@ -1010,6 +1013,8 @@ class local_moodec_renderer extends plugin_renderer_base {
 	 * @return string  	HTML
 	 */	
 	function cart_actions() {
+		global $CFG;
+
 		$html = '<div class="cart-actions">';
 
 			// Return to store button
@@ -1020,29 +1025,8 @@ class local_moodec_renderer extends plugin_renderer_base {
 				'<form action="%s" method="GET">
 					<input type="submit" value="%s">
 				</form>',
-				new moodle_url('/local/moodec/pages/checkout.php'),
+				new moodle_url($CFG->wwwroot . '/local/moodec/pages/checkout.php'),
 				get_string('button_checkout_label', 'local_moodec')
-			);
-
-		$html .= '</div>';
-
-		return $html;
-	}
-
-	/**
-	 * Returns the HTML output for the checkout actions
-	 * @param  string  $ipnData  The IPN data required for Paypal
-	 * @return string        	 HTML
-	 */
-	function checkout_actions($ipnData){
-		$html = '<div class="cart-actions">';
-
-			// Output proceed to paypal button
-			$html .= sprintf(
-				'<input type="hidden" name="custom" value="%s">
-				<input type="submit" name="submit"  value="%s">',
-				$ipnData,
-				get_string('button_paypal_label', 'local_moodec')
 			);
 
 		$html .= '</div>';
@@ -1056,65 +1040,15 @@ class local_moodec_renderer extends plugin_renderer_base {
 	 * @return string 	HTML
 	 */	
 	function return_to_store_action() {
+		global $CFG;
+
 		// Return to store button
 		return sprintf(
 			'<form action="%s" method="GET" class="back-to-shop">
 				<input type="submit" value="%s">
 			</form>',
-			new moodle_url('/local/moodec/pages/catalogue.php'),
+			new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php'),
 			get_string('button_return_store_label', 'local_moodec')
 		);
-	}
-
-	/**
-	 * Returns the Paypal input fields required
-	 * @return string  HTML
-	 */
-	function paypal_fields(){
-		return sprintf(
-			'<input type="hidden" name="cmd" value="_cart">
-			<input type="hidden" name="charset" value="utf-8">
-			<input type="hidden" name="upload" value="1">
-			<input type="hidden" name="business" value="%s">
-			<input type="hidden" name="currency_code" value="%s">
-			<input type="hidden" name="for_auction" value="false">
-			<input type="hidden" name="no_note" value="1">
-			<input type="hidden" name="no_shipping" value="1">
-			<input type="hidden" name="notify_url" value="%s">
-			<input type="hidden" name="return" value="%s">
-			<input type="hidden" name="cancel_return" value="%s">',
-			get_config('local_moodec', 'paypalbusiness'),
-			get_config('local_moodec', 'currency'),
-			new moodle_url('/local/moodec/ipn.php'),
-			new moodle_url('/local/moodec/pages/catalogue.php'),
-			new moodle_url('/local/moodec/pages/cart.php')
-		);
-	}
-
-
-	/**
-	 * Returns the Paypal item fields
-	 * @param  product  $p  the product
-	 * @param  int 		$v  the product variation id
-	 * @param  int 		$i  the iterator value 
-	 * @return string    	HTML
-	 */
-	function paypal_product_info($p, $v, $i) {
-
-		// Paypal item name field
-		$html = sprintf(
-			'<input type="hidden" name="%s" value="%s">',
-			'item_name_' . $i,
-			$p->get_type() === PRODUCT_TYPE_SIMPLE ? $p->get_fullname() : $p->get_fullname() . ' - ' . $p->get_variations($v)->get_name()
-		);
-
-		// Paypal item amount field
-		$html .= sprintf(
-			'<input type="hidden" name="%s" value="%s">',
-			'amount_' . $i,
-			$p->get_type() === PRODUCT_TYPE_SIMPLE ? $p->get_price() : $p->get_variations($v)->get_price()
-		);
-
-		return $html;
 	}
 }
