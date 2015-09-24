@@ -218,6 +218,9 @@ class moodec_edit_product_form extends moodleform {
 				get_string(
 					'product_variation_name',
 					'local_moodec'
+				),
+				array(
+					'maxlength' => 25
 				)
 			);
 			$mform->setType('product_variation_name_'.$i, PARAM_TEXT);
@@ -240,6 +243,9 @@ class moodec_edit_product_form extends moodleform {
 				get_string(
 					'product_variation_price',
 					'local_moodec'
+				),
+				array(
+					'maxlength' => 9
 				)
 			);
 			$mform->setType('product_variation_price_'.$i, PARAM_TEXT);
@@ -262,6 +268,9 @@ class moodec_edit_product_form extends moodleform {
 				get_string(
 					'product_variation_duration',
 					'local_moodec'
+				),
+				array(
+					'maxlength' => 9
 				)
 			);
 			$mform->setType('product_variation_duration_'.$i, PARAM_TEXT);
@@ -324,11 +333,11 @@ class moodec_edit_product_form extends moodleform {
 				$errors[$name] = get_string('error_invalid_name', 'local_moodec');
 			}
 
-			if( !is_numeric($data[$price]) ) {
+			if( !is_numeric($data[$price]) && !is_float($data[$price]) ) {
 				$errors[$price] = get_string('error_invalid_price', 'local_moodec');
 			}
 
-			if( !is_numeric($data[$duration]) ) {
+			if( !is_numeric($data[$duration]) && !is_int($data[$duration]) ) {
 				$errors[$duration] = get_string('error_invalid_duration', 'local_moodec');
 			}
 
