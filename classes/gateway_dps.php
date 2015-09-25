@@ -211,7 +211,7 @@ class MoodecGatewayDPS extends MoodecGateway {
 	public function render(){
 
 		// output form
-		$html = sprintf('<form action="%s" method="POST">', $this->_internalGatewayURL);
+		$html = sprintf('<form action="%s" method="POST" class="payment-gateway gateway--dps">', $this->_internalGatewayURL);
 
 			$html .= sprintf(
 				'<input type="hidden" name="id" value="%s">',

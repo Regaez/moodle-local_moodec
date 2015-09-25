@@ -145,9 +145,9 @@ class MoodecGatewayPaypal extends MoodecGateway {
 
 	public function render(){
 		global $CFG;
-		
+
 		// output form
-		$html = sprintf('<form action="%s" method="POST">', $this->_gatewayURL);
+		$html = sprintf('<form action="%s" method="POST" class="payment-gateway gateway--paypal">', $this->_gatewayURL);
 
 			$html .= sprintf(
 				'<input type="hidden" name="cmd" value="_cart">

@@ -131,6 +131,18 @@
     margin-bottom: 2em;
 }
 
+.cart-summary {
+    margin-bottom: 1em;
+}
+
+.back-to-shop {
+    float: left;
+}
+
+.payment-gateway {
+    float: right;
+}
+
 #fitem_id_variable_name_1:before {
     content: 'Tier 1';
     display: block;
