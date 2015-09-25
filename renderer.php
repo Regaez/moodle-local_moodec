@@ -958,10 +958,10 @@ class local_moodec_renderer extends plugin_renderer_base {
 			'default-asc',
 			'fullname-asc',
 			'fullname-desc',
-			'simple_price-asc',
-			'simple_price-desc',
-			'simple_enrolment_duration-asc',
-			'simple_enrolment_duration-desc',
+			'price-asc',
+			'price-desc',
+			'duration-asc',
+			'duration-desc',
 		);
 
 		// open form wrapper
