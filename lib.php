@@ -50,7 +50,20 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 	if (!!get_config('local_moodec', 'page_product_enable')) {
 
 		// We store the courses by category
-		$categories = $DB->get_records('course_categories');
+		// but only get categories with active products
+		$query = sprintf(
+			'SELECT DISTINCT 
+					cc.id, 
+					cc.visible,
+					cc.name
+			FROM	{course_categories} cc, 
+					{course} c, 
+					{local_moodec_product} lmp
+			WHERE 	cc.id = c.category
+			AND 	c.id = lmp.course_id
+			AND 	lmp.is_enabled = 1');
+
+		$categories = $DB->get_records_sql($query);
 
 		if (!!$categories) {
 			foreach ($categories as $category) {
