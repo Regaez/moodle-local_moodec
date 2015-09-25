@@ -846,6 +846,8 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 		if (!!$removedProducts && is_array($removedProducts)) {
 			
+			$html .= '<div class="cart-review__wrapper">';
+
 			$html .= sprintf(
 				'<p class="cart-review__message--removed">%s</p>', 
 				get_string('checkout_removed_courses_label', 'local_moodec')
@@ -862,7 +864,8 @@ class local_moodec_renderer extends plugin_renderer_base {
 				);
 			}
 
-			$html .= '</ul>';
+			$html .= '</ul></div>';
+
 		}
 		
 

@@ -143,6 +143,19 @@
     float: right;
 }
 
+.cart-review__wrapper {
+    background-color: #f2dede;
+    margin: 2em 0;
+    padding: 2em;
+    color: #b94a48;
+    border: 1px solid #eed3d7;
+    border-radius: 4px;
+}
+
+.cart-review__wrapper ul {
+    margin: 0 0 0 25px;
+}
+
 #fitem_id_variable_name_1:before {
     content: 'Tier 1';
     display: block;

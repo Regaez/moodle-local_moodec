@@ -106,7 +106,7 @@ $string['product_related_button_label'] = 'View details';
 // CHECKOUT
 $string['checkout_title'] = 'Checkout';
 $string['checkout_message'] = 'Please review your cart once more before purchasing.';
-$string['checkout_removed_courses_label'] = 'The following courses have been removed from your cart as you are already enrolled in them:';
+$string['checkout_removed_courses_label'] = 'The following courses have been removed from your cart as they are either invalid, or you are already enrolled in them:';
 $string['checkout_total'] = 'Total:';
 $string['checkout_guest_message'] = 'You cannot be logged in as guest to purchase courses! Please log out and create your own account to continue.';
 
