@@ -129,9 +129,17 @@ class MoodecCart {
 		// If the transaction is complete, then this cart has been purchased,
 		// so we need to clear it. 		
 		if( !!$this->get_transaction_id() ) {
-			$transaction = new MoodecTransaction($this->get_transaction_id());
+			
+			try {
+				$transaction = new MoodecTransaction($this->get_transaction_id());
 
-			if( $transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
+				if( $transaction->get_status() === MoodecTransaction::STATUS_COMPLETE ) {
+					$this->clear();
+				}
+			} catch (Exception $e) {
+				// If there is an exception, then we want to clear the transaction
+				// so we will be given a new one
+				$this->_transactionId = null;
 				$this->clear();
 			}
 		}
