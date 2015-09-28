@@ -119,6 +119,7 @@ $string['cart_empty_message'] = 'Your cart is empty!';
 $string['button_add_label'] = 'Add to cart';
 $string['button_remove_label'] = 'Remove';
 $string['button_checkout_label'] = 'Proceed to checkout';
+$string['button_cart_empty_label'] = 'Empty cart';
 $string['button_paypal_label'] = 'Pay with PayPal';
 $string['button_dps_label'] = 'Pay via DPS';
 $string['button_return_store_label'] = 'Return to store';

@@ -1025,11 +1025,21 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 			// Proceed to checkout button
 			$html .= sprintf(
-				'<form action="%s" method="GET">
+				'<form action="%s" method="GET" class="proceed-to-checkout">
 					<input type="submit" value="%s">
 				</form>',
 				new moodle_url($CFG->wwwroot . '/local/moodec/pages/checkout.php'),
 				get_string('button_checkout_label', 'local_moodec')
+			);
+
+			// Empty cart button
+			$html .= sprintf(
+				'<form action="%s" method="POST" class="empty-cart">
+					<input type="hidden" name="action" value="emptyCart">
+					<input type="submit" value="%s">
+				</form>',
+				new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'),
+				get_string('button_cart_empty_label', 'local_moodec')
 			);
 
 		$html .= '</div>';

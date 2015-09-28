@@ -47,7 +47,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'addToCart') {
 	redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'));
 }
 
-
 // If we are adding to the cart, process this first
 if (isset($_POST['action']) && $_POST['action'] === 'addVariationToCart') {
 	// Updates the cart var with the new addition
@@ -61,6 +60,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'removeFromCart') {
 	$cart->remove($_POST['id']);
 	// redirect back to the course page
 	redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'));
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'emptyCart') {
+	// Updates the cart var with the new addition
+	$cart->clear();
+	// redirect back to the course page
+	redirect(new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php'));
 }
 
 echo $OUTPUT->header();
