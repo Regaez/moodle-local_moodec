@@ -124,6 +124,19 @@ class MoodecCart {
 
 		}
 
+		// We run through all the products in the cart and load the info
+		foreach( $this->_products as $pID => $vID ){
+			$newProduct = local_moodec_get_product($pID);
+
+			// If any product is variable, but the variation ID is stored as 0
+			// That means the product WAS simple, but has been changed.
+			// Therefore we clear the cart, as this could cause errors.
+			if( $newProduct->get_type() === PRODUCT_TYPE_VARIABLE && $vID === 0 ){
+				$this->clear();
+				break;
+			}
+		}
+
 		// When we create the cart, check if there is a transaction associated with it,
 		// and if there is, check if it is complete.
 		// If the transaction is complete, then this cart has been purchased,
