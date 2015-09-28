@@ -30,7 +30,7 @@ class moodec_edit_product_form extends moodleform {
 		        array(array('formid' => $mform->getAttribute('id'))));
 		// And we check the params for format (will be passed on page reload)
 		// so we know how many variations to display
-		$variationCount = optional_param('format', 1, PARAM_INT);
+		$variationCount = optional_param('format', 0, PARAM_INT);
 
 		$groups = local_moodec_get_groups($COURSE->id);
 
@@ -150,11 +150,17 @@ class moodec_edit_product_form extends moodleform {
 			// If it's a variable product, with multiple variations, and variationCount is equal to 1 
 			// (this indicates the number of variations has not been specified via optional_param)
 			// Then we set the number of variations displayed, to be the amount in the product config
-			// If variationCount is not 1, then it means the user has changed the amount of variations for this product, so we show the desired amount
-			if($productconfig->type === PRODUCT_TYPE_VARIABLE && $variationCount === 1 ) {
+			// If variationCount evaluates to false, then it means the user has changed the amount of variations for this product, so we show the desired amount
+			if($productconfig->type === PRODUCT_TYPE_VARIABLE && !$variationCount ) {
 				$variationCount = $productconfig->variation_count;
 			}
 		}
+
+		// If false, then we set the count to a default so there's always at least 1 option
+		if( !$variationCount ) {
+			$variationCount = 1;
+		}
+
 		$mform->setDefault('format', $variationCount);
 
 		// Button to update format-specific options on format change (will be hidden by JavaScript).
@@ -321,7 +327,7 @@ class moodec_edit_product_form extends moodleform {
 		
 		$errors = parent::validation($data, $files);
 		
-		$numVars = (int) $data['format'];
+		$numVars = $data['product_type'] === PRODUCT_TYPE_SIMPLE ? 1 : (int) $data['format'];
 
 		for ($i=1; $i <= $numVars; $i++) { 
 			
@@ -340,7 +346,7 @@ class moodec_edit_product_form extends moodleform {
 			if( !is_numeric($data[$duration]) && !is_int($data[$duration]) ) {
 				$errors[$duration] = get_string('error_invalid_duration', 'local_moodec');
 			}
-
+						
 		}
 
 		return $errors;
