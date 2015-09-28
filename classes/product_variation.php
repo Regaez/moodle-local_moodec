@@ -117,29 +117,22 @@ class MoodecProductVariation {
 				return get_string('enrolment_duration_unlimited', 'local_moodec');
 			}
 
-			if (364 < $duration) {
+			if (364 < $duration && $duration % 365 === 0 ) {
 				$years = floor($duration / 365);
-				$duration = $duration % 365;
-				$output .= $years == 1 ? sprintf(' %d %s ', $years, get_string('enrolment_duration_year', 'local_moodec')) : sprintf(' %d %s ', $years, get_string('enrolment_duration_year_plural', 'local_moodec'));
+				return $years == 1 ? sprintf(' %d %s ', $years, get_string('enrolment_duration_year', 'local_moodec')) : sprintf(' %d %s ', $years, get_string('enrolment_duration_year_plural', 'local_moodec'));
 			}
 
-			if (29 < $duration) {
+			if (29 < $duration && $duration % 30 === 0) {
 				$months = floor($duration / 30);
-				$duration = $duration % 30;
-				$output .= $months == 1 ? sprintf(' %d %s ', $months, get_string('enrolment_duration_month', 'local_moodec')) : sprintf(' %d %s ', $months, get_string('enrolment_duration_month_plural', 'local_moodec'));
+				return $months == 1 ? sprintf(' %d %s ', $months, get_string('enrolment_duration_month', 'local_moodec')) : sprintf(' %d %s ', $months, get_string('enrolment_duration_month_plural', 'local_moodec'));
 			}
 
-			if (6 < $duration) {
+			if (6 < $duration && $duration % 7 === 0) {
 				$weeks = floor($duration / 7);
-				$duration = $duration % 7;
-				$output .= $weeks == 1 ? sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week', 'local_moodec')) : sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week_plural', 'local_moodec'));
+				return $weeks == 1 ? sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week', 'local_moodec')) : sprintf(' %d %s ', $weeks, get_string('enrolment_duration_week_plural', 'local_moodec'));
 			}
 
-			if (0 < $duration) {
-				$output .= $duration == 1 ? sprintf(' %d %s ', $duration, get_string('enrolment_duration_day', 'local_moodec')) : sprintf(' %d %s ', $duration, get_string('enrolment_duration_day_plural', 'local_moodec'));
-			}
-
-			return $output;
+			return $duration == 1 ? sprintf(' %d %s ', $duration, get_string('enrolment_duration_day', 'local_moodec')) : sprintf(' %d %s ', $duration, get_string('enrolment_duration_day_plural', 'local_moodec'));
 		} else {
 			return $this->_duration;
 		}
