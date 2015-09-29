@@ -1025,9 +1025,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 			// Proceed to checkout button
 			$html .= sprintf(
-				'<form action="%s" method="GET" class="proceed-to-checkout">
-					<input type="submit" value="%s">
-				</form>',
+				'<a href="%s" class="btn proceed-to-checkout">%s</a>',
 				new moodle_url($CFG->wwwroot . '/local/moodec/pages/checkout.php'),
 				get_string('button_checkout_label', 'local_moodec')
 			);
@@ -1057,9 +1055,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 		// Return to store button
 		return sprintf(
-			'<form action="%s" method="GET" class="back-to-shop">
-				<input type="submit" value="%s">
-			</form>',
+			'<a href="%s" class="btn back-to-shop">%s</a>',
 			new moodle_url($CFG->wwwroot . '/local/moodec/pages/catalogue.php'),
 			get_string('button_return_store_label', 'local_moodec')
 		);
