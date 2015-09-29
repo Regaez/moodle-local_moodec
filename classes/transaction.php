@@ -318,7 +318,7 @@ class MoodecTransaction {
 	 * @return datetime purchaseDate;
 	 */
 	public function get_date(){
-		return $_purchaseDate;
+		return $this->_purchaseDate;
 	}
 
 	/**
