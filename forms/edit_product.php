@@ -276,7 +276,7 @@ class moodec_edit_product_form extends moodleform {
 					'local_moodec'
 				),
 				array(
-					'maxlength' => 9
+					'maxlength' => 8
 				)
 			);
 			$mform->setType('product_variation_duration_'.$i, PARAM_TEXT);
