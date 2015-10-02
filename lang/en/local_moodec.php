@@ -115,6 +115,25 @@ $string['cart_title'] = 'Cart';
 $string['cart_total'] = 'Total:';
 $string['cart_empty_message'] = 'Your cart is empty!';
 
+// TRANSACTIONS
+$string['transactions_title'] = 'Transactions';
+$string['transaction_view_label'] = 'View';
+$string['transaction_status_complete'] = 'Complete';
+$string['transaction_status_failed'] = 'Failed';
+$string['transaction_status_pending'] = 'Pending';
+$string['transaction_status_not_submitted'] = 'Not submitted';
+
+$string['transaction_field_date'] = 'Date';
+$string['transaction_field_id'] = 'Transaction ID';
+$string['transaction_field_user'] = 'User';
+$string['transaction_field_amount'] = 'Amount';
+$string['transaction_field_items'] = '# Items';
+$string['transaction_field_gateway'] = 'Gateway';
+$string['transaction_field_status'] = 'Status';
+$string['transaction_field_actions'] = '';
+
+$string['transaction_view_title'] = 'Transaction #{$a->id} Details';
+
 // Buttons
 $string['button_add_label'] = 'Add to cart';
 $string['button_remove_label'] = 'Remove';
