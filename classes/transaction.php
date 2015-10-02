@@ -292,7 +292,16 @@ class MoodecTransaction {
 	 * Returns the gateway used for this transaction
 	 * @return string gateway
 	 */
-	public function get_gateway(){
+	public function get_gateway($format = false){
+		
+		if( !!$format ) {
+			if( $this->_gateway === MOODEC_GATEWAY_DPS ) {
+				return get_string('payment_dps_title', 'local_moodec');
+			} else if( $this->_gateway === MOODEC_GATEWAY_PAYPAL ) {
+				return get_string('payment_paypal_title', 'local_moodec');
+			}
+		}
+
 		return $this->_gateway;
 	}
 
@@ -309,7 +318,20 @@ class MoodecTransaction {
 	 * Returns the status of the transaction
 	 * @return int status
 	 */
-	public function get_status(){
+	public function get_status($format = false){
+		
+		if( !!$format ) {
+			if( $this->_status === self::STATUS_COMPLETE ) {
+				return get_string('transaction_status_complete', 'local_moodec');
+			} else if( $this->_status === self::STATUS_FAILED ) {
+				return get_string('transaction_status_failed', 'local_moodec');
+			} else if( $this->_status === self::STATUS_PENDING ) {
+				return get_string('transaction_status_failed', 'local_moodec');
+			} else if( $this->_status === self::STATUS_NOT_SUBMITTED ) {
+				return get_string('transaction_status_not_submitted', 'local_moodec');
+			}
+		}
+
 		return $this->_status;
 	}
 
