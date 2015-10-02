@@ -29,6 +29,10 @@ if (array_key_exists('moodec_checkout', $PAGE->theme->layouts)) {
 $PAGE->set_title(get_string('checkout_title', 'local_moodec'));
 $PAGE->set_heading(get_string('checkout_title', 'local_moodec'));
 
+$PAGE->navbar->add(get_string('cart_title', 'local_moodec'), new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php'));
+$PAGE->navbar->add(get_string('checkout_title', 'local_moodec'));
+
+
 // Get the renderer for this page
 $renderer = $PAGE->get_renderer('local_moodec');
 
