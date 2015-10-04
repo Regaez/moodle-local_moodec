@@ -25,19 +25,19 @@ $capabilities = array(
 		),
 	),
 
-	// 'local/moodec:checkout' => array(
+	'local/moodec:viewalltransactions' => array(
 
-	// 	'riskbitmask' => RISK_SPAM,
+		'riskbitmask' => RISK_PERSONAL,
 
-	// 	'captype' => 'read',
-	// 	'contextlevel' => CONTEXT_SYSTEM,
-	// 	'archetypes' => array(
-	// 		'guest' => CAP_PREVENT,
-	// 		'user' => CAP_ALLOW,
-	// 		'student' => CAP_ALLOW,
-	// 		'teacher' => CAP_ALLOW,
-	// 		'editingteacher' => CAP_ALLOW,
-	// 		'manager' => CAP_ALLOW,
-	// 	),
-	// ),
+		'captype' => 'read',
+		'contextlevel' => CONTEXT_SYSTEM,
+		'archetypes' => array(
+			'guest' => CAP_PREVENT,
+			'user' => CAP_PREVENT,
+			'student' => CAP_PREVENT,
+			'teacher' => CAP_PREVENT,
+			'editingteacher' => CAP_ALLOW,
+			'manager' => CAP_ALLOW,
+		),
+	),
 );

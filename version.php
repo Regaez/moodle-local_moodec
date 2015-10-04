@@ -12,7 +12,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_moodec';
-$plugin->version = 2015092400;
+$plugin->version = 2015100500;
 $plugin->release = '2.8 (Build: 2015012900)';
 $plugin->requires = 2014051200;
 //$plugin->requires = 2014111000;

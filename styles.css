@@ -192,6 +192,46 @@
     margin-bottom: 0.5em;
 }
 
+#page-content .transaction_table {
+    margin-bottom: 2em;
+}
+
+.moodec-transaction__details,
+.moodec-transaction__items {
+    margin-bottom: 4em;
+}
+
+.moodec-transaction__details h4,
+.moodec-transaction__items h4 {
+    padding: 0 0 8px 8px;
+} 
+
+.moodec-transaction__details .column,
+.moodec-transaction__items .column {
+    line-height: 2;
+    padding-top: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.path-local-moodec .align-right {
+    text-align: right;
+}
+
+.moodec-transaction__details .row-fluid,
+.moodec-transaction__items .row-fluid {
+    border-bottom: 1px solid #eee;
+}
+
+.moodec-transaction__details .row-fluid:nth-child(2n),
+.moodec-transaction__items .row-fluid:nth-child(2n) {
+    background: #f3f4f5;
+}
+
+.moodec-transaction__items .row-fluid:hover {
+    background: #e6e6e6;
+}
+
 @media all and (min-width: 767px) {
     .product-item .product-details {
         float: left;

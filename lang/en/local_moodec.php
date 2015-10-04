@@ -77,6 +77,7 @@ $string['error_invalid_name'] = 'Required field. Please enter a name.';
 $string['error_invalid_price'] = 'Invalid format: please enter a single number only, such as 20 or 19.99 - no currency symbols or letters are allowed.';
 $string['error_invalid_duration'] = 'Invalid format: please enter a single number, indicating the days for the duration of the course. The number 0 represents an unlimited duration.';
 
+$string['moodec:viewalltransactions'] = 'View all Moodec transactions';
 $string['messageprovider:payment_gateway'] = 'Notifications from the Moodec Payment Gateway';
 
 // Pages
@@ -129,10 +130,14 @@ $string['transaction_field_user'] = 'User';
 $string['transaction_field_amount'] = 'Amount';
 $string['transaction_field_items'] = '# Items';
 $string['transaction_field_gateway'] = 'Gateway';
+$string['transaction_field_txn'] = 'Txn ID';
 $string['transaction_field_status'] = 'Status';
 $string['transaction_field_actions'] = '';
+$string['transaction_field_actions_course'] = 'Go to course';
 
-$string['transaction_view_title'] = 'Transaction #{$a->id} Details';
+$string['transaction_view_title'] = 'Transaction #{$a->id}';
+$string['transaction_section_details'] = 'Details';
+$string['transaction_section_items'] = 'Items';
 
 // Buttons
 $string['button_add_label'] = 'Add to cart';

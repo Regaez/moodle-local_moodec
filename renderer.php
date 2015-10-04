@@ -1060,4 +1060,108 @@ class local_moodec_renderer extends plugin_renderer_base {
 			get_string('button_return_store_label', 'local_moodec')
 		);
 	}
+
+	function single_transaction($transaction) {
+		global $CFG, $DB;
+
+		$fieldDate = date('H:i:s d/m/Y', $transaction->get_date());
+
+		$user = $DB->get_record('user', array('id' => $transaction->get_user_id() ));
+		$fieldUser = sprintf(
+			'<a href="%s">%s %s</a>',
+			new moodle_url($CFG->wwwroot . '/user/profile.php', array( 'id'=> $user->id )),
+			$user->firstname,
+			$user->lastname
+		);
+
+		$fieldAmount = local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . number_format($transaction->get_cost(), 2, '.', ','); 
+		$fieldItemCount = count($transaction->get_items());
+
+		$html = sprintf(
+			'<div class="moodec-transaction__details span5 desktop-first-column">
+				<h4>%s</h4>
+				<div class="row-fluid">
+					<div class="column span3"><strong>%s:</strong></div>
+					<div class="column span9">%s</div>
+				</div>
+				<div class="row-fluid">
+					<div class="column span3"><strong>%s:</strong></div>
+					<div class="column span9">%s</div>
+				</div>
+				<div class="row-fluid">
+					<div class="column span3"><strong>%s:</strong></div>
+					<div class="column span9">%s</div>
+				</div>
+				<div class="row-fluid">
+					<div class="column span3"><strong>%s:</strong></div>
+					<div class="column span9">%s</div>
+				</div>
+				<div class="row-fluid">
+					<div class="column span3"><strong>%s:</strong></div>
+					<div class="column span9">%s</div>
+				</div>
+				<div class="row-fluid">
+					<div class="column span3"><strong>%s:</strong></div>
+					<div class="column span9">%s</div>
+				</div>
+				<div class="row-fluid">
+					<div class="column span3"><strong>%s:</strong></div>
+					<div class="column span9">%s</div>
+				</div>
+			</div>',
+			get_string('transaction_section_details', 'local_moodec'),
+			get_string('transaction_field_id', 'local_moodec'),
+			$transaction->get_id(),
+			get_string('transaction_field_user', 'local_moodec'),
+			$fieldUser,
+			get_string('transaction_field_amount', 'local_moodec'),
+			$fieldAmount,
+			get_string('transaction_field_date', 'local_moodec'),
+			$fieldDate,
+			get_string('transaction_field_gateway', 'local_moodec'),
+			$transaction->get_gateway(true),
+			get_string('transaction_field_txn', 'local_moodec'),
+			$transaction->get_txn_id(),
+			get_string('transaction_field_status', 'local_moodec'),
+			$transaction->get_status(true)
+		);
+
+		$html .= sprintf(
+			'<div class="moodec-transaction__items span7 pull-right">
+				<h4>%s (%s)</h4>',
+			get_string('transaction_section_items', 'local_moodec'),
+			count($transaction->get_items())
+		);
+
+		if( 0 < count($transaction->get_items())) {
+
+			foreach ($transaction->get_items() as $item) {
+				
+				$product = local_moodec_get_product($item->get_product_id());
+				$name = $product->get_fullname();
+
+				if( $product->get_type() === PRODUCT_TYPE_VARIABLE ) {
+					$name .= ' - ' . $product->get_variation($item->get_variation_id())->get_name();
+				}
+
+				$html .= sprintf(
+					'<div class="row-fluid">
+						<div class="column span8"><a href="%s">%s</a></div>
+						<div class="column span2">%s</div>
+						<div class="column span2 align-right"><a href="%s">%s</a></div>
+					</div>',
+					new moodle_url($CFG->wwwroot .'/local/moodec/pages/product.php', array('id' => $item->get_product_id() )),
+					$name,
+					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . number_format($item->get_cost(), 2, '.', ','),
+					new moodle_url($CFG->wwwroot .'/course/view.php', array('id' => $product->get_course_id())),
+					'Go to course'
+				);
+
+			}
+		}
+
+		$html .= '</div>';
+		
+		return $html;
+	}
 }
