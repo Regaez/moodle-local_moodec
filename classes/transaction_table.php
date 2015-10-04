@@ -47,7 +47,7 @@ class moodec_transaction_table extends table_sql {
             get_string('transaction_field_amount', 'local_moodec'),     // 'Amount',
             get_string('transaction_field_items', 'local_moodec'),      // 'Number of items',
             get_string('transaction_field_gateway', 'local_moodec'),    // 'Gateway',
-            'Txn ID',
+            get_string('transaction_field_txn', 'local_moodec'),
             get_string('transaction_field_status', 'local_moodec'),     // 'Status',
             get_string('transaction_field_actions', 'local_moodec'),     // 'Action'
         );
