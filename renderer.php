@@ -794,10 +794,10 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 				// Cart total price
 				$html .= sprintf(
-					'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%0.2f</h3>',
+					'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%01.2f</h3>',
 					get_string('cart_total', 'local_moodec'),
 					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-					$cart->get_total()
+					$cart->get_total(false)
 				);
 
 			$html .= '</div>';
@@ -904,10 +904,10 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 				// Cart total price
 				$html .= sprintf(
-					'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%0.2f</h3>',
+					'<h3 class="cart-total__label">%s</h3><h3 class="cart-total">%s%01.2f</h3>',
 					get_string('cart_total', 'local_moodec'),
 					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')),
-					$cart->get_total()
+					$cart->get_total(false)
 				);
 
 			$html .= '</div>';
