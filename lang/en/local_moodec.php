@@ -138,6 +138,7 @@ $string['transaction_field_actions_course'] = 'Go to course';
 $string['transaction_view_title'] = 'Transaction #{$a->id}';
 $string['transaction_section_details'] = 'Details';
 $string['transaction_section_items'] = 'Items';
+$string['transaction_section_error'] = 'Error details';
 
 // Buttons
 $string['button_add_label'] = 'Add to cart';

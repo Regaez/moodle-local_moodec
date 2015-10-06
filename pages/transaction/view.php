@@ -66,4 +66,15 @@ echo $OUTPUT->header();
 // Render the transaction list
 echo $renderer->single_transaction($transaction);
 
+if( !!$transaction->get_error() && has_capability('local/moodec:viewalltransactions', $context)) {
+	printf(
+		'<div class="span12 desktop-first-column">
+			<h4>%s</h4>
+			<pre>%s</pre>
+		</div>',
+		get_string('transaction_section_error', 'local_moodec'),
+		$transaction->get_error()
+	);
+}
+
 echo $OUTPUT->footer();

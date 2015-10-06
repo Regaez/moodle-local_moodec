@@ -187,7 +187,7 @@ abstract class MoodecGateway {
 		$site = get_site();
 
 		$message = sprintf(
-			'%s: Transaction #%d failed.\n\n%s\n\n',
+			"%s: Transaction #%d failed. %s \n\n",
 			$site->fullname,
 			$this->_transaction->get_id(),
 			$subject
@@ -196,6 +196,9 @@ abstract class MoodecGateway {
 		foreach ($data as $key => $value) {
 			$message .= "$key => $value\n";
 		}
+
+		// Update the transaction with the error message details
+		$this->_transaction->set_error($message);
 
 		$eventdata = new stdClass();
 		$eventdata->component = 'local_moodec';

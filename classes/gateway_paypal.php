@@ -51,6 +51,11 @@ class MoodecGatewayPaypal extends MoodecGateway {
 			return false;
 		}
 		
+		// Set the transaction ID
+		if(isset($data->txn_id)) {
+			$this->_transaction->set_txn_id($data->txn_id);
+		}
+
 		// If status is not completed or pending then unenrol the student if already enrolled
 		// and notify admin
 		if ($data->payment_status != "Completed" and $data->payment_status != "Pending") {
@@ -132,8 +137,6 @@ class MoodecGatewayPaypal extends MoodecGateway {
 
 		// Lastly, verify the general transaction items and user
 		if( $this->verify_transaction() ) {
-			
-			$this->_transaction->set_txn_id($data->txn_id);
 
 			$this->complete_enrolment();
 

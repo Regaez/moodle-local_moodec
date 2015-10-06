@@ -68,6 +68,12 @@ class MoodecTransaction {
 	protected $_items;
 
 	/**
+	 * The details of the transaction error.
+	 * @var string
+	 */
+	protected $_error;
+
+	/**
 	 * Constructor. If passed an id, will load the transaction from the DB, otherwise will create a new one
 	 * @param int $id transaction_id
 	 */
@@ -91,14 +97,20 @@ class MoodecTransaction {
 	private function create(){
 		global $DB, $USER;
 
+		// Create a new record to insert into the DB
 		$newRecord 					= new stdClass();
 		$newRecord->status 			= self::STATUS_NOT_SUBMITTED;
 		$newRecord->txnId 			= '';
 		$newRecord->user_id 		= $USER->id;
-		//$newRecord->gateway 		= get_config('local_moodec', 'active_gateway'); // get from config which gateway they're using?
 		$newRecord->purchase_date 	= time();
 
 		$this->_id = $DB->insert_record('local_moodec_transaction', $newRecord, true);
+
+		// Update the current instance of the class to the new record details
+		$this->_status 				= $newRecord->status;
+		$this->_txnId 				= $newRecord->txnId;
+		$this->_userId 				= $newRecord->user_id;
+		$this->_purchaseDate 		= $newRecord->purchase_date;
 	}
 
 	/**
@@ -115,6 +127,7 @@ class MoodecTransaction {
 		$updatedRecord->status 			= $this->_status;
 		$updatedRecord->gateway 		= $this->_gateway;
 		$updatedRecord->purchase_date 	= $this->_purchaseDate;
+		$updatedRecord->error 			= $this->_error;
 
 		$DB->update_record('local_moodec_transaction', $updatedRecord);
 	}
@@ -133,11 +146,12 @@ class MoodecTransaction {
 		// Set the data
 		if (!!$record) {
 			$this->_id 				= (int) $id;
-			$this->_txnId 			= (int) $record->txn_id;
+			$this->_txnId 			= 		$record->txn_id;
 			$this->_userId 			= (int) $record->user_id;
 			$this->_gateway 		= 		$record->gateway;
 			$this->_status 			= (int) $record->status;
 			$this->_purchaseDate 	= 		$record->purchase_date;
+			$this->_error 			= 		$record->error;
 
 			// Load the transaction items
 			$this->load_items();
@@ -355,5 +369,27 @@ class MoodecTransaction {
 		}
 
 		return $amount;
+	}
+
+	/**
+	 * Returns the error text
+	 * @return string|bool 	error text or false
+	 */	
+	public function get_error(){
+		
+		if( is_null($this->_error)) {
+			return false;
+		}
+
+		return $this->_error;
+	}
+
+	/**
+	 * Set the error text for this transaction
+	 * @param string $error 
+	 */
+	public function set_error($error){
+		$this->_error = $error;
+		$this->update();
 	}
 }

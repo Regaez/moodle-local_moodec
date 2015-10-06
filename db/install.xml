@@ -36,6 +36,7 @@
                 <FIELD NAME="gateway" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The payment gateway"/>
                 <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="The status of the transaction"/>
                 <FIELD NAME="purchase_date" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The date of when this transaction was made"/>
+                <FIELD NAME="error" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Any transaction error details"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
