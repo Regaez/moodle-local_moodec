@@ -95,6 +95,12 @@ function local_moodec_extends_navigation(global_navigation $nav) {
 		get_string('cart_title', 'local_moodec'),
 		new moodle_url($CFG->wwwroot . '/local/moodec/pages/cart.php')
 	);
+
+	// Add transactions page to menu
+	$PAGE->navigation->add(
+		get_string('transactions_title', 'local_moodec'),
+		new moodle_url($CFG->wwwroot . '/local/moodec/pages/transaction/index.php')
+	);
 }
 
 /**

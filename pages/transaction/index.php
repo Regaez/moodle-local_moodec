@@ -71,7 +71,6 @@ $context = context_system::instance();
 // Set PAGE variables
 $PAGE->set_context($context);
 $PAGE->set_url($CFG->wwwroot . '/local/moodec/pages/transaction/index.php', $params);
-$PAGE->navbar->add(get_string('transactions_title', 'local_moodec'), new moodle_url($CFG->wwwroot . '/local/moodec/pages/transaction/index.php'));
 
 // Force the user to login/create an account to access this page
 require_login();
