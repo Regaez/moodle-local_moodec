@@ -326,7 +326,7 @@ class MoodecTransaction {
 			} else if( $this->_status === self::STATUS_FAILED ) {
 				return get_string('transaction_status_failed', 'local_moodec');
 			} else if( $this->_status === self::STATUS_PENDING ) {
-				return get_string('transaction_status_failed', 'local_moodec');
+				return get_string('transaction_status_pending', 'local_moodec');
 			} else if( $this->_status === self::STATUS_NOT_SUBMITTED ) {
 				return get_string('transaction_status_not_submitted', 'local_moodec');
 			}
