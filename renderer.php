@@ -1154,7 +1154,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					$name,
 					local_moodec_get_currency_symbol(get_config('local_moodec', 'currency')) . number_format($item->get_cost(), 2, '.', ','),
 					new moodle_url($CFG->wwwroot .'/course/view.php', array('id' => $product->get_course_id())),
-					'Go to course'
+					get_string('transaction_field_actions_course', 'local_moodec')
 				);
 
 			}
@@ -1162,6 +1162,109 @@ class local_moodec_renderer extends plugin_renderer_base {
 
 		$html .= '</div>';
 		
+		return $html;
+	}
+
+	function transaction_filter($params = array(), $pageURL = '') {
+
+		$html = '';
+
+		$html .= sprintf('<form action="" class="transaction__filter">');
+
+		$html .= sprintf(
+			'<fieldset class="filterset__date">
+				<legend>%s</legend>',
+			'Date range'
+		);
+
+			$html .= sprintf(
+				'<div class="span6 desktop-first-column">
+					<label>%s</label><input type="date" name="date-from" max="%s" value="%s">
+				</div>',
+				'From',
+				date('Y-m-d', time()),
+				isset($params['date-from']) ? $params['date-from'] : date('Y-m-d', strtotime("1 month ago"))
+			);
+
+			$html .= sprintf(
+				'<div class="span6">
+					<label>%s</label><input type="date" name="date-to" max="%s" value="%s">
+				</div>',
+				'To',
+				date('Y-m-d', strtotime("+1 day")),
+				isset($params['date-to']) ? $params['date-to'] : date('Y-m-d', strtotime("+1 day"))
+			);
+
+		$html .= sprintf('</fieldset>');
+
+		$html .= sprintf(
+			'<fieldset class="filterset__gateway">
+				<legend>%s</legend>',
+			'Gateway'
+		);
+
+			$html .= sprintf(
+				'<div>
+					<input type="checkbox" id="paypal" name="paypal" %s><label for="paypal">%s</label>
+				</div>',
+				(isset($params['paypal']) && !!$params['paypal'] ) ? 'checked' : '',
+				'Paypal'
+			);
+
+			$html .= sprintf(
+				'<div>
+					<input type="checkbox" id="dps" name="dps" %s><label for="dps">%s</label>
+				</div>',
+				(isset($params['dps']) && !!$params['dps'] ) ? 'checked' : '',
+				'DPS'
+			);
+
+		$html .= sprintf('</fieldset>');
+
+		$html .= sprintf(
+			'<fieldset class="filterset__status">
+				<legend>%s</legend>',
+			'Status'
+		);
+
+			$html .= sprintf(
+				'<div>
+					<input type="checkbox" id="status-complete" name="status-complete" %s><label for="status-complete">%s</label>
+					<div class="column--right">
+						<input type="checkbox" id="status-failed" name="status-failed" %s><label for="status-failed">%s</label>
+					</div>
+				<div>',
+				(isset($params['status-complete']) && !!$params['status-complete']) ? 'checked' : '',
+				'Complete',
+				(isset($params['status-failed']) && !!$params['status-failed'] ) ? 'checked' : '',
+				'Failed'
+			);
+
+			$html .= sprintf(
+				'<div>
+					<input type="checkbox" id="status-pending" name="status-pending" %s><label for="status-pending">%s</label>
+					<div class="column--right">
+						<input type="checkbox" id="status-nosubmit" name="status-nosubmit" %s><label for="status-nosubmit">%s</label>
+					</div>
+				</div>',
+				(isset($params['status-pending']) && !!$params['status-pending'] ) ? 'checked' : '',
+				'Pending',
+				(isset($params['status-nosubmit']) && !!$params['status-nosubmit'] ) ? 'checked' : '',
+				'Not submitted'
+			);
+
+		$html .= sprintf('</fieldset>');
+
+		$html .= sprintf(
+			'<input class="filter__button" type="submit" value="%s">
+			<a href="%s" class="btn filter__button">%s</a>',
+			'Filter',
+			$pageURL,
+			'Reset'
+		);
+
+		$html .= sprintf('</form>');
+
 		return $html;
 	}
 }

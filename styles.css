@@ -232,6 +232,55 @@
     background: #e6e6e6;
 }
 
+.transaction__filter {
+    overflow: hidden;
+    border: 1px solid #eee;
+    clear: both;
+    margin-bottom: 2em;
+}
+
+.transaction__filter fieldset {
+    float: left;
+    padding: 0 1em 1em 1em;
+    box-sizing: border-box;
+    border-right: 1px solid #eee;
+}
+
+.transaction__filter .filterset__date {
+    width: 50%;
+}
+
+.transaction__filter .filterset__gateway {
+    width: 15%;
+}
+
+.transaction__filter .filterset__status {
+    width: 20%;
+}
+
+.transaction__filter legend {
+    border: 0;
+    margin: 0;
+}
+
+.transaction__filter .filterset__date label {
+    width: 50px;
+    display: inline-block;
+    line-height: 3;
+    font-weight: bold;
+    margin: 0;
+}
+
+.transaction__filter .column--right {
+    width: 50%;
+    float: right;
+}
+
+.transaction__filter .filter__button {
+    float: right;
+    margin: 2em 1em 1em 1em;
+}
+
 @media all and (min-width: 767px) {
     .product-item .product-details {
         float: left;
