@@ -124,6 +124,8 @@ $string['transaction_status_failed'] = 'Failed';
 $string['transaction_status_pending'] = 'Pending';
 $string['transaction_status_not_submitted'] = 'Not submitted';
 
+$string['transaction_table_empty'] = 'No transactions to display.';
+
 $string['transaction_field_date'] = 'Date';
 $string['transaction_field_id'] = 'Transaction ID';
 $string['transaction_field_user'] = 'User';

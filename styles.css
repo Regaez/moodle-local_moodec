@@ -281,6 +281,11 @@
     margin: 2em 1em 1em 1em;
 }
 
+.transactions--empty {
+    font-style: italic;
+    text-align: center;
+}
+
 @media all and (min-width: 767px) {
     .product-item .product-details {
         float: left;

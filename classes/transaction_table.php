@@ -211,4 +211,17 @@ class moodec_transaction_table extends table_sql {
         //     return "****";
         // }
     }
+
+    /**
+     * This function is not part of the public api.
+     */
+    function print_nothing_to_display() {
+        global $OUTPUT;
+        $this->print_initials_bar();
+
+        printf(
+            '<p class="transactions--empty">%s</p>',
+            get_string('transaction_table_empty', 'local_moodec')
+        );
+    }
 }
