@@ -137,6 +137,14 @@ $string['transaction_field_status'] = 'Status';
 $string['transaction_field_actions'] = '';
 $string['transaction_field_actions_course'] = 'Go to course';
 
+$string['transaction_filter_date'] = 'Date range';
+$string['transaction_filter_date_from'] = 'From';
+$string['transaction_filter_date_to'] = 'To';
+$string['transaction_filter_gateway'] = 'Gateway';
+$string['transaction_filter_status'] = 'Status';
+$string['transaction_filter_button_filter'] = 'Filter';
+$string['transaction_filter_button_reset'] = 'Reset';
+
 $string['transaction_view_title'] = 'Transaction #{$a->id}';
 $string['transaction_section_details'] = 'Details';
 $string['transaction_section_items'] = 'Items';

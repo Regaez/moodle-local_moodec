@@ -1174,14 +1174,14 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$html .= sprintf(
 			'<fieldset class="filterset__date">
 				<legend>%s</legend>',
-			'Date range'
+			get_string('transaction_filter_date', 'local_moodec')
 		);
 
 			$html .= sprintf(
 				'<div class="span6 desktop-first-column">
 					<label>%s</label><input type="date" name="date-from" max="%s" value="%s">
 				</div>',
-				'From',
+				get_string('transaction_filter_date_from', 'local_moodec'),
 				date('Y-m-d', time()),
 				isset($params['date-from']) ? $params['date-from'] : date('Y-m-d', strtotime("1 month ago"))
 			);
@@ -1190,7 +1190,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 				'<div class="span6">
 					<label>%s</label><input type="date" name="date-to" max="%s" value="%s">
 				</div>',
-				'To',
+				get_string('transaction_filter_date_to', 'local_moodec'),
 				date('Y-m-d', strtotime("+1 day")),
 				isset($params['date-to']) ? $params['date-to'] : date('Y-m-d', strtotime("+1 day"))
 			);
@@ -1200,7 +1200,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$html .= sprintf(
 			'<fieldset class="filterset__gateway">
 				<legend>%s</legend>',
-			'Gateway'
+			get_string('transaction_filter_gateway', 'local_moodec')
 		);
 
 			$html .= sprintf(
@@ -1208,7 +1208,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					<input type="checkbox" id="paypal" name="paypal" %s><label for="paypal">%s</label>
 				</div>',
 				(isset($params['paypal']) && !!$params['paypal'] ) ? 'checked' : '',
-				'Paypal'
+				get_string('payment_paypal_title', 'local_moodec')
 			);
 
 			$html .= sprintf(
@@ -1216,7 +1216,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 					<input type="checkbox" id="dps" name="dps" %s><label for="dps">%s</label>
 				</div>',
 				(isset($params['dps']) && !!$params['dps'] ) ? 'checked' : '',
-				'DPS'
+				get_string('payment_dps_title', 'local_moodec')
 			);
 
 		$html .= sprintf('</fieldset>');
@@ -1224,7 +1224,7 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$html .= sprintf(
 			'<fieldset class="filterset__status">
 				<legend>%s</legend>',
-			'Status'
+			get_string('transaction_filter_status', 'local_moodec')
 		);
 
 			$html .= sprintf(
@@ -1235,9 +1235,9 @@ class local_moodec_renderer extends plugin_renderer_base {
 					</div>
 				<div>',
 				(isset($params['status-complete']) && !!$params['status-complete']) ? 'checked' : '',
-				'Complete',
+				get_string('transaction_status_complete', 'local_moodec'),
 				(isset($params['status-failed']) && !!$params['status-failed'] ) ? 'checked' : '',
-				'Failed'
+				get_string('transaction_status_failed', 'local_moodec')
 			);
 
 			$html .= sprintf(
@@ -1248,9 +1248,9 @@ class local_moodec_renderer extends plugin_renderer_base {
 					</div>
 				</div>',
 				(isset($params['status-pending']) && !!$params['status-pending'] ) ? 'checked' : '',
-				'Pending',
+				get_string('transaction_status_pending', 'local_moodec'),
 				(isset($params['status-nosubmit']) && !!$params['status-nosubmit'] ) ? 'checked' : '',
-				'Not submitted'
+				get_string('transaction_status_not_submitted', 'local_moodec')
 			);
 
 		$html .= sprintf('</fieldset>');
@@ -1258,9 +1258,9 @@ class local_moodec_renderer extends plugin_renderer_base {
 		$html .= sprintf(
 			'<input class="filter__button" type="submit" value="%s">
 			<a href="%s" class="btn filter__button">%s</a>',
-			'Filter',
+			get_string('transaction_filter_button_filter', 'local_moodec'),
 			$pageURL,
-			'Reset'
+			get_string('transaction_filter_button_reset', 'local_moodec')
 		);
 
 		$html .= sprintf('</form>');
