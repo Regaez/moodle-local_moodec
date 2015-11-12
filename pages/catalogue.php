@@ -38,7 +38,12 @@ $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/local/moodec/js/catalogue.j
 // Get the renderer for this page
 $renderer = $PAGE->get_renderer('local_moodec');
 
-list($sortfield, $sortorder) = local_moodec_extract_sort_vars($sort);
+if( $sort !== null) {
+	list($sortfield, $sortorder) = local_moodec_extract_sort_vars($sort);
+} else {
+	$sortfield = null;
+	$sortorder = null;
+}
 
 echo $OUTPUT->header();
 
